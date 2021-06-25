@@ -1,0 +1,75 @@
+﻿<local:WindowBase
+    x:Class="ShareClientWpf.MessageDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ShareClientWpf"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="Dialog"
+    Width="600"
+    Height="200"
+    BorderBrush="{Binding RelativeSource={RelativeSource Self}, Path=ThemeBrush}"
+    Style="{StaticResource DialogWindowStyle}"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+
+    <Grid Background="{Binding Background, RelativeSource={RelativeSource AncestorType=Window}}">
+
+        <Grid.Resources>
+
+            <Style BasedOn="{StaticResource DefaultButtonStyle}" TargetType="Button">
+                <Setter Property="Width" Value="120" />
+                <Setter Property="Margin" Value="20,0,0,0" />
+            </Style>
+
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource DialogForeGround}" />
+            </Style>
+
+        </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="72" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="{StaticResource HeaderBackGround}">
+
+            <TextBlock
+                x:Name="TitleTextBlock"
+                Margin="12,4,12,2"
+                FontSize="16"
+                Text="{Binding Title, RelativeSource={RelativeSource AncestorType=Window}}" />
+        </Border>
+
+        <TextBlock
+            x:Name="MessageTextBlock"
+            Grid.Row="1"
+            Margin="22"
+            FontSize="26" />
+
+        <StackPanel
+            Grid.Row="2"
+            Margin="18"
+            HorizontalAlignment="Right"
+            ButtonBase.Click="StackPanel_Click"
+            Orientation="Horizontal">
+
+            <Button
+                x:Name="ThirdButton"
+                Tag="2"
+                Visibility="Collapsed" />
+
+            <Button
+                x:Name="SecondryButton"
+                Tag="1"
+                Visibility="Collapsed" />
+
+            <Button x:Name="PrimaryButton" Tag="0" />
+
+        </StackPanel>
+
+    </Grid>
+
+</local:WindowBase>
