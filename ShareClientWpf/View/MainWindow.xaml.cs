@@ -23,15 +23,6 @@ namespace ShareClientWpf
             InitializeComponent();
         }
 
-        private void MenuHeader_MenuButtonClick(object sender, MenuHeaderButtonClickEventArgs e)
-        {
-            if (DataContext is MainWindowViewModel mv)
-            {
-                mv.MainWindow_MenuButtonClick(e);
-            }
-
-        }
-
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Close();

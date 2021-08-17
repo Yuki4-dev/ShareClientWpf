@@ -11,6 +11,8 @@ namespace ShareClientWpf
             get => (Brush)GetValue(ThemeBrushProperty);
             set => SetValue(ThemeBrushProperty, value);
         }
+        public static readonly DependencyProperty ThemeBrushProperty =
+            DependencyProperty.Register(nameof(ThemeBrush), typeof(Brush), typeof(WindowBase), new PropertyMetadata(new SolidColorBrush(Colors.Red)));
 
         public WindowBase()
         {
@@ -32,15 +34,6 @@ namespace ShareClientWpf
         private void PreViewModel(ViewModelBase viewModel)
         {
             viewModel.ShowMessageBox += ShowMessageBox;
-
-            IsVisibleChanged += (s, e) =>
-             {
-                 if ((bool)e.NewValue)
-                 {
-                     viewModel.DisplayProcces();
-                 }
-             };
-
             Closing += (s, e) =>
             {
                 e.Cancel = viewModel.PostProcces();
@@ -52,6 +45,5 @@ namespace ShareClientWpf
             e.Result = MessageDialog.Show(Title, e.Message, e.Button);
         }
 
-        public static readonly DependencyProperty ThemeBrushProperty = DependencyProperty.Register(nameof(ThemeBrush), typeof(Brush), typeof(WindowBase), new PropertyMetadata(new SolidColorBrush(Colors.Red)));
     }
 }

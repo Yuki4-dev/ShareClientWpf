@@ -10,23 +10,15 @@ namespace ShareClientWpf
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private Visibility _SendDialogVisibility = Visibility.Collapsed;
-        public Visibility SendDialogVisibility
+        private ImageSource source;
+        public ImageSource Source
         {
-            get => _SendDialogVisibility;
-            set => OnPropertyChanged(ref _SendDialogVisibility, value, nameof(SendDialogVisibility));
+            get => source;
+            set => SetProperty(ref source, value);
         }
 
         public MainWindowViewModel()
         {
-        }
-
-        public void MainWindow_MenuButtonClick(MenuHeaderButtonClickEventArgs e)
-        {
-            if (e.Button == MenuHeaderButton.Send)
-            {
-                SendDialogVisibility = Visibility.Visible;
-            }
         }
 
         public override bool PostProcces()

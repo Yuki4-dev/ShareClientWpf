@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 
 namespace ShareClientWpf
@@ -9,20 +10,16 @@ namespace ShareClientWpf
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler<ShowMessageBoxEventArgs> ShowMessageBox;
 
-        private bool _IsBusy = false;
+        private bool isBusy;
         public bool IsBusy
         {
-            get => _IsBusy;
-            set => OnPropertyChanged(ref _IsBusy, value, nameof(IsBusy), () => OnPropertyChanged(nameof(IsNotBusy)));
+            get => isBusy;
+            set => SetProperty(ref isBusy, value, () => OnPropertyChanged(nameof(IsNotBusy)));
         }
 
         public bool IsNotBusy
         {
-            get => !_IsBusy;
-        }
-
-        public virtual void DisplayProcces()
-        {
+            get => !IsBusy;
         }
 
         public virtual bool PostProcces()
@@ -30,19 +27,19 @@ namespace ShareClientWpf
             return false;
         }
 
-        protected void OnPropertyChanged<T>(ref T prop, T value, string name, Action postCallMethod = null)
+        protected void SetProperty<T>(ref T prop, T value, Action postCallMethod = null, [CallerMemberName] string name = "")
         {
-            if ((prop == null && value != null) || (prop != null && !prop.Equals(value)))
+            if (prop?.Equals(value) ?? value != null)
             {
                 prop = value;
-                OnPropertyChanged(name, postCallMethod);
+                OnPropertyChanged(name);
+                postCallMethod?.Invoke();
             }
         }
 
-        protected void OnPropertyChanged(string name, Action postCallMethod = null)
+        protected void OnPropertyChanged([CallerMemberName] string name = "")
         {
             PropertyChanged?.Invoke(this, new(name));
-            postCallMethod?.Invoke();
         }
 
         protected void OnShowMessageBox(string msg)

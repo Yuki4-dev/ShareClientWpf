@@ -17,8 +17,7 @@
 
                 <Border
                     Background="#7f000000"
-                    MouseDown="Border_MouseDown"
-                    WindowChrome.IsHitTestVisibleInChrome="true">
+                    MouseDown="Border_MouseDown">
 
                     <Grid
                         Width="{Binding DialogWidth, RelativeSource={RelativeSource AncestorType=local:OverlayDialog}}"
@@ -26,7 +25,8 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center">
 
-                        <ContentPresenter />
+                        <ContentPresenter HorizontalAlignment="Stretch" 
+                                          VerticalAlignment="Stretch" />
 
                     </Grid>
 
