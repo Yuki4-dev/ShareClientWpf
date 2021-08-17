@@ -10,25 +10,24 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace ShareClientWpf
 {
-    public partial class MainWindow : WindowBase
+    /// <summary>
+    /// ConnectionWindow.xaml の相互作用ロジック
+    /// </summary>
+    public partial class ConnectionWindow : WindowBase
     {
-
-        public MainWindow()
+        public ConnectionWindow()
         {
             InitializeComponent();
         }
 
-        private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                DragMove();
-            }
+            ExecuteCallback?.Invoke(null);
+            Close();
         }
     }
 }

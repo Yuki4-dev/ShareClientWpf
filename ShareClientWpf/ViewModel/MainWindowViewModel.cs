@@ -1,6 +1,8 @@
-﻿using System;
+﻿using ShareClient.Component;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -39,6 +41,14 @@ namespace ShareClientWpf
             set => SetProperty(ref moreCommand, value);
         }
 
+        private string statusText;
+        public string StatusText
+        {
+            get => statusText;
+            set => SetProperty(ref statusText, value);
+        }
+
+
         public MainWindowViewModel()
         {
             sendCommand = new Command(SendExecute);
@@ -46,14 +56,33 @@ namespace ShareClientWpf
             moreCommand = new Command(MoreExecute);
         }
 
-        private void SendExecute()
+        private async void SendExecute()
         {
-            OnShowWindow(typeof(SendWindow));
+            ((Command)SendCommand).Can = false;
+
+            await OnShowWindow(typeof(SendWindow));
+            StatusText = "送信";
         }
 
         private void RecieveExecute()
         {
-            OnShowWindow(typeof(SendWindow));
+
+            OnShowWindow(typeof(RecieveWindow), executeCall: (port) => RecieveProcess((string)port));
+        }
+
+        private async void RecieveProcess(string port)
+        {
+            ((Command)RecieveCommand).Can = false;
+            StatusText = "受信中";
+
+            using var con = new ConnectionManager();
+            var connection = await con.AcceptAsync(new IPEndPoint(IPAddress.Any, int.Parse(port)), (ip, data) =>
+            {
+                var t = OnShowWindow(typeof(ConnectionWindow));
+                t.Wait();
+                return true;
+            });
+
         }
 
         private void MoreExecute()

@@ -19,7 +19,7 @@
     <Grid>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" MaxWidth="112" MinWidth="84"/>
+            <ColumnDefinition Width="2*" MaxWidth="108" MinWidth="84"/>
             <ColumnDefinition Width="8*" />
         </Grid.ColumnDefinitions>
 
@@ -49,8 +49,10 @@
 
             </StackPanel.Resources>
 
+            <TextBlock Text="{Binding StatusText}" FontSize="24"/>
+
             <local:IconButton
-                    Click="CloseButton_Click"
+                    Command="{Binding CloseCommand}"
                     Content="{StaticResource Close}">
 
                 <Button.ToolTip>
@@ -76,8 +78,8 @@
             </Grid.RowDefinitions>
 
             <Button Grid.Row="0" Command="{Binding SendCommand}">Send</Button>
-            <Button Grid.Row="1">Receive</Button>
-            <Button Grid.Row="2">More</Button>
+            <Button Grid.Row="1" Command="{Binding RecieveCommand }">Receive</Button>
+            <Button Grid.Row="2" Command="{Binding MoreCommand }" >More</Button>
 
         </Grid>
 

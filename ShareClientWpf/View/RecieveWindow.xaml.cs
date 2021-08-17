@@ -10,25 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace ShareClientWpf
 {
-    public partial class MainWindow : WindowBase
+    /// <summary>
+    /// RecieveWindow.xaml の相互作用ロジック
+    /// </summary>
+    public partial class RecieveWindow : WindowBase
     {
-
-        public MainWindow()
+        public RecieveWindow()
         {
             InitializeComponent();
-        }
-
-        private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                DragMove();
-            }
         }
     }
 }

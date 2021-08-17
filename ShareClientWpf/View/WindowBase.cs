@@ -8,8 +8,22 @@ namespace ShareClientWpf
 {
     public class WindowBase : Window
     {
-        protected Action<object> Callback { get; set; }
-        protected object Paramater { get; set; }
+        protected Action<object> ExecuteCallback
+        {
+            get => (Action<object>)GetValue(ExecuteCallbackProperty);
+            set => SetValue(ExecuteCallbackProperty, value);
+        }
+        public static readonly DependencyProperty ExecuteCallbackProperty =
+            DependencyProperty.Register(nameof(ExecuteCallback), typeof(Action<object>), typeof(WindowBase), new PropertyMetadata(null));
+
+
+        protected object Paramater
+        {
+            get => GetValue(ParamaterProperty);
+            set => SetValue(ParamaterProperty, value);
+        }
+        public static readonly DependencyProperty ParamaterProperty =
+            DependencyProperty.Register(nameof(Paramater), typeof(Action<object>), typeof(WindowBase), new PropertyMetadata(null));
 
         public Brush ThemeBrush
         {
@@ -17,7 +31,7 @@ namespace ShareClientWpf
             set => SetValue(ThemeBrushProperty, value);
         }
         public static readonly DependencyProperty ThemeBrushProperty =
-            DependencyProperty.Register(nameof(ThemeBrush), typeof(Brush), typeof(WindowBase), new PropertyMetadata(new SolidColorBrush(Colors.Red)));
+            DependencyProperty.Register(nameof(ThemeBrush), typeof(Brush), typeof(WindowBase), new PropertyMetadata(new SolidColorBrush(Colors.Transparent)));
 
         public WindowBase()
         {
@@ -38,31 +52,43 @@ namespace ShareClientWpf
 
         private void PreViewModel(ViewModelBase vm)
         {
-            vm.ShowMessageBox += ViewModel_ShowMessageBox;
+            vm.ShowMessageBox += Vm_ShowMessageBox;
             vm.ShowWindow += Vm_ShowWindow;
+            vm.CloseWindow += Vm_CloseWindow;
             Closing += (s, e) => e.Cancel = vm.PostProcces();
         }
 
-        protected virtual void Vm_ShowWindow(Type windowType, bool isModal, object paramater, Action<object> callback)
+        protected virtual bool Vm_CloseWindow()
         {
-            var window = (Window)Activator.CreateInstance(windowType);
-            if (window is WindowBase windowBase)
-            {
-                windowBase.Callback = callback;
-                windowBase.Paramater = paramater;
-            }
-
-            if (isModal)
-            {
-                window.ShowDialog();
-            }
-            else
-            {
-                window.Show();
-            }
+            Close();
+            return true;
         }
 
-        protected virtual MessageBoxResult ViewModel_ShowMessageBox(string arg1, MessageBoxButton arg2)
+        protected virtual async Task Vm_ShowWindow(Type windowType, bool isModal, object paramater, Action<object> callback)
+        {
+
+            await Dispatcher.InvokeAsync(() =>
+            {
+                var window = (Window)Activator.CreateInstance(windowType);
+                if (window is WindowBase windowBase)
+                {
+                    windowBase.Paramater = paramater;
+                    windowBase.ExecuteCallback = callback;
+                }
+
+                if (isModal)
+                {
+                    window.ShowDialog();
+                }
+                else
+                {
+                    window.Show();
+                }
+            });
+           
+        }
+
+        protected virtual MessageBoxResult Vm_ShowMessageBox(string arg1, MessageBoxButton arg2)
         {
             return MessageDialog.Show(Title, arg1, arg2);
         }

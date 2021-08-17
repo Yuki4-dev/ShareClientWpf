@@ -11,7 +11,8 @@ namespace ShareClientWpf
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public event Func<string, MessageBoxButton, MessageBoxResult> ShowMessageBox;
-        public event Action<Type, bool, object, Action<object>> ShowWindow;
+        public event Func<Type, bool, object, Action<object>, Task> ShowWindow;
+        public event Func<bool> CloseWindow;
 
         private bool isBusy;
         public bool IsBusy
@@ -23,6 +24,23 @@ namespace ShareClientWpf
         public bool IsNotBusy
         {
             get => !IsBusy;
+        }
+
+        private ICommand closeCommand;
+        public ICommand CloseCommand
+        {
+            get => closeCommand;
+            set => SetProperty(ref closeCommand, value);
+        }
+
+        public ViewModelBase()
+        {
+            CloseCommand = new Command(CloseExecute);
+        }
+
+        private void CloseExecute()
+        {
+            OnCloseWindow();
         }
 
         public virtual bool PostProcces()
@@ -44,8 +62,8 @@ namespace ShareClientWpf
             return false;
         }
 
-        protected void OnShowWindow(Type windowType, bool isModal = true, object paramater = null, Action<object> callBack = null)
-            => ShowWindow?.Invoke(windowType, isModal, paramater, callBack);
+        protected Task OnShowWindow(Type windowType, bool isModal = true, object paramater = null, Action<object> executeCall = null)
+            => ShowWindow?.Invoke(windowType, isModal, paramater, executeCall) ?? Task.CompletedTask;
 
         protected void OnPropertyChanged([CallerMemberName] string name = "") =>
             PropertyChanged?.Invoke(this, new(name));
@@ -55,6 +73,8 @@ namespace ShareClientWpf
 
         protected MessageBoxResult OnShowMessageBox(string msg, MessageBoxButton button) =>
             ShowMessageBox?.Invoke(msg, button) ?? MessageBoxResult.None;
+
+        protected bool OnCloseWindow() => CloseWindow?.Invoke() ?? false;
     }
 
 
@@ -65,12 +85,12 @@ namespace ShareClientWpf
         private Action<object> callCommand;
 
         private bool can = true;
-        public bool Can 
+        public bool Can
         {
             get => can;
             set
             {
-                if(!can.Equals(value))
+                if (!can.Equals(value))
                 {
                     can = value;
                     CanExecuteChanged?.Invoke(this, new EventArgs());
