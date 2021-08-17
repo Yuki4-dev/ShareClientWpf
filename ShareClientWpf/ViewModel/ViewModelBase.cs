@@ -1,14 +1,17 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace ShareClientWpf
 {
     public class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        public event EventHandler<ShowMessageBoxEventArgs> ShowMessageBox;
+        public event Func<string, MessageBoxButton, MessageBoxResult> ShowMessageBox;
+        public event Action<Type, bool, object, Action<object>> ShowWindow;
 
         private bool isBusy;
         public bool IsBusy
@@ -27,41 +30,70 @@ namespace ShareClientWpf
             return false;
         }
 
-        protected void SetProperty<T>(ref T prop, T value, Action postCallMethod = null, [CallerMemberName] string name = "")
+        protected bool SetProperty<T>(ref T prop, T value, Action postCallMethod = null, [CallerMemberName] string name = "")
         {
             if (prop?.Equals(value) ?? value != null)
             {
                 prop = value;
                 OnPropertyChanged(name);
                 postCallMethod?.Invoke();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        protected void OnShowWindow(Type windowType, bool isModal = true, object paramater = null, Action<object> callBack = null)
+            => ShowWindow?.Invoke(windowType, isModal, paramater, callBack);
+
+        protected void OnPropertyChanged([CallerMemberName] string name = "") =>
+            PropertyChanged?.Invoke(this, new(name));
+
+        protected MessageBoxResult OnShowMessageBox(string msg) =>
+            OnShowMessageBox(msg, MessageBoxButton.OK);
+
+        protected MessageBoxResult OnShowMessageBox(string msg, MessageBoxButton button) =>
+            ShowMessageBox?.Invoke(msg, button) ?? MessageBoxResult.None;
+    }
+
+
+    public class Command : ICommand
+    {
+        public event EventHandler CanExecuteChanged;
+
+        private Action<object> callCommand;
+
+        private bool can = true;
+        public bool Can 
+        {
+            get => can;
+            set
+            {
+                if(!can.Equals(value))
+                {
+                    can = value;
+                    CanExecuteChanged?.Invoke(this, new EventArgs());
+                }
             }
         }
 
-        protected void OnPropertyChanged([CallerMemberName] string name = "")
+        public Command(Action action)
         {
-            PropertyChanged?.Invoke(this, new(name));
+            callCommand = (p) => action.Invoke();
         }
 
-        protected void OnShowMessageBox(string msg)
+        public Command(Action<object> action)
         {
-            ShowMessageBox?.Invoke(this, new(msg));
+            callCommand = action;
         }
 
-        protected void OnShowMessageBox(ShowMessageBoxEventArgs args)
-        {
-            ShowMessageBox?.Invoke(this, args);
-        }
-    }
+        public bool CanExecute(object parameter) => Can;
 
-    public class ShowMessageBoxEventArgs : EventArgs
-    {
-        public MessageBoxButton Button { get; set; }
-        public MessageBoxResult Result { get; set; }
-        public string Message { get; }
-
-        public ShowMessageBoxEventArgs(string msg)
+        public void Execute(object parameter)
         {
-            Message = msg;
+            callCommand.Invoke(parameter);
         }
     }
+
 }

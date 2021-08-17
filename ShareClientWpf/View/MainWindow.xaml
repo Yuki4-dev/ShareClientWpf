@@ -61,32 +61,27 @@
 
         </StackPanel>
 
-        <local:TitleBarContent>
+        <Grid Background="{StaticResource HeaderBackGround}" MouseLeftButtonDown="Grid_MouseLeftButtonDown">
 
-            <Grid Background="{StaticResource HeaderBackGround}">
+            <Grid.Resources>
+                <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+                    <Setter Property="Margin" Value="4"/>
+                </Style>
+            </Grid.Resources>
 
-                <Grid.Resources>
-                    <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
-                        <Setter Property="Margin" Value="4"/>
-                    </Style>
-                </Grid.Resources>
-                
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-                <Button Grid.Row="0">Send</Button>
-                <Button Grid.Row="1">Send</Button>
-                <Button Grid.Row="2">Send</Button>
-                
-            </Grid>
+            <Button Grid.Row="0" Command="{Binding SendCommand}">Send</Button>
+            <Button Grid.Row="1">Receive</Button>
+            <Button Grid.Row="2">More</Button>
 
-        </local:TitleBarContent>
-      
+        </Grid>
 
-        <Image Grid.ColumnSpan="2"
+        <Image Grid.Column="1"
                HorizontalAlignment="Center"
                Source="{Binding Source, Mode=OneWay}"
                Stretch="Fill" />

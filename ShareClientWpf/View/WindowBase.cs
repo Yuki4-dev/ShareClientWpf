@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
@@ -6,6 +8,9 @@ namespace ShareClientWpf
 {
     public class WindowBase : Window
     {
+        protected Action<object> Callback { get; set; }
+        protected object Paramater { get; set; }
+
         public Brush ThemeBrush
         {
             get => (Brush)GetValue(ThemeBrushProperty);
@@ -31,19 +36,35 @@ namespace ShareClientWpf
             }
         }
 
-        private void PreViewModel(ViewModelBase viewModel)
+        private void PreViewModel(ViewModelBase vm)
         {
-            viewModel.ShowMessageBox += ShowMessageBox;
-            Closing += (s, e) =>
+            vm.ShowMessageBox += ViewModel_ShowMessageBox;
+            vm.ShowWindow += Vm_ShowWindow;
+            Closing += (s, e) => e.Cancel = vm.PostProcces();
+        }
+
+        protected virtual void Vm_ShowWindow(Type windowType, bool isModal, object paramater, Action<object> callback)
+        {
+            var window = (Window)Activator.CreateInstance(windowType);
+            if (window is WindowBase windowBase)
             {
-                e.Cancel = viewModel.PostProcces();
-            };
+                windowBase.Callback = callback;
+                windowBase.Paramater = paramater;
+            }
+
+            if (isModal)
+            {
+                window.ShowDialog();
+            }
+            else
+            {
+                window.Show();
+            }
         }
 
-        protected virtual void ShowMessageBox(object sender, ShowMessageBoxEventArgs e)
+        protected virtual MessageBoxResult ViewModel_ShowMessageBox(string arg1, MessageBoxButton arg2)
         {
-            e.Result = MessageDialog.Show(Title, e.Message, e.Button);
+            return MessageDialog.Show(Title, arg1, arg2);
         }
-
     }
 }
