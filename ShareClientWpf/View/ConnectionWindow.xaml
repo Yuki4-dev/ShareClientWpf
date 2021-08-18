@@ -6,12 +6,39 @@
         xmlns:local="clr-namespace:ShareClientWpf"
         mc:Ignorable="d"
         Style="{StaticResource DialogWindowStyle}"
-        Title="ConnectionWindow" Height="450" Width="800">
+        Title="ConnectionWindow">
+
+    <Window.DataContext>
+        <local:ConnectionWindowViewModel/>
+    </Window.DataContext>
+    
     <Grid HorizontalAlignment="Center"
           VerticalAlignment="Center">
 
-        <Button Style="{StaticResource DefaultButtonStyle}" Width="100" Click="Button_Click">OK</Button>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
+        <TextBlock Text="{Binding ConnectText,Mode=OneWay}" FontSize="32"/>
+
+        <StackPanel Grid.Row="1" 
+                    Orientation="Horizontal">
+
+            <Button Margin="4" 
+                    Command="{Binding OkCommand}"
+                    Style="{StaticResource DefaultButtonStyle}" 
+                    Width="100"
+                    Content="OK"/>
+
+            <Button Margin="4" 
+                    Command="{Binding CancelCommand}"
+                    Style="{StaticResource DefaultButtonStyle}" 
+                    Width="100"
+                    Content="Cancel"/>
+
+        </StackPanel>
+        
     </Grid>
     
 </local:WindowBase>

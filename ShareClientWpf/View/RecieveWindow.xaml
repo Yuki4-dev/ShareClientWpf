@@ -6,36 +6,68 @@
         xmlns:local="clr-namespace:ShareClientWpf"
         mc:Ignorable="d"
         Style="{StaticResource DialogWindowStyle}"
-        ExecuteCallback="{Binding Execute, Mode=OneWayToSource}"
-        Title="RecieveWindow" Height="450" Width="800">
+        Title="RecieveWindow">
 
     <Window.DataContext>
         <local:RecieveWindowViewModel />
     </Window.DataContext>
 
-    <StackPanel HorizontalAlignment="Center"
+
+    <Grid HorizontalAlignment="Center"
           VerticalAlignment="Center">
 
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Port" 
-                       Margin="8" 
-                       FontSize="24"/>
-            <TextBox  Text="{Binding PortText ,Mode=TwoWay}" 
-                      Margin="8" 
-                      Width="100"/>
-        </StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal">
-            <Button Margin="4" 
-                    Style="{StaticResource DefaultButtonStyle}" 
-                    Content="開始" 
-                    Command="{Binding RecieveCommand}"/>
-            
-            <Button Margin="4" Style="{StaticResource DefaultButtonStyle}" 
-                    Content="キャンセル" 
-                    Command="{Binding CloseCommand}"/>
-            
-        </StackPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
 
-    </StackPanel>
+        <Grid.Resources>
+            
+            <Style TargetType="TextBlock">
+                <Setter Property="FontSize" Value="24"/>
+                <Setter Property="Margin" Value="4"/>
+            </Style>
+
+            <Style TargetType="TextBox">
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="Margin" Value="4"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+            </Style>
+
+            <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+                <Setter Property="Margin" Value="4"/>
+                <Setter Property="Width" Value="100"/>
+            </Style>
+
+        </Grid.Resources>
+
+        <TextBlock Text="ポート番号"/>
+        
+        <TextBox Grid.Column="1" 
+                 Text="{Binding PortText ,Mode=TwoWay}" 
+                 Width="100"/>
+
+        <Button Grid.Row="1"
+                Content="開始" 
+                Command="{Binding RecieveCommand}"/>
+
+        <Button Grid.Row="1"
+                Grid.Column="1" 
+                Content="キャンセル" 
+                Command="{Binding CloseCommand}"/>
+
+        <TextBlock Grid.Row="2"
+                   Grid.ColumnSpan="2" 
+                   Foreground="Red"
+                   FontSize="16"
+                   Text="{Binding Message}"/>
+
+    </Grid>
+    
 </local:WindowBase>

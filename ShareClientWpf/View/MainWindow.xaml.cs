@@ -30,5 +30,10 @@ namespace ShareClientWpf
                 DragMove();
             }
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadViewModel(null, null);
+        }
     }
 }

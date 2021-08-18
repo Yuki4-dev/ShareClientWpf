@@ -23,11 +23,5 @@ namespace ShareClientWpf
         {
             InitializeComponent();
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            ExecuteCallback?.Invoke(null);
-            Close();
-        }
     }
 }

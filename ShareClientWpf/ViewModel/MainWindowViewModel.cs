@@ -13,11 +13,20 @@ namespace ShareClientWpf
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        private IClientContrloler clientContrloler = new ShreClientController();
+
         private ImageSource source;
         public ImageSource Source
         {
             get => source;
             set => SetProperty(ref source, value);
+        }
+
+        private string statusText;
+        public string StatusText
+        {
+            get => statusText;
+            set => SetProperty(ref statusText, value);
         }
 
         private ICommand sendCommand;
@@ -41,48 +50,53 @@ namespace ShareClientWpf
             set => SetProperty(ref moreCommand, value);
         }
 
-        private string statusText;
-        public string StatusText
-        {
-            get => statusText;
-            set => SetProperty(ref statusText, value);
-        }
-
-
         public MainWindowViewModel()
         {
-            sendCommand = new Command(SendExecute);
-            recieveCommand = new Command(RecieveExecute);
-            moreCommand = new Command(MoreExecute);
+            SendCommand = new Command(SendExecute);
+            RecieveCommand = new Command(RecieveExecute);
+            MoreCommand = new Command(MoreExecute);
         }
 
         private async void SendExecute()
         {
-            ((Command)SendCommand).Can = false;
+            ((Command)SendCommand).CanExecuteValue = false;
+            StatusText = "送信中";
 
-            await OnShowWindow(typeof(SendWindow));
-            StatusText = "送信";
+            await OnShowWindow(typeof(SendWindow), executeCall: SendProcess);
+
+            ((Command)SendCommand).CanExecuteValue = true;
+            StatusText = "";
+        }
+
+        private void SendProcess(object handle)
+        {
+
         }
 
         private void RecieveExecute()
         {
-
-            OnShowWindow(typeof(RecieveWindow), executeCall: (port) => RecieveProcess((string)port));
+            OnShowWindow(typeof(RecieveWindow), executeCall: RecieveProcess);
         }
 
-        private async void RecieveProcess(string port)
+        private async void RecieveProcess(object port)
         {
-            ((Command)RecieveCommand).Can = false;
+            ((Command)RecieveCommand).CanExecuteValue = false;
             StatusText = "受信中";
 
-            using var con = new ConnectionManager();
-            var connection = await con.AcceptAsync(new IPEndPoint(IPAddress.Any, int.Parse(port)), (ip, data) =>
+            await clientContrloler.AcceptAsync((int)port, (ip, data) =>
             {
-                var t = OnShowWindow(typeof(ConnectionWindow));
-                t.Wait();
-                return true;
+                bool reqConnect = false;
+                OnShowWindow(typeof(ConnectionWindow),
+                    paramater: Tuple.Create(ip, data),
+                    executeCall: (p) => reqConnect = (bool)p).Wait();
+
+                return reqConnect;
             });
 
+            await clientContrloler.ReceiveAsync((img) => Source = img);
+
+            ((Command)RecieveCommand).CanExecuteValue = true;
+            StatusText = "";
         }
 
         private void MoreExecute()
@@ -90,9 +104,19 @@ namespace ShareClientWpf
             OnShowWindow(typeof(SendWindow));
         }
 
-        public override bool PostProcces()
+        protected override void CloseExecute()
         {
-            return OnShowMessageBox("終了しますか？", MessageBoxButton.YesNo) != MessageBoxResult.Yes;
+            Closing();
+        }
+
+        private async void Closing()
+        {
+            var result = await OnShowMessageBox("終了しますか？", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
+            {
+                clientContrloler.Dispose();
+                OnCloseWindow();
+            }
         }
     }
 }

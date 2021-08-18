@@ -10,7 +10,7 @@ namespace ShareClientWpf
     public class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        public event Func<string, MessageBoxButton, MessageBoxResult> ShowMessageBox;
+        public event Func<string, MessageBoxButton, Task<MessageBoxResult>> ShowMessageBox;
         public event Func<Type, bool, object, Action<object>, Task> ShowWindow;
         public event Func<bool> CloseWindow;
 
@@ -38,9 +38,14 @@ namespace ShareClientWpf
             CloseCommand = new Command(CloseExecute);
         }
 
-        private void CloseExecute()
+        protected virtual void CloseExecute()
         {
             OnCloseWindow();
+        }
+
+        public virtual void LoadedProcces(object paramater, Action<object> executeCallback)
+        {
+            return;
         }
 
         public virtual bool PostProcces()
@@ -50,7 +55,7 @@ namespace ShareClientWpf
 
         protected bool SetProperty<T>(ref T prop, T value, Action postCallMethod = null, [CallerMemberName] string name = "")
         {
-            if (prop?.Equals(value) ?? value != null)
+            if (!prop?.Equals(value) ?? value != null)
             {
                 prop = value;
                 OnPropertyChanged(name);
@@ -68,11 +73,11 @@ namespace ShareClientWpf
         protected void OnPropertyChanged([CallerMemberName] string name = "") =>
             PropertyChanged?.Invoke(this, new(name));
 
-        protected MessageBoxResult OnShowMessageBox(string msg) =>
+        protected Task<MessageBoxResult> OnShowMessageBox(string msg) =>
             OnShowMessageBox(msg, MessageBoxButton.OK);
 
-        protected MessageBoxResult OnShowMessageBox(string msg, MessageBoxButton button) =>
-            ShowMessageBox?.Invoke(msg, button) ?? MessageBoxResult.None;
+        protected Task<MessageBoxResult> OnShowMessageBox(string msg, MessageBoxButton button) =>
+            ShowMessageBox?.Invoke(msg, button) ?? Task.FromResult(MessageBoxResult.None);
 
         protected bool OnCloseWindow() => CloseWindow?.Invoke() ?? false;
     }
@@ -83,36 +88,40 @@ namespace ShareClientWpf
         public event EventHandler CanExecuteChanged;
 
         private Action<object> callCommand;
+        private Action postCallMethod;
 
-        private bool can = true;
-        public bool Can
+        private bool canExecuteValue = true;
+        public bool CanExecuteValue
         {
-            get => can;
+            get => canExecuteValue;
             set
             {
-                if (!can.Equals(value))
+                if (!canExecuteValue.Equals(value))
                 {
-                    can = value;
+                    canExecuteValue = value;
                     CanExecuteChanged?.Invoke(this, new EventArgs());
                 }
             }
         }
 
-        public Command(Action action)
+        public Command(Action action, Action postCall = null)
         {
             callCommand = (p) => action.Invoke();
+            postCallMethod = postCall;
         }
 
-        public Command(Action<object> action)
+        public Command(Action<object> action, Action postCall = null)
         {
             callCommand = action;
+            postCallMethod = postCall;
         }
 
-        public bool CanExecute(object parameter) => Can;
+        public bool CanExecute(object parameter) => CanExecuteValue;
 
         public void Execute(object parameter)
         {
             callCommand.Invoke(parameter);
+            postCallMethod?.Invoke();
         }
     }
 

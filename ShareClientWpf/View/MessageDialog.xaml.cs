@@ -14,8 +14,7 @@ namespace ShareClientWpf
         private MessageDialog(string title, string message, MessageBoxButton button) : base()
         {
             InitializeComponent();
-
-            TitleTextBlock.Text = title;
+            Title = title;
             MessageTextBlock.Text = message;
 
             if (button == MessageBoxButton.OK)

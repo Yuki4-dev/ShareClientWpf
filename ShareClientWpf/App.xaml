@@ -32,10 +32,38 @@
             <Setter Property="Foreground" Value="Silver" />
         </Style>
 
+        <ControlTemplate TargetType="local:WindowBase" x:Key="DailogTemplate">
+
+            <Border Padding="1" Background="{TemplateBinding ThemeBrush}">
+
+                <Grid Background="{TemplateBinding Background}">
+                
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="{StaticResource HeaderBackGround}">
+
+                        <TextBlock x:Name="TitleTextBlock"
+                                   Margin="12,4,12,2"
+                                   FontSize="16"
+                                   Text="{TemplateBinding Title}" />
+                    </Border>
+
+                <ContentPresenter Grid.Row="1" 
+                                  HorizontalAlignment="Stretch" 
+                                  VerticalAlignment="Stretch"/>
+
+            </Grid>
+
+            </Border>
+        </ControlTemplate>
+
         <Style
             x:Key="DialogWindowStyle"
             BasedOn="{StaticResource DefaultWindowStyle}"
-            TargetType="{x:Type Window}">
+            TargetType="{x:Type local:WindowBase}">
             <Setter Property="WindowChrome.WindowChrome">
                 <Setter.Value>
                     <WindowChrome
@@ -46,7 +74,13 @@
                         UseAeroCaptionButtons="True" />
                 </Setter.Value>
             </Setter>
+            <Setter Property="Template" Value="{StaticResource DailogTemplate }"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="{StaticResource WindowBackGround}"/>
+            <Setter Property="Foreground" Value="{StaticResource DialogForeGround}"/>
             <Setter Property="ResizeMode" Value="NoResize" />
+            <Setter Property="Width" Value="500"/>
+            <Setter Property="Height" Value="350"/>
         </Style>
 
         <ControlTemplate x:Key="DefaultButtonTemplate" TargetType="{x:Type Button}">
