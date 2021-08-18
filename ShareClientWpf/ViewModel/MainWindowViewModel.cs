@@ -101,7 +101,12 @@ namespace ShareClientWpf
 
         private void MoreExecute()
         {
-            OnShowWindow(typeof(SendWindow));
+            OnShowWindow(typeof(SendWindow), executeCall: MoreProcess);
+        }
+
+        private void MoreProcess(object context)
+        {
+
         }
 
         protected override void CloseExecute()
