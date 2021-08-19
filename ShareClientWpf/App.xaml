@@ -14,7 +14,7 @@
         <Brush x:Key="ButtonForeGround">LightGray</Brush>
         <Brush x:Key="DialogForeGround">LightGray</Brush>
 
-        <Style x:Key="DefaultWindowStyle" TargetType="{x:Type Window}">
+        <Style x:Key="DefaultWindowStyle" TargetType="{x:Type local:WindowBase}">
             <Setter Property="WindowChrome.WindowChrome">
                 <Setter.Value>
                     <WindowChrome
@@ -27,7 +27,6 @@
             </Setter>
             <Setter Property="SnapsToDevicePixels" Value="True" />
             <Setter Property="UseLayoutRounding" Value="True" />
-            <Setter Property="BorderThickness" Value="1" />
             <Setter Property="Background" Value="{StaticResource WindowBackGround}" />
             <Setter Property="Foreground" Value="Silver" />
         </Style>
@@ -60,10 +59,10 @@
             </Border>
         </ControlTemplate>
 
-        <Style
-            x:Key="DialogWindowStyle"
-            BasedOn="{StaticResource DefaultWindowStyle}"
-            TargetType="{x:Type local:WindowBase}">
+        <Style x:Key="DialogWindowStyle"
+               BasedOn="{StaticResource DefaultWindowStyle}"
+               TargetType="{x:Type local:WindowBase}">
+            
             <Setter Property="WindowChrome.WindowChrome">
                 <Setter.Value>
                     <WindowChrome
@@ -84,12 +83,16 @@
         </Style>
 
         <ControlTemplate x:Key="DefaultButtonTemplate" TargetType="{x:Type Button}">
-            <Border Background="{TemplateBinding Background}">
+            <Border Background="{TemplateBinding Background}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+                
                 <TextBlock
                     HorizontalAlignment="Center"
                     FontSize="24"
                     Foreground="{TemplateBinding Foreground}"
                     Text="{TemplateBinding Content}" />
+                
             </Border>
         </ControlTemplate>
 
@@ -100,6 +103,77 @@
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="{StaticResource ButtonMouseOver}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <ControlTemplate x:Key="TextButtonTemplate" TargetType="{x:Type Button}">
+            
+            <Border Background="{TemplateBinding Background}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+
+                <VisualStateManager.VisualStateGroups>
+
+                    <VisualStateGroup Name="CommonStates">
+                        <VisualState Name="Normal" />
+                        <VisualState Name="MouseOver">
+                            <Storyboard>
+                                <DoubleAnimation From="0.0" To="1.5" 
+                                                 Duration="0"  
+                                                 Storyboard.TargetName="UnderLine" 
+                                                 Storyboard.TargetProperty="Height"/>
+                            </Storyboard>
+                        </VisualState>
+                        <VisualState Name="Pressed"/>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+
+                <Grid>
+                    <TextBlock x:Name="ContentText"
+                               HorizontalAlignment="Center"
+                               FontSize="24"
+                               Foreground="{TemplateBinding Foreground}"
+                               Text="{TemplateBinding Content}" />
+
+                    <Grid>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="6*"/>
+                            <RowDefinition Height="4*"/>
+                        </Grid.RowDefinitions>
+
+                        <Border x:Name="UnderLine"
+                                Grid.Row="1"
+                                Height="0"
+                                Background="{TemplateBinding Foreground}"
+                                VerticalAlignment="Top" 
+                                HorizontalAlignment="Stretch">
+
+                        </Border>
+                    </Grid>
+
+                </Grid>
+
+            </Border>
+        </ControlTemplate>
+
+        <Style  x:Key="TextButtonStyle" TargetType="Button">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template" Value="{StaticResource TextButtonTemplate}"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource ButtonMouseOver}" />
+                    <Setter Property="BorderThickness"  Value="3"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style  x:Key="IconButtonStyle" TargetType="local:IconButton">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource ButtonMouseOver}" />
                 </Trigger>
             </Style.Triggers>
         </Style>

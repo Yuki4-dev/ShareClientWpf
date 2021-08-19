@@ -11,7 +11,7 @@
     <Window.DataContext>
         <local:ConnectionWindowViewModel/>
     </Window.DataContext>
-    
+
     <Grid HorizontalAlignment="Center"
           VerticalAlignment="Center">
 
@@ -20,25 +20,27 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="{Binding ConnectText,Mode=OneWay}" FontSize="32"/>
+        <TextBlock Text="{Binding ConnectText}" FontSize="32"/>
 
         <StackPanel Grid.Row="1" 
                     Orientation="Horizontal">
 
             <Button Margin="4" 
-                    Command="{Binding OkCommand}"
+                    Command="{Binding ExecuteCommand}"
+                    CommandParameter="1"
                     Style="{StaticResource DefaultButtonStyle}" 
                     Width="100"
                     Content="OK"/>
 
             <Button Margin="4" 
-                    Command="{Binding CancelCommand}"
+                    Command="{Binding ExecuteCommand}"
+                    CommandParameter="2"
                     Style="{StaticResource DefaultButtonStyle}" 
                     Width="100"
                     Content="Cancel"/>
 
         </StackPanel>
-        
+
     </Grid>
-    
+
 </local:WindowBase>

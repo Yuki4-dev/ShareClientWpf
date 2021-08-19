@@ -12,7 +12,6 @@
         <local:RecieveWindowViewModel />
     </Window.DataContext>
 
-
     <Grid HorizontalAlignment="Center"
           VerticalAlignment="Center">
 

@@ -20,24 +20,16 @@ namespace ShareClientWpf
             set => SetProperty(ref connectText, value);
         }
 
-        private ICommand okCommand;
-        public ICommand OkCommand
+        private ICommand executeCommand;
+        public ICommand ExecuteCommand
         {
-            get => okCommand;
-            set => SetProperty(ref okCommand, value);
-        }
-
-        private ICommand cancelCommand;
-        public ICommand CancelCommand
-        {
-            get => cancelCommand;
-            set => SetProperty(ref cancelCommand, value);
+            get => executeCommand;
+            set => SetProperty(ref executeCommand, value);
         }
 
         public ConnectionWindowViewModel()
         {
-            OkCommand = new Command(OkExecute, () => OnCloseWindow());
-            CancelCommand = new Command(CancelExecute, () => OnCloseWindow());
+            ExecuteCommand = new Command(Execute, () => OnCloseWindow());
         }
 
         public override void LoadedProcces(object paramater, Action<object> executeCallback)
@@ -55,14 +47,9 @@ namespace ShareClientWpf
             ConnectText = iPEndPoint.Address.ToString();
         }
 
-        public void OkExecute()
+        private void Execute(object paramater)
         {
-            callback?.Invoke(true);
-        }
-
-        public void CancelExecute()
-        {
-            callback?.Invoke(false);
+            callback?.Invoke(paramater.ToString().Equals("1"));
         }
     }
 }

@@ -6,11 +6,11 @@
     xmlns:local="clr-namespace:ShareClientWpf"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="Dialog"
+    WindowStartupLocation="CenterScreen"
     Width="600"
     Height="200"
     BorderBrush="{Binding RelativeSource={RelativeSource Self}, Path=ThemeBrush}"
     Style="{StaticResource DialogWindowStyle}"
-    WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
     <Grid>

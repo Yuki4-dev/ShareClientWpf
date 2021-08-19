@@ -73,10 +73,7 @@ namespace ShareClientWpf
         protected void OnPropertyChanged([CallerMemberName] string name = "") =>
             PropertyChanged?.Invoke(this, new(name));
 
-        protected Task<MessageBoxResult> OnShowMessageBox(string msg) =>
-            OnShowMessageBox(msg, MessageBoxButton.OK);
-
-        protected Task<MessageBoxResult> OnShowMessageBox(string msg, MessageBoxButton button) =>
+        protected Task<MessageBoxResult> OnShowMessageBox(string msg, MessageBoxButton button = MessageBoxButton.OK) =>
             ShowMessageBox?.Invoke(msg, button) ?? Task.FromResult(MessageBoxResult.None);
 
         protected bool OnCloseWindow() => CloseWindow?.Invoke() ?? false;
@@ -104,10 +101,8 @@ namespace ShareClientWpf
             }
         }
 
-        public Command(Action action, Action postCall = null)
+        public Command(Action action, Action postCall = null) : this((p) => action.Invoke(), postCall)
         {
-            callCommand = (p) => action.Invoke();
-            postCallMethod = postCall;
         }
 
         public Command(Action<object> action, Action postCall = null)

@@ -22,11 +22,18 @@ namespace ShareClientWpf
             set => SetProperty(ref source, value);
         }
 
-        private string statusText;
-        public string StatusText
+        private string recieveStatus;
+        public string RecieveStatus
         {
-            get => statusText;
-            set => SetProperty(ref statusText, value);
+            get => recieveStatus;
+            set => SetProperty(ref recieveStatus, value);
+        }
+
+        private string sendStatus;
+        public string SendStatus
+        {
+            get => sendStatus;
+            set => SetProperty(ref sendStatus, value);
         }
 
         private ICommand sendCommand;
@@ -50,22 +57,37 @@ namespace ShareClientWpf
             set => SetProperty(ref moreCommand, value);
         }
 
+        private ICommand stopReceiveCommand;
+        public ICommand StopReceiveCommand
+        {
+            get => stopReceiveCommand;
+            set => SetProperty(ref stopReceiveCommand, value);
+        }
+
+        private ICommand stopSendCommand;
+        public ICommand StopSendCommand
+        {
+            get => stopSendCommand;
+            set => SetProperty(ref stopSendCommand, value);
+        }
+
         public MainWindowViewModel()
         {
             SendCommand = new Command(SendExecute);
             RecieveCommand = new Command(RecieveExecute);
             MoreCommand = new Command(MoreExecute);
+            StopReceiveCommand = new Command(StopReceiveExecute);
         }
 
         private async void SendExecute()
         {
             ((Command)SendCommand).CanExecuteValue = false;
-            StatusText = "送信中";
+            SendStatus = "送信：接続要求";
 
             await OnShowWindow(typeof(SendWindow), executeCall: SendProcess);
 
             ((Command)SendCommand).CanExecuteValue = true;
-            StatusText = "";
+            SendStatus = "";
         }
 
         private void SendProcess(object handle)
@@ -81,8 +103,9 @@ namespace ShareClientWpf
         private async void RecieveProcess(object port)
         {
             ((Command)RecieveCommand).CanExecuteValue = false;
-            StatusText = "受信中";
+            RecieveStatus = "受信：待機中";
 
+            IPEndPoint iPEndPoint = null;
             await clientContrloler.AcceptAsync((int)port, (ip, data) =>
             {
                 bool reqConnect = false;
@@ -90,13 +113,15 @@ namespace ShareClientWpf
                     paramater: Tuple.Create(ip, data),
                     executeCall: (p) => reqConnect = (bool)p).Wait();
 
+                iPEndPoint = ip;
                 return reqConnect;
             });
 
+            RecieveStatus = $"受信：{iPEndPoint?.Address}";
             await clientContrloler.ReceiveAsync((img) => Source = img);
 
             ((Command)RecieveCommand).CanExecuteValue = true;
-            StatusText = "";
+            RecieveStatus = "";
         }
 
         private void MoreExecute()
@@ -107,6 +132,18 @@ namespace ShareClientWpf
         private void MoreProcess(object context)
         {
 
+        }
+
+        private async void StopReceiveExecute()
+        {
+
+            var result =  await OnShowMessageBox("受信処理を中止しますか？", MessageBoxButton.YesNo);
+            if(result == MessageBoxResult.Yes)
+            {
+                clientContrloler.Dispose();
+                ((Command)RecieveCommand).CanExecuteValue = true;
+                RecieveStatus = "";
+            }
         }
 
         protected override void CloseExecute()

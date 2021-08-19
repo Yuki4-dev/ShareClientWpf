@@ -56,6 +56,7 @@ namespace ShareClientWpf
 
                 if (isModal)
                 {
+                    window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                     window.ShowDialog();
                 }
                 else
