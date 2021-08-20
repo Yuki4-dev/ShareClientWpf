@@ -10,6 +10,7 @@
     Height="450"
     Loaded="Window_Loaded"
     BorderThickness="2"
+    Closing="WindowBase_Closing"
     BorderBrush="{Binding RelativeSource={RelativeSource Self}, Path=ThemeBrush}"
     Style="{StaticResource DefaultWindowStyle}"
     mc:Ignorable="d">

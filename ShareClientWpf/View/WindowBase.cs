@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -9,6 +11,16 @@ namespace ShareClientWpf
 {
     public class WindowBase : Window
     {
+        private readonly static Dictionary<Type, WindowBase> casheWindows = new();
+
+        public bool IsCasheWindow
+        {
+            get => (bool)GetValue(IsCasheWindowProperty);
+            set => SetValue(IsCasheWindowProperty, value);
+        }
+        public static readonly DependencyProperty IsCasheWindowProperty =
+            DependencyProperty.Register(nameof(IsCasheWindow), typeof(bool), typeof(WindowBase), new PropertyMetadata(false));
+
         public Brush ThemeBrush
         {
             get => (Brush)GetValue(ThemeBrushProperty);
@@ -40,7 +52,15 @@ namespace ShareClientWpf
 
         protected virtual bool Vm_CloseWindow()
         {
-            Close();
+            if (IsCasheWindow)
+            {
+                Hide();
+            }
+            else
+            {
+                Close();
+            }
+
             return true;
         }
 
@@ -48,10 +68,26 @@ namespace ShareClientWpf
         {
             await Dispatcher.InvokeAsync(() =>
             {
-                var window = (Window)Activator.CreateInstance(windowType);
+                Window window;
+                if (casheWindows.ContainsKey(windowType))
+                {
+                    window = casheWindows[windowType];
+                }
+                else
+                {
+                    window = (Window)Activator.CreateInstance(windowType);
+                }
+
                 if (window is WindowBase windowBase)
                 {
                     windowBase.LoadViewModel(paramater, callback);
+                    if (windowBase.IsCasheWindow)
+                    {
+                        if (!casheWindows.ContainsKey(windowType))
+                        {
+                            casheWindows[windowType] = windowBase;
+                        }
+                    }
                 }
 
                 if (isModal)
@@ -70,6 +106,19 @@ namespace ShareClientWpf
         protected virtual async Task<MessageBoxResult> Vm_ShowMessageBox(string arg1, MessageBoxButton arg2)
         {
             return await Dispatcher.InvokeAsync(() => MessageDialog.Show(Title, arg1, arg2));
+        }
+
+        protected static void ClearCasheWindow()
+        {
+            casheWindows.Values.ToList().ForEach((x) =>
+            {
+                try
+                {
+                    x.Close();
+                }
+                catch { }
+            });
+            casheWindows.Clear();
         }
     }
 }

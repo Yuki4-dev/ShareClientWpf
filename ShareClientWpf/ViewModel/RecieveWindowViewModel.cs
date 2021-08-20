@@ -44,13 +44,15 @@ namespace ShareClientWpf
 
         public void RecieveExecute()
         {
-            if(int.TryParse(PortText, out var port))
+            if (int.TryParse(PortText, out var port))
             {
                 callback?.Invoke(port);
                 OnCloseWindow();
             }
-
-            Message = "※数字を入力してください。";
+            else
+            {
+                Message = "※数字を入力してください。";
+            }
         }
     }
 }

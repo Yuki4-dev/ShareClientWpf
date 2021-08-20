@@ -17,7 +17,6 @@ namespace ShareClientWpf
 {
     public partial class MainWindow : WindowBase
     {
-
         public MainWindow()
         {
             InitializeComponent();
@@ -34,6 +33,11 @@ namespace ShareClientWpf
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             LoadViewModel(null, null);
+        }
+
+        private void WindowBase_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            ClearCasheWindow();
         }
     }
 }

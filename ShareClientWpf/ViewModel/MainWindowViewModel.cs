@@ -14,6 +14,7 @@ namespace ShareClientWpf
     public class MainWindowViewModel : ViewModelBase
     {
         private IClientContrloler clientContrloler = new ShreClientController();
+        private SettingContext settingContext = new SettingContext();
 
         private ImageSource source;
         public ImageSource Source
@@ -126,19 +127,19 @@ namespace ShareClientWpf
 
         private void MoreExecute()
         {
-            OnShowWindow(typeof(SendWindow), executeCall: MoreProcess);
+            OnShowWindow(typeof(MoreWindow), paramater: settingContext, executeCall: MoreProcess);
         }
 
         private void MoreProcess(object context)
         {
-
+            settingContext = (SettingContext)context;
         }
 
         private async void StopReceiveExecute()
         {
 
-            var result =  await OnShowMessageBox("受信処理を中止しますか？", MessageBoxButton.YesNo);
-            if(result == MessageBoxResult.Yes)
+            var result = await OnShowMessageBox("受信処理を中止しますか？", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
             {
                 clientContrloler.Dispose();
                 ((Command)RecieveCommand).CanExecuteValue = true;
