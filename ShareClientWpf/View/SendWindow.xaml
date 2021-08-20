@@ -60,7 +60,8 @@
                     HorizontalAlignment="Right"
                     Grid.Row="2">
 
-            <Button Content="開始"/>
+            <Button Content="開始"
+                    Command="{Binding SendCommand}"/>
             <Button Content="キャンセル"
                     Command="{Binding CloseCommand}"/>
 
@@ -69,6 +70,7 @@
         <TextBlock Grid.Row="3"
                    Foreground="Red"
                    FontSize="16"
+                   HorizontalAlignment="Right"
                    Text="{Binding Message}"/>
 
     </Grid>

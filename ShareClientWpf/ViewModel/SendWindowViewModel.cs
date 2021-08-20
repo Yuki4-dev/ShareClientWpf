@@ -52,9 +52,15 @@ namespace ShareClientWpf
 
         public void SendExecute()
         {
-            if (int.TryParse(IptText, out var ip) && int.TryParse(PortText, out var port))
+            if (int.TryParse(PortText, out var port))
             {
-                callback?.Invoke(Tuple.Create(ip, port));
+                var context = new SendContext()
+                {
+                    Ip = IptText,
+                    Port = port
+                };
+
+                callback?.Invoke(context);
                 OnCloseWindow();
             }
             else

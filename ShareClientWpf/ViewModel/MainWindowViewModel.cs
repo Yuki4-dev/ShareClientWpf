@@ -91,7 +91,7 @@ namespace ShareClientWpf
             SendStatus = "";
         }
 
-        private void SendProcess(object handle)
+        private void SendProcess(object context)
         {
 
         }
