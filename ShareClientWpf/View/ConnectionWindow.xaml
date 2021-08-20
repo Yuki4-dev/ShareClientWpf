@@ -18,12 +18,13 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="{StaticResource DialogRowHeight}"/>
         </Grid.RowDefinitions>
 
         <TextBlock Text="{Binding ConnectText}" FontSize="32"/>
 
         <StackPanel Grid.Row="1" 
+                    HorizontalAlignment="Right"
                     Orientation="Horizontal">
 
             <Button Margin="4" 

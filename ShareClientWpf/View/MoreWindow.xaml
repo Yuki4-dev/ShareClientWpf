@@ -17,10 +17,10 @@
           VerticalAlignment="Center">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="{StaticResource DialogRowHeight}"/>
+            <RowDefinition Height="{StaticResource DialogRowHeight}"/>
+            <RowDefinition Height="{StaticResource DialogRowHeight}"/>
+            <RowDefinition Height="{StaticResource DialogRowHeight}"/>
         </Grid.RowDefinitions>
 
         <Grid.Resources>

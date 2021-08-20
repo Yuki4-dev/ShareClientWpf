@@ -17,8 +17,8 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="{StaticResource DialogRowHeight}"/>
+            <RowDefinition Height="{StaticResource DialogRowHeight}"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
@@ -43,6 +43,7 @@
         </Grid.Resources>
 
         <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
                     Grid.Row="1">
 
             <TextBlock Text="IP："/>

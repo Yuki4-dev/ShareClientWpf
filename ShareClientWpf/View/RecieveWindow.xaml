@@ -17,9 +17,9 @@
           VerticalAlignment="Center">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="{StaticResource DialogRowHeight}"/>
+            <RowDefinition Height="{StaticResource DialogRowHeight}"/>
+            <RowDefinition Height="{StaticResource DialogRowHeight}"/>
         </Grid.RowDefinitions>
         
         <Grid.Resources>
@@ -42,7 +42,8 @@
 
         </Grid.Resources>
 
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right">
 
             <TextBlock Text="PORT："/>
             <TextBox Text="{Binding PortText ,Mode=TwoWay}" 
@@ -51,6 +52,7 @@
         </StackPanel>
 
         <StackPanel Grid.Row="1"
+                    HorizontalAlignment="Right"
                     Orientation="Horizontal">
 
             <Button Content="開始" 

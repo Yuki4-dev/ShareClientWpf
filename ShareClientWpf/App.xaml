@@ -1,5 +1,6 @@
 ﻿<Application
     x:Class="ShareClientWpf.App"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:ShareClientWpf"
@@ -13,6 +14,8 @@
         <Brush x:Key="ButtonMouseOver">#7C7C7C</Brush>
         <Brush x:Key="ButtonForeGround">LightGray</Brush>
         <Brush x:Key="DialogForeGround">LightGray</Brush>
+
+        <GridLength x:Key="DialogRowHeight" >40</GridLength>
 
         <Style x:Key="DefaultWindowStyle" TargetType="{x:Type local:WindowBase}">
             <Setter Property="WindowChrome.WindowChrome">
