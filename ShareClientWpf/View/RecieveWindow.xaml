@@ -17,16 +17,11 @@
           VerticalAlignment="Center">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-
+        
         <Grid.Resources>
             
             <Style TargetType="TextBlock">
@@ -47,26 +42,34 @@
 
         </Grid.Resources>
 
-        <TextBlock Text="ポート番号"/>
-        
-        <TextBox Grid.Column="1" 
-                 Text="{Binding PortText ,Mode=TwoWay}" 
-                 Width="100"/>
+        <StackPanel Orientation="Horizontal">
 
-        <Button Grid.Row="1"
-                Content="開始" 
-                Command="{Binding RecieveCommand}"/>
+            <TextBlock Text="PORT："/>
+            <TextBox Text="{Binding PortText ,Mode=TwoWay}" 
+                 Width="120"/>
+            
+        </StackPanel>
 
-        <Button Grid.Row="1"
-                Grid.Column="1" 
-                Content="キャンセル" 
-                Command="{Binding CloseCommand}"/>
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal">
 
-        <TextBlock Grid.Row="2"
+            <Button Content="開始" 
+                    Command="{Binding RecieveCommand}"/>
+            <Button Content="キャンセル" 
+                    Command="{Binding CloseCommand}"/>
+            
+        </StackPanel>
+
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal">
+
+            <TextBlock Grid.Row="2"
                    Grid.ColumnSpan="2" 
                    Foreground="Red"
                    FontSize="16"
                    Text="{Binding Message}"/>
+            
+        </StackPanel>
 
     </Grid>
     

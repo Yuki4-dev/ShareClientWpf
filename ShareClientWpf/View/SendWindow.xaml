@@ -5,13 +5,71 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShareClientWpf"
         mc:Ignorable="d"
+        IsCasheWindow="True"
         Style="{StaticResource DialogWindowStyle}"
         Title="SendWindow">
+
+    <Window.DataContext>
+        <local:SendWindowViewModel/>
+    </Window.DataContext>
     
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
 
-        <TextBlock Text="SendWIndow" FontSize="32"></TextBlock>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+
+        <Grid.Resources>
+
+            <Style TargetType="TextBlock">
+                <Setter Property="FontSize" Value="24"/>
+                <Setter Property="Margin" Value="4"/>
+            </Style>
+
+            <Style TargetType="TextBox">
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="Margin" Value="4"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+            </Style>
+
+            <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+                <Setter Property="Margin" Value="4"/>
+                <Setter Property="Width" Value="100"/>
+            </Style>
+
+        </Grid.Resources>
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="1">
+
+            <TextBlock Text="IP："/>
+            <TextBox Width="200"
+                     Text="{Binding IptText, Mode=TwoWay}"/>
+
+            <TextBlock Text="PORT："/>
+            <TextBox Width="120"
+                     Text="{Binding PortText, Mode=TwoWay}"/>
+
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Grid.Row="2">
+
+            <Button Content="開始"/>
+            <Button Content="キャンセル"
+                    Command="{Binding CloseCommand}"/>
+
+        </StackPanel>
+
+        <TextBlock Grid.Row="3"
+                   Foreground="Red"
+                   FontSize="16"
+                   Text="{Binding Message}"/>
+
     </Grid>
     
 </local:WindowBase>
