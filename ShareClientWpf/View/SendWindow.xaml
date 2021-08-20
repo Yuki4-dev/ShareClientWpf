@@ -7,72 +7,99 @@
         mc:Ignorable="d"
         IsCasheWindow="True"
         Style="{StaticResource DialogWindowStyle}"
+        Width="700"
+        Height="500"
         Title="SendWindow">
 
     <Window.DataContext>
         <local:SendWindowViewModel/>
     </Window.DataContext>
-    
-    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
 
+    <Window.Resources>
+        <local:WindowInmageInfo2ImageSourceConveter x:Key="WindowInfoConverter" />
+    </Window.Resources>
+
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="{StaticResource DialogRowHeight}"/>
-            <RowDefinition Height="{StaticResource DialogRowHeight}"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="8.5*"/>
+            <RowDefinition Height="2.5*"/>
         </Grid.RowDefinitions>
 
-        <Grid.Resources>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="7*"/>
+            </Grid.ColumnDefinitions>
 
-            <Style TargetType="TextBlock">
-                <Setter Property="FontSize" Value="24"/>
-                <Setter Property="Margin" Value="4"/>
-            </Style>
+            <ListBox x:Name="ImageList"
+                     HorizontalAlignment="Stretch"
+                     BorderThickness="0"
+                     SelectedValue="{Binding SelectWindowInfo,Mode=TwoWay}"
+                     Foreground="{StaticResource DialogForeGround}"
+                     Background="{StaticResource ListBackGround}"
+                     ItemsSource="{Binding WindowImageInfos}">
 
-            <Style TargetType="TextBox">
-                <Setter Property="FontSize" Value="18"/>
-                <Setter Property="Margin" Value="4"/>
-                <Setter Property="VerticalContentAlignment" Value="Center"/>
-            </Style>
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="local:WindowImageInfo">
 
-            <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
-                <Setter Property="Margin" Value="4"/>
-                <Setter Property="Width" Value="100"/>
-            </Style>
+                        <TextBlock Text="{Binding Title}" 
+                                   HorizontalAlignment="Center"/>
 
-        </Grid.Resources>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
 
-        <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Right"
-                    Grid.Row="1">
+            </ListBox>
 
-            <TextBlock Text="IP："/>
-            <TextBox Width="200"
-                     Text="{Binding IptText, Mode=TwoWay}"/>
+            <Image Grid.Column="1"
+                   Source="{Binding SelectedValue, ElementName=ImageList,Converter={StaticResource WindowInfoConverter}}"
+                   Stretch="Fill"/>
 
-            <TextBlock Text="PORT："/>
-            <TextBox Width="120"
-                     Text="{Binding PortText, Mode=TwoWay}"/>
+        </Grid>
 
-        </StackPanel>
+        <Grid Grid.Row="1">
 
-        <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Right"
-                    Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="{StaticResource DialogRowHeight}"/>
+                <RowDefinition Height="{StaticResource DialogRowHeight}"/>
+                <RowDefinition Height="{StaticResource DialogRowHeight}"/>
+            </Grid.RowDefinitions>
 
-            <Button Content="開始"
-                    Command="{Binding SendCommand}"/>
-            <Button Content="キャンセル"
-                    Command="{Binding CloseCommand}"/>
+            <Grid.Resources>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource DialogTextBlockStyle}"/>
+                <Style TargetType="TextBox" BasedOn="{StaticResource DialogTextBoxStyle}"/>
+                <Style TargetType="Button" BasedOn="{StaticResource DialogButtonStyle}"/>
+            </Grid.Resources>
 
-        </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
 
-        <TextBlock Grid.Row="3"
-                   Foreground="Red"
-                   FontSize="16"
-                   HorizontalAlignment="Right"
-                   Text="{Binding Message}"/>
+                <TextBlock Text="IP："/>
+                <TextBox Width="200"
+                     Text="{Binding IpText, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
 
+                <TextBlock Text="PORT："/>
+                <TextBox Width="120"
+                         Text="{Binding PortText, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Grid.Row="1">
+
+                <Button Content="開始"
+                        Command="{Binding SendCommand}"/>
+                <Button Content="キャンセル"
+                        Command="{Binding CloseCommand}"/>
+
+            </StackPanel>
+
+            <TextBlock Grid.Row="2"
+                       Style="{StaticResource WarnningTextBlockStyle}"
+                       Text="{Binding Message}"/>
+
+        </Grid>
+        
     </Grid>
-    
+
 </local:WindowBase>

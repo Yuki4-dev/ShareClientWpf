@@ -59,8 +59,8 @@
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" MaxWidth="108" MinWidth="84"/>
-            <ColumnDefinition Width="8*" />
+            <ColumnDefinition Width="84"/>
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.ColumnSpan="2"
@@ -70,13 +70,23 @@
                     Panel.ZIndex="1"
                     Orientation="Horizontal">
 
-            <Button Content="{Binding SendStatus}"
-                    Command="{Binding StopSendCommand}"
-                    CommandParameter="1"/>
+            <Button Content="{Binding SendStatus , Mode=TwoWay}"
+                    Command="{Binding StopSendCommand}">
+
+                <Button.ToolTip>
+                    <ToolTip Content="送信終了" />
+                </Button.ToolTip>
+
+            </Button>
 
             <Button Content="{Binding RecieveStatus}" 
-                    Command="{Binding StopReceiveCommand}"
-                    CommandParameter="2"/>
+                    Command="{Binding StopReceiveCommand}">
+
+                <Button.ToolTip>
+                    <ToolTip Content="受信終了" />
+                </Button.ToolTip>
+                
+            </Button>
 
             <local:IconButton Command="{Binding CloseCommand}"
                               Content="{StaticResource Close}">

@@ -16,6 +16,12 @@
     <Grid HorizontalAlignment="Center"
           VerticalAlignment="Center">
 
+        <Grid.Resources>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource DialogTextBlockStyle}"/>
+            <Style TargetType="TextBox" BasedOn="{StaticResource DialogTextBoxStyle}"/>
+            <Style TargetType="Button" BasedOn="{StaticResource DialogButtonStyle}"/>
+        </Grid.Resources>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="{StaticResource DialogRowHeight}"/>
@@ -27,18 +33,12 @@
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
 
-            <Button Margin="4" 
-                    Command="{Binding ExecuteCommand}"
+            <Button Command="{Binding ExecuteCommand}"
                     CommandParameter="1"
-                    Style="{StaticResource DefaultButtonStyle}" 
-                    Width="100"
                     Content="OK"/>
 
-            <Button Margin="4" 
-                    Command="{Binding ExecuteCommand}"
+            <Button Command="{Binding ExecuteCommand}"
                     CommandParameter="2"
-                    Style="{StaticResource DefaultButtonStyle}" 
-                    Width="100"
                     Content="Cancel"/>
 
         </StackPanel>

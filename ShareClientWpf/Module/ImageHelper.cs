@@ -25,9 +25,41 @@ namespace ShareClientWpf
             return bitmap;
         }
 
-        public static bool TryGetPrintWindowBmp(IntPtr hWnd, out ImageSource image)
+        public static byte[] BitMap2Byte(Bitmap bitmap, ImageFormat format)
         {
-            if (!NativeMethod.GetWindowRect(hWnd, out NativeMethod.RECT rect))
+            using var ms = new MemoryStream();
+            bitmap.Save(ms, format);
+            return ms.GetBuffer();
+        }
+
+        public static bool TryGetWindowBmp(IntPtr hWnd, out Bitmap bmp)
+        {
+            if (!NativeMethod.GetWindowRect(hWnd, out var rect))
+            {
+                bmp = null;
+                return false;
+            }
+
+            int width = rect.right - rect.left;
+            int height = rect.bottom - rect.top;
+            if (width <= 0 || height <= 0)
+            {
+                bmp = null;
+                return false;
+            }
+
+            var rectangle = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+            bmp = new Bitmap(rectangle.Width, rectangle.Height);
+
+            using var g = Graphics.FromImage(bmp);
+            g.CopyFromScreen(new Point(rectangle.X, rectangle.Y), new Point(0, 0), rectangle.Size);
+
+            return true;
+        }
+
+        public static bool TryGetWindow(IntPtr hWnd, out ImageSource image)
+        {
+            if (!NativeMethod.GetWindowRect(hWnd, out var rect))
             {
                 image = null;
                 return false;
@@ -41,11 +73,11 @@ namespace ShareClientWpf
                 return false;
             }
 
-            var windowBmp = new Bitmap(width, height);
+            var rectangle = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+            var windowBmp = new Bitmap(rectangle.Width, rectangle.Height);
+
             using var g = Graphics.FromImage(windowBmp);
-            var dc = g.GetHdc();
-            NativeMethod.PrintWindow(hWnd, dc, 0);
-            g.ReleaseHdc(dc);
+            g.CopyFromScreen(new Point(rectangle.X, rectangle.Y), new Point(0, 0), rectangle.Size);
 
             using var ms = new WrappingStream(new MemoryStream());
             windowBmp.Save(ms, ImageFormat.Png);
@@ -57,42 +89,18 @@ namespace ShareClientWpf
             bitmap.StreamSource = ms;
             bitmap.EndInit();
             bitmap.Freeze();
+
             image = bitmap;
             return true;
         }
 
-        public static bool TryGetWindow(IntPtr hWnd, out Bitmap windowBmp)
-        {
-            if (!NativeMethod.GetWindowRect(hWnd, out var rect))
-            {
-                windowBmp = null;
-                return false;
-            }
-
-            int width = rect.right - rect.left;
-            int height = rect.bottom - rect.top;
-            if (width <= 0 || height <= 0)
-            {
-                windowBmp = null;
-                return false;
-            }
-
-            var rectangle = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
-            windowBmp = new Bitmap(rectangle.Width, rectangle.Height);
-
-            using var g = Graphics.FromImage(windowBmp);
-            g.CopyFromScreen(new Point(rectangle.X, rectangle.Y), new Point(0, 0), rectangle.Size);
-
-            return true;
-        }
-
-        public static Bitmap ResizeBmp(Bitmap baseBmp, int width, InterpolationMode mode)
+        public static Bitmap ResizeBmp(Bitmap baseBmp, int width, InterpolationMode mode = InterpolationMode.Low)
         {
             var height = (int)(baseBmp.Height * (width / (double)baseBmp.Width));
             return ResizeBmp(baseBmp, height, width, mode);
         }
 
-        public static Bitmap ResizeBmp(Bitmap baseBmp, int height, int width, InterpolationMode mode)
+        public static Bitmap ResizeBmp(Bitmap baseBmp, int height, int width, InterpolationMode mode = InterpolationMode.Low)
         {
             if (baseBmp == null)
             {

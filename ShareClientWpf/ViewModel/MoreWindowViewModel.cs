@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,14 +22,33 @@ namespace ShareClientWpf
         public string SendDelayText
         {
             get => sendDelayText;
-            set => SetProperty(ref sendDelayText, value);
+            set
+            {
+                SetProperty(ref sendDelayText,
+                                value,
+                                ModelBase.IntValidate<string>((_) => Message = "Portには数字を入れてください。"),
+                                () => Message = "");
+            }
         }
 
         private string sendWidthText;
         public string SendWidthText
         {
             get => sendWidthText;
-            set => SetProperty(ref sendWidthText, value);
+            set
+            {
+                SetProperty(ref sendWidthText,
+                                value,
+                                ModelBase.IntValidate<string>((_) => Message = "Portには数字を入れてください。"),
+                                () => Message = "");
+            }
+        }
+
+        private string message;
+        public string Message
+        {
+            get => message;
+            set => SetProperty(ref message, value);
         }
 
         public override void LoadedProcces(object paramater, Action<object> executeCallback)
@@ -37,8 +57,8 @@ namespace ShareClientWpf
             if (paramater is SettingContext context)
             {
                 NameText = context.Name;
-                SendDelayText = context.SendDelay;
-                SendWidthText = context.SendWidth;
+                SendDelayText = context.SendDelay.ToString();
+                SendWidthText = context.SendWidth.ToString();
             }
         }
 
@@ -47,8 +67,8 @@ namespace ShareClientWpf
             var context = new SettingContext()
             {
                 Name = NameText,
-                SendDelay = SendDelayText,
-                SendWidth = SendWidthText
+                SendDelay = int.Parse(SendDelayText),
+                SendWidth = int.Parse(SendWidthText),
             };
 
             callback?.Invoke(context);

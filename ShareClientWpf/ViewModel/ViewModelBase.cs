@@ -7,9 +7,8 @@ using System.Windows.Input;
 
 namespace ShareClientWpf
 {
-    public class ViewModelBase : INotifyPropertyChanged
+    public class ViewModelBase : ModelBase
     {
-        public event PropertyChangedEventHandler PropertyChanged;
         public event Func<string, MessageBoxButton, Task<MessageBoxResult>> ShowMessageBox;
         public event Func<Type, bool, object, Action<object>, Task> ShowWindow;
         public event Func<bool> CloseWindow;
@@ -53,25 +52,8 @@ namespace ShareClientWpf
             return false;
         }
 
-        protected bool SetProperty<T>(ref T prop, T value, Action postCallMethod = null, [CallerMemberName] string name = "")
-        {
-            if (!prop?.Equals(value) ?? value != null)
-            {
-                prop = value;
-                OnPropertyChanged(name);
-                postCallMethod?.Invoke();
-
-                return true;
-            }
-
-            return false;
-        }
-
-        protected Task OnShowWindow(Type windowType, bool isModal = true, object paramater = null, Action<object> executeCall = null)
-            => ShowWindow?.Invoke(windowType, isModal, paramater, executeCall) ?? Task.CompletedTask;
-
-        protected void OnPropertyChanged([CallerMemberName] string name = "") =>
-            PropertyChanged?.Invoke(this, new(name));
+        protected Task OnShowWindow(Type windowType, bool isModal = true, object paramater = null, Action<object> executeCall = null) =>
+            ShowWindow?.Invoke(windowType, isModal, paramater, executeCall) ?? Task.CompletedTask;
 
         protected Task<MessageBoxResult> OnShowMessageBox(string msg, MessageBoxButton button = MessageBoxButton.OK) =>
             ShowMessageBox?.Invoke(msg, button) ?? Task.FromResult(MessageBoxResult.None);

@@ -16,37 +16,23 @@
     <Grid HorizontalAlignment="Center"
           VerticalAlignment="Center">
 
+        <Grid.Resources>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource DialogTextBlockStyle}"/>
+            <Style TargetType="TextBox" BasedOn="{StaticResource DialogTextBoxStyle}"/>
+            <Style TargetType="Button" BasedOn="{StaticResource DialogButtonStyle}"/>
+        </Grid.Resources>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="{StaticResource DialogRowHeight}"/>
             <RowDefinition Height="{StaticResource DialogRowHeight}"/>
             <RowDefinition Height="{StaticResource DialogRowHeight}"/>
         </Grid.RowDefinitions>
-        
-        <Grid.Resources>
-            
-            <Style TargetType="TextBlock">
-                <Setter Property="FontSize" Value="24"/>
-                <Setter Property="Margin" Value="4"/>
-            </Style>
-
-            <Style TargetType="TextBox">
-                <Setter Property="FontSize" Value="18"/>
-                <Setter Property="Margin" Value="4"/>
-                <Setter Property="VerticalContentAlignment" Value="Center"/>
-            </Style>
-
-            <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
-                <Setter Property="Margin" Value="4"/>
-                <Setter Property="Width" Value="100"/>
-            </Style>
-
-        </Grid.Resources>
 
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right">
 
             <TextBlock Text="PORT："/>
-            <TextBox Text="{Binding PortText ,Mode=TwoWay}" 
+            <TextBox Text="{Binding PortText ,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
                  Width="120"/>
             
         </StackPanel>
@@ -67,8 +53,7 @@
 
             <TextBlock Grid.Row="2"
                    Grid.ColumnSpan="2" 
-                   Foreground="Red"
-                   FontSize="16"
+                   Style="{StaticResource WarnningTextBlockStyle}"
                    Text="{Binding Message}"/>
             
         </StackPanel>

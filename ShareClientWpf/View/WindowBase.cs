@@ -34,6 +34,8 @@ namespace ShareClientWpf
             NativeMethod.DwmGetColorizationColor(out var rgb, out var b);
             var color = Color.FromArgb((byte)(rgb >> 24), (byte)(rgb >> 16), (byte)(rgb >> 8), (byte)rgb);
             ThemeBrush = new SolidColorBrush(color);
+
+            Closed += WindowBase_Closed;
         }
 
         protected void LoadViewModel(object paramater, Action<object> executeCallback)
@@ -44,7 +46,6 @@ namespace ShareClientWpf
                 vm.ShowWindow += Vm_ShowWindow;
                 vm.CloseWindow += Vm_CloseWindow;
                 Closing += (s, e) => e.Cancel = vm.PostProcces();
-                Closed += WindowBase_Closed;
 
                 vm.LoadedProcces(paramater, executeCallback);
             }

@@ -1,6 +1,8 @@
 ﻿using ShareClient.Component;
+using ShareClient.Model;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -78,73 +80,108 @@ namespace ShareClientWpf
             RecieveCommand = new Command(RecieveExecute);
             MoreCommand = new Command(MoreExecute);
             StopReceiveCommand = new Command(StopReceiveExecute);
+            StopSendCommand = new Command(StopSendExecute);
+
+#if DEBUG
+            settingContext.Name = "test";
+            settingContext.SendWidth = 0;
+            settingContext.SendDelay = 30;
+            settingContext.Format = ImageFormat.Jpeg;
+#endif
         }
 
         private async void SendExecute()
         {
-            ((Command)SendCommand).CanExecuteValue = false;
-            SendStatus = "送信：接続要求";
+            SendStatusChange(false, "送信：接続要求");
 
-            await OnShowWindow(typeof(SendWindow), executeCall: SendProcess);
+            bool doExecute = false;
+            await OnShowWindow(typeof(SendWindow), executeCall: async (paramater) =>
+            {
+                doExecute = true;
 
-            ((Command)SendCommand).CanExecuteValue = true;
-            SendStatus = "";
+                var sendContext = (SendContext)paramater;
+                await clientContrloler.ConnectAsync(sendContext.IPEndPoint, new ConnectionData(new ShareClientSpec()));
+
+                var length = sendContext.WindowInfo.Title.Length;
+                SendStatusChange(false, $"送信：画面共有中【{sendContext.WindowInfo.Title.Substring(0, length > 12 ? 12 : length)}】");
+
+                await clientContrloler.SendWindowAsync(sendContext, settingContext);
+
+                SendStatusChange(true);
+            });
+
+            if (!doExecute)
+            {
+                SendStatusChange(true);
+            }
         }
 
-        private void SendProcess(object context)
+        private async void StopSendExecute()
         {
+            var result = await OnShowMessageBox("送信処理を中止しますか？", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
+            {
+                clientContrloler.Dispose();
+                SendStatusChange(true);
+            }
+        }
 
+        private void SendStatusChange(bool execute, string message = "")
+        {
+            ((Command)SendCommand).CanExecuteValue = execute;
+            SendStatus = message;
         }
 
         private void RecieveExecute()
         {
-            OnShowWindow(typeof(RecieveWindow), executeCall: RecieveProcess);
-        }
-
-        private async void RecieveProcess(object port)
-        {
-            ((Command)RecieveCommand).CanExecuteValue = false;
-            RecieveStatus = "受信：待機中";
-
-            IPEndPoint iPEndPoint = null;
-            await clientContrloler.AcceptAsync((int)port, (ip, data) =>
+            OnShowWindow(typeof(RecieveWindow), executeCall: async (port) =>
             {
-                bool reqConnect = false;
-                OnShowWindow(typeof(ConnectionWindow),
-                    paramater: Tuple.Create(ip, data),
-                    executeCall: (p) => reqConnect = (bool)p).Wait();
+                ReceiveStatusChange(false, "受信：待機中");
 
-                iPEndPoint = ip;
-                return reqConnect;
+                IPEndPoint iPEndPoint = null;
+                await clientContrloler.AcceptAsync((int)port, (ip, data) =>
+                {
+                    bool reqConnect = false;
+                    OnShowWindow(typeof(ConnectionWindow),
+                        paramater: Tuple.Create(ip, data),
+                        executeCall: (p) => reqConnect = (bool)p).Wait();
+
+                    iPEndPoint = ip;
+                    return reqConnect;
+                });
+
+                if (iPEndPoint != null)
+                {
+                    ReceiveStatusChange(false, $"受信：{iPEndPoint.Address}");
+                    await clientContrloler.ReceiveWindowAsync((img) => Source = img);
+                }
+
+                ReceiveStatusChange(true);
             });
-
-            RecieveStatus = $"受信：{iPEndPoint?.Address}";
-            await clientContrloler.ReceiveAsync((img) => Source = img);
-
-            ((Command)RecieveCommand).CanExecuteValue = true;
-            RecieveStatus = "";
-        }
-
-        private void MoreExecute()
-        {
-            OnShowWindow(typeof(MoreWindow), paramater: settingContext, executeCall: MoreProcess);
-        }
-
-        private void MoreProcess(object context)
-        {
-            settingContext = (SettingContext)context;
         }
 
         private async void StopReceiveExecute()
         {
-
             var result = await OnShowMessageBox("受信処理を中止しますか？", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
                 clientContrloler.Dispose();
-                ((Command)RecieveCommand).CanExecuteValue = true;
-                RecieveStatus = "";
+                ReceiveStatusChange(true);
             }
+        }
+
+        private void ReceiveStatusChange(bool execute, string message = "")
+        {
+            ((Command)RecieveCommand).CanExecuteValue = execute;
+            RecieveStatus = message;
+        }
+
+        private void MoreExecute()
+        {
+            OnShowWindow(typeof(MoreWindow), paramater: settingContext, executeCall: (context) =>
+            {
+                settingContext = (SettingContext)context;
+            });
         }
 
         protected override void CloseExecute()

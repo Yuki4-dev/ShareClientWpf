@@ -21,27 +21,15 @@
             <RowDefinition Height="{StaticResource DialogRowHeight}"/>
             <RowDefinition Height="{StaticResource DialogRowHeight}"/>
             <RowDefinition Height="{StaticResource DialogRowHeight}"/>
+            <RowDefinition Height="{StaticResource DialogRowHeight}"/>
         </Grid.RowDefinitions>
 
         <Grid.Resources>
-
-            <Style TargetType="TextBlock">
-                <Setter Property="FontSize" Value="24"/>
-                <Setter Property="Margin" Value="4"/>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource DialogTextBlockStyle}"/>
+            <Style TargetType="TextBox" BasedOn="{StaticResource DialogTextBoxStyle}">
+                <Setter Property="Width" Value="140"/>
             </Style>
-
-            <Style TargetType="TextBox">
-                <Setter Property="FontSize" Value="18"/>
-                <Setter Property="Margin" Value="4"/>
-                <Setter Property="Width" Value="150"/>
-                <Setter Property="VerticalContentAlignment" Value="Center"/>
-            </Style>
-
-            <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
-                <Setter Property="Margin" Value="4"/>
-                <Setter Property="Width" Value="100"/>
-            </Style>
-
+            <Style TargetType="Button" BasedOn="{StaticResource DialogButtonStyle}"/>
         </Grid.Resources>
 
         <StackPanel Orientation="Horizontal"
@@ -57,7 +45,8 @@
                     Grid.Row="1">
 
             <TextBlock Text="送信間隔(msec)："/>
-            <TextBox Text="{Binding SendDelayText,Mode=TwoWay}"/>
+            <TextBox Text="{Binding SendDelayText,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                     HorizontalContentAlignment="Right"/>
 
         </StackPanel>
 
@@ -66,10 +55,11 @@
                     Grid.Row="2">
 
             <TextBlock Text="送信画像サイズ(幅)："/>
-            <TextBox Text="{Binding SendWidthText,Mode=TwoWay}"/>
+            <TextBox Text="{Binding SendWidthText,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                     
+                     HorizontalContentAlignment="Right"/>
             
         </StackPanel>
-
 
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right"
@@ -79,8 +69,11 @@
                     Command="{Binding CloseCommand}"/>
             
         </StackPanel>
-        
 
+        <TextBlock Grid.Row="4"
+                   Grid.ColumnSpan="2" 
+                   Style="{StaticResource WarnningTextBlockStyle}"
+                   Text="{Binding Message}"/>
 
     </Grid>
 

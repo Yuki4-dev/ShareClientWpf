@@ -15,7 +15,13 @@ namespace ShareClientWpf
         public string PortText
         {
             get => portText;
-            set => SetProperty(ref portText, value);
+            set
+            {
+                SetProperty(ref portText,
+                                value,
+                                ModelBase.IntValidate<string>((_) => Message = "Portには数字を入れてください。"),
+                                () => Message = "");
+            }
         }
 
         private string message;
@@ -35,6 +41,9 @@ namespace ShareClientWpf
         public RecieveWindowViewModel()
         {
             RecieveCommand = new Command(RecieveExecute);
+#if DEBUG
+            PortText = "2002";
+#endif
         }
 
         public override void LoadedProcces(object paramater, Action<object> executeCallback)
@@ -44,15 +53,9 @@ namespace ShareClientWpf
 
         public void RecieveExecute()
         {
-            if (int.TryParse(PortText, out var port))
-            {
-                callback?.Invoke(port);
-                OnCloseWindow();
-            }
-            else
-            {
-                Message = "※数字を入力してください。";
-            }
+            callback?.Invoke(int.Parse(PortText));
+            OnCloseWindow();
+            Message = "";
         }
     }
 }
