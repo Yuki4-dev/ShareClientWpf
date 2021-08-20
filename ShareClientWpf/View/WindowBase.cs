@@ -43,8 +43,8 @@ namespace ShareClientWpf
                 vm.ShowMessageBox += Vm_ShowMessageBox;
                 vm.ShowWindow += Vm_ShowWindow;
                 vm.CloseWindow += Vm_CloseWindow;
-
                 Closing += (s, e) => e.Cancel = vm.PostProcces();
+                Closed += WindowBase_Closed;
 
                 vm.LoadedProcces(paramater, executeCallback);
             }
@@ -101,6 +101,11 @@ namespace ShareClientWpf
                 }
             });
 
+        }
+
+        private void WindowBase_Closed(object sender, EventArgs e)
+        {
+            casheWindows.Remove(GetType());
         }
 
         protected virtual async Task<MessageBoxResult> Vm_ShowMessageBox(string arg1, MessageBoxButton arg2)
