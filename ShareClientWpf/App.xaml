@@ -15,25 +15,33 @@
         <Brush x:Key="ButtonForeGround">LightGray</Brush>
         <Brush x:Key="DialogForeGround">LightGray</Brush>
         <Brush x:Key="ListBackGround">#5F5E5E</Brush>
+        <Brush x:Key="TextboxBackGround">#FF333333</Brush>
+        <Brush x:Key="TextboxForeGround">LightGray</Brush>
         <Brush x:Key="ShowWindowBackGround">#7f000000</Brush>
+        <Brush x:Key="DialogBorderBackGround">#202020</Brush>
 
         <GridLength x:Key="DialogRowHeight" >40</GridLength>
 
-        <ControlTemplate x:Key="DefaultButtonTemplate" TargetType="{x:Type Button}">
+        <ControlTemplate x:Key="DefaultButtonTemplate"
+                         TargetType="{x:Type Button}">
+
             <Border Background="{TemplateBinding Background}"
                     HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
-                
+                    VerticalAlignment="Stretch"
+                    CornerRadius="6">
+
                 <TextBlock
                     HorizontalAlignment="Center"
                     FontSize="24"
                     Foreground="{TemplateBinding Foreground}"
                     Text="{TemplateBinding Content}" />
-                
+
             </Border>
         </ControlTemplate>
 
-        <Style x:Key="DefaultButtonStyle" TargetType="Button">
+        <Style x:Key="DefaultButtonStyle" 
+               TargetType="Button">
+
             <Setter Property="Template" Value="{StaticResource DefaultButtonTemplate}" />
             <Setter Property="Background" Value="{StaticResource ButtonBackGround}" />
             <Setter Property="Foreground" Value="{StaticResource ButtonForeGround}" />
@@ -44,8 +52,22 @@
             </Style.Triggers>
         </Style>
 
-        <ControlTemplate x:Key="TextButtonTemplate" TargetType="{x:Type Button}">
-            
+        <Style x:Key="AccentButtonStyle" 
+               TargetType="Button">
+
+            <Setter Property="Template" Value="{StaticResource DefaultButtonTemplate}" />
+            <Setter Property="Background" Value="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}" />
+            <Setter Property="Foreground" Value="{StaticResource ButtonForeGround}" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource ButtonMouseOver}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <ControlTemplate x:Key="TextButtonTemplate" 
+                         TargetType="{x:Type Button}">
+
             <Border Background="{TemplateBinding Background}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
@@ -95,7 +117,9 @@
             </Border>
         </ControlTemplate>
 
-        <Style  x:Key="TextButtonStyle" TargetType="Button">
+        <Style  x:Key="TextButtonStyle" 
+                TargetType="Button">
+
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Template" Value="{StaticResource TextButtonTemplate}"/>
             <Style.Triggers>
@@ -106,7 +130,25 @@
             </Style.Triggers>
         </Style>
 
-        <Style  x:Key="IconButtonStyle" TargetType="local:IconButton">
+        <Style x:Key="DialogButtonStyle"
+               TargetType="Button" 
+               BasedOn="{StaticResource DefaultButtonStyle}" >
+
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Width" Value="100"/>
+        </Style>
+
+        <Style x:Key="DialogAccentButtonStyle"
+               TargetType="Button" 
+               BasedOn="{StaticResource AccentButtonStyle}">
+
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Width" Value="100"/>
+        </Style>
+
+        <Style  x:Key="IconButtonStyle" 
+                TargetType="local:IconButton">
+
             <Setter Property="BorderThickness" Value="0"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
@@ -115,7 +157,9 @@
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="DefaultWindowStyle" TargetType="{x:Type local:WindowBase}">
+        <Style x:Key="DefaultWindowStyle" 
+               TargetType="{x:Type local:WindowBase}">
+
             <Setter Property="WindowChrome.WindowChrome">
                 <Setter.Value>
                     <WindowChrome
@@ -132,7 +176,8 @@
             <Setter Property="Foreground" Value="Silver" />
         </Style>
 
-        <ControlTemplate TargetType="local:WindowBase" x:Key="DailogTemplate">
+        <ControlTemplate x:Key="DailogTemplate" 
+                         TargetType="local:WindowBase">
 
             <Border Padding="1" 
                     Background="{TemplateBinding ThemeBrush}">
@@ -144,17 +189,16 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <Border Grid.Row="0" Background="{StaticResource HeaderBackGround}">
-
-                        <TextBlock x:Name="TitleTextBlock"
-                                   Margin="12,4,12,2"
-                                   FontSize="16"
-                                   Text="{TemplateBinding Title}" />
-                    </Border>
+                    <TextBlock x:Name="TitleTextBlock"
+                               Margin="12,4,12,2"
+                               FontSize="16"
+                               Foreground="{StaticResource DialogForeGround}"    
+                               Text="{TemplateBinding Title}" />
 
                     <ContentPresenter Grid.Row="1" 
-                                  HorizontalAlignment="Stretch" 
-                                  VerticalAlignment="Stretch"/>
+                                      Margin="8"
+                                      HorizontalAlignment="Stretch" 
+                                      VerticalAlignment="Stretch"/>
 
                 </Grid>
 
@@ -184,28 +228,62 @@
             <Setter Property="Height" Value="250"/>
         </Style>
 
-        <Style TargetType="TextBlock" x:Key="DialogTextBlockStyle">
-            <Setter Property="FontSize" Value="24"/>
-            <Setter Property="Margin" Value="4"/>
+        <Style x:Key="DialogTextBlockStyle"
+               TargetType="TextBlock" >
+
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="2"/>
         </Style>
 
-        <Style TargetType="TextBox" x:Key="DialogTextBoxStyle">
-            <Setter Property="FontSize" Value="18"/>
-            <Setter Property="Margin" Value="4"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-        </Style>
+        <Style x:Key="WarnningTextBlockStyle" 
+               TargetType="TextBlock" >
 
-        <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}" x:Key="DialogButtonStyle">
-            <Setter Property="Margin" Value="4"/>
-            <Setter Property="Width" Value="100"/>
-        </Style>
-
-        <Style TargetType="TextBlock" x:Key="WarnningTextBlockStyle">
             <Setter Property="Margin" Value="4"/>
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="Foreground" Value="Red"/>
-            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
+
+        <Style x:Key="DialogTextBoxStyle"
+               TargetType="TextBox">
+
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="BorderBrush" Value="{StaticResource DialogForeGround}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Width" Value="220"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="FontWeight" Value="ExtraLight"/>
+            <Setter Property="Background" Value="{StaticResource TextboxBackGround}" />
+            <Setter Property="Foreground" Value="{StaticResource TextboxForeGround}" />
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+
+        <Style x:Key="DialogButtonStackPanelStyle" 
+               TargetType="StackPanel">
+
+            <Setter Property="Margin" Value="0,14,0,0"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="Orientation" Value="Horizontal"/>
+        </Style>
+
+        <Style x:Key="CardButtonStyle"
+               TargetType="Button">
+
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+
+        <Style x:Key="DefaultToolTipStyle"
+               TargetType="ToolTip">
+
+            <Setter Property="Background" Value="{StaticResource WindowBackGround}"/>
+            <Setter Property="Foreground" Value="{StaticResource DialogForeGround}"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="FontWeight" Value="ExtraLight"/>
+        </Style>
+
 
     </Application.Resources>
 </Application>

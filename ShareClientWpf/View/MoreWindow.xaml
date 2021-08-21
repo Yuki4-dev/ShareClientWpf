@@ -13,67 +13,54 @@
         <local:MoreWindowViewModel/>
     </Window.DataContext>
 
-    <Grid HorizontalAlignment="Center"
-          VerticalAlignment="Center">
+    <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="{StaticResource DialogRowHeight}"/>
-            <RowDefinition Height="{StaticResource DialogRowHeight}"/>
-            <RowDefinition Height="{StaticResource DialogRowHeight}"/>
-            <RowDefinition Height="{StaticResource DialogRowHeight}"/>
-            <RowDefinition Height="{StaticResource DialogRowHeight}"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid.Resources>
             <Style TargetType="TextBlock" BasedOn="{StaticResource DialogTextBlockStyle}"/>
-            <Style TargetType="TextBox" BasedOn="{StaticResource DialogTextBoxStyle}">
-                <Setter Property="Width" Value="140"/>
-            </Style>
+            <Style TargetType="TextBox" BasedOn="{StaticResource DialogTextBoxStyle}"/>
             <Style TargetType="Button" BasedOn="{StaticResource DialogButtonStyle}"/>
         </Grid.Resources>
 
-        <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Right">
+        <ScrollViewer>
 
-            <TextBlock Text="名前："/>
-            <TextBox Text="{Binding NameText,Mode=TwoWay}"/>
+            <StackPanel HorizontalAlignment="Left">
 
-        </StackPanel>
+                <TextBlock Text="名前"/>
+                <TextBox Text="{Binding NameText,Mode=TwoWay}"/>
 
-        <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Right"
-                    Grid.Row="1">
+                <TextBlock Text="送信間隔(msec)"/>
+                <TextBox Text="{Binding SendDelayText,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
 
-            <TextBlock Text="送信間隔(msec)："/>
-            <TextBox Text="{Binding SendDelayText,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                     HorizontalContentAlignment="Right"/>
+                <TextBlock Text="送信画像サイズ(幅)"/>
+                <TextBox Text="{Binding SendWidthText,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
 
-        </StackPanel>
+                <TextBlock Text="{Binding Message}"
+                           Style="{StaticResource WarnningTextBlockStyle}"/>
 
-        <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Right"
-                    Grid.Row="2">
-
-            <TextBlock Text="送信画像サイズ(幅)："/>
-            <TextBox Text="{Binding SendWidthText,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                     
-                     HorizontalContentAlignment="Right"/>
+            </StackPanel>
             
-        </StackPanel>
+        </ScrollViewer>
+        
+        <Border Grid.Row="1"
+                Background="{StaticResource DialogBorderBackGround}"/>
 
-        <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Right"
-                    Grid.Row="3">
+        <StackPanel Grid.Row="2"
+                    Style="{StaticResource DialogButtonStackPanelStyle}">
 
             <Button Content="OK"
+                    Style="{StaticResource DialogAccentButtonStyle}"
+                    Command="{Binding CloseCommand}"
+                    CommandParameter="1"/>
+            <Button Content="Cancel"
                     Command="{Binding CloseCommand}"/>
-            
-        </StackPanel>
 
-        <TextBlock Grid.Row="4"
-                   Grid.ColumnSpan="2" 
-                   Style="{StaticResource WarnningTextBlockStyle}"
-                   Text="{Binding Message}"/>
+        </StackPanel>
 
     </Grid>
 

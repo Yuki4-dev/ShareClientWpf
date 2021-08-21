@@ -62,16 +62,19 @@ namespace ShareClientWpf
             }
         }
 
-        protected override void CloseExecute()
+        protected override void CloseExecute(object paramater)
         {
-            var context = new SettingContext()
+            if (paramater?.ToString().Equals("1") ?? false)
             {
-                Name = NameText,
-                SendDelay = int.Parse(SendDelayText),
-                SendWidth = int.Parse(SendWidthText),
-            };
+                var context = new SettingContext()
+                {
+                    Name = NameText,
+                    SendDelay = int.Parse(SendDelayText),
+                    SendWidth = int.Parse(SendWidthText),
+                };
+                callback?.Invoke(context);
+            }
 
-            callback?.Invoke(context);
             OnCloseWindow();
         }
     }

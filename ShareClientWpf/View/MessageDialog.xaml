@@ -22,6 +22,11 @@
                 <Setter Property="Margin" Value="20,0,0,0" />
             </Style>
 
+            <Style BasedOn="{StaticResource DialogTextBlockStyle}" TargetType="TextBlock">
+                <Setter Property="Margin" Value="22" />
+                <Setter Property="FontSize" Value="26" />
+            </Style>
+
         </Grid.Resources>
 
         <Grid.RowDefinitions>
@@ -31,9 +36,7 @@
 
         <TextBlock
             x:Name="MessageTextBlock"
-            Grid.Row="0"
-            Margin="22"
-            FontSize="26" />
+            Grid.Row="0"/>
 
         <StackPanel
             Grid.Row="1"
@@ -52,7 +55,11 @@
                 Tag="1"
                 Visibility="Collapsed" />
 
-            <Button x:Name="PrimaryButton" Tag="0" />
+            <Button x:Name="PrimaryButton" 
+                    Tag="0" 
+                    Margin="20,0,0,0"
+                    Width="120"
+                    Style="{StaticResource AccentButtonStyle}"/>
 
         </StackPanel>
 

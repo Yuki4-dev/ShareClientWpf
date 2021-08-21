@@ -7,14 +7,19 @@
         mc:Ignorable="d"
         IsCasheWindow="True"
         Style="{StaticResource DialogWindowStyle}"
-        Title="RecieveWindow">
+        Title="受信">
 
     <Window.DataContext>
         <local:RecieveWindowViewModel />
     </Window.DataContext>
 
-    <Grid HorizontalAlignment="Center"
-          VerticalAlignment="Center">
+    <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
         <Grid.Resources>
             <Style TargetType="TextBlock" BasedOn="{StaticResource DialogTextBlockStyle}"/>
@@ -22,40 +27,27 @@
             <Style TargetType="Button" BasedOn="{StaticResource DialogButtonStyle}"/>
         </Grid.Resources>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="{StaticResource DialogRowHeight}"/>
-            <RowDefinition Height="{StaticResource DialogRowHeight}"/>
-            <RowDefinition Height="{StaticResource DialogRowHeight}"/>
-        </Grid.RowDefinitions>
-
-        <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Right">
-
-            <TextBlock Text="PORT："/>
-            <TextBox Text="{Binding PortText ,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                 Width="120"/>
+        <StackPanel HorizontalAlignment="Left">
+            
+            <TextBlock Text="PORT"/>
+            <TextBox Text="{Binding PortText ,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Style="{StaticResource WarnningTextBlockStyle}"
+                       Text="{Binding Message}"/>
             
         </StackPanel>
 
-        <StackPanel Grid.Row="1"
-                    HorizontalAlignment="Right"
-                    Orientation="Horizontal">
+        <Border Grid.Row="1"
+                Background="{StaticResource DialogBorderBackGround}"/>
+
+        <StackPanel Grid.Row="2"
+                    Style="{StaticResource DialogButtonStackPanelStyle}">
 
             <Button Content="開始" 
+                    Style="{StaticResource DialogAccentButtonStyle}"
                     Command="{Binding RecieveCommand}"/>
             <Button Content="キャンセル" 
                     Command="{Binding CloseCommand}"/>
-            
-        </StackPanel>
 
-        <StackPanel Grid.Row="2"
-                    Orientation="Horizontal">
-
-            <TextBlock Grid.Row="2"
-                   Grid.ColumnSpan="2" 
-                   Style="{StaticResource WarnningTextBlockStyle}"
-                   Text="{Binding Message}"/>
-            
         </StackPanel>
 
     </Grid>

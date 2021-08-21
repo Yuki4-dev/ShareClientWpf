@@ -107,9 +107,9 @@ namespace ShareClientWpf
                     SendStatusChange(false, $"送信：画面共有中【{sendContext.WindowInfo.Title.Substring(0, length > 12 ? 12 : length)}】");
                     await clientContrloler.SendWindowAsync(sendContext, settingContext);
                 }
-
-                SendStatusChange(true);
             });
+
+            SendStatusChange(true);
         }
 
         private async void StopSendExecute()
@@ -181,7 +181,7 @@ namespace ShareClientWpf
             });
         }
 
-        protected override void CloseExecute()
+        protected override void CloseExecute(object paramater)
         {
             Closing();
         }

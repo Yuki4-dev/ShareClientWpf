@@ -16,7 +16,18 @@ namespace ShareClientWpf
 
         public ICollection<WindowInfo> WindowImageInfos { get; } = new ObservableCollection<WindowInfo>();
 
-        public WindowInfo SelectWindowInfo { get; set; }
+        private WindowInfo selectWindowInfo;
+        private WindowInfo SelectWindowInfo 
+        { 
+            get => selectWindowInfo;
+            set
+            {
+                if(selectWindowInfo != null)
+                    selectWindowInfo.IsSelected = false;
+                selectWindowInfo = value;
+                selectWindowInfo.IsSelected = true;
+            } 
+        }
 
         private string ipText;
         public string IpText
@@ -52,6 +63,13 @@ namespace ShareClientWpf
             set => SetProperty(ref message, value);
         }
 
+        private ICommand selectedCommand;
+        public ICommand SelectedCommand
+        {
+            get => selectedCommand;
+            set => SetProperty(ref selectedCommand, value);
+        }
+
         private ICommand sendCommand;
         public ICommand SendCommand
         {
@@ -62,6 +80,7 @@ namespace ShareClientWpf
         public SendWindowViewModel()
         {
             SendCommand = new Command(SendExecute);
+            SelectedCommand = new Command(SelectedExecute);
 #if DEBUG
             IpText = "127.0.0.1";
             PortText = "2002";
@@ -89,6 +108,12 @@ namespace ShareClientWpf
                     WindowImageInfos.Add(w);
                 }
             }
+        }
+
+        private void SelectedExecute(object paramater)
+        {
+            var info = (WindowInfo)paramater;
+            SelectWindowInfo = info;
         }
 
         private void SendExecute()

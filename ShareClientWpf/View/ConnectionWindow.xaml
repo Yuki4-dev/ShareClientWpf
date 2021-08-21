@@ -51,6 +51,7 @@
                     Orientation="Horizontal">
 
             <Button Command="{Binding ExecuteCommand}"
+                    Style="{StaticResource DialogAccentButtonStyle}"
                     CommandParameter="1"
                     Content="OK"/>
 

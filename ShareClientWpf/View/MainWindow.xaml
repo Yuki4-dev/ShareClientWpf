@@ -62,11 +62,7 @@
                 <Setter Property="Margin" Value="8"/>
             </Style>
 
-            <Style TargetType="ToolTip">
-                <Setter Property="FontSize" Value="24"/>
-                <Setter Property="Background" Value="{StaticResource WindowBackGround}" />
-                <Setter Property="Foreground" Value="{StaticResource ButtonForeGround}" />
-            </Style>
+            <Style TargetType="ToolTip" BasedOn="{StaticResource DefaultToolTipStyle}"/>
 
         </Grid.Resources>
 

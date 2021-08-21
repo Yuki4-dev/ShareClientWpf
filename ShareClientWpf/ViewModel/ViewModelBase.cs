@@ -37,7 +37,7 @@ namespace ShareClientWpf
             CloseCommand = new Command(CloseExecute);
         }
 
-        protected virtual void CloseExecute()
+        protected virtual void CloseExecute(object paramater)
         {
             OnCloseWindow();
         }
