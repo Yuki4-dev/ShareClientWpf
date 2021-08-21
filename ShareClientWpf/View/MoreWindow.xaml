@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         IsCasheWindow="True"
         Style="{StaticResource DialogWindowStyle}"
-        Title="MoreWindow">
+        Title="設定">
 
     <Window.DataContext>
         <local:MoreWindowViewModel/>
