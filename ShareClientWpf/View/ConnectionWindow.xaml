@@ -5,9 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShareClientWpf"
         mc:Ignorable="d"
-        IsCasheWindow="True"
-        Style="{StaticResource DialogWindowStyle}"
         Title="ConnectionWindow">
+
+    <Window.Style>
+        <Style TargetType="local:WindowBase" BasedOn="{StaticResource DialogWindowStyle}">
+
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="Opacity" 
+                                             From="0" 
+                                             To="1" 
+                                             Duration="0:0:.5" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
 
     <Window.DataContext>
         <local:ConnectionWindowViewModel/>

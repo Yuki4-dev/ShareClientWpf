@@ -21,6 +21,14 @@ namespace ShareClientWpf
         public static readonly DependencyProperty IsCasheWindowProperty =
             DependencyProperty.Register(nameof(IsCasheWindow), typeof(bool), typeof(WindowBase), new PropertyMetadata(false));
 
+        public bool IsShowDialog
+        {
+            get => (bool)GetValue(IsShowDialogProperty);
+            set => SetValue(IsShowDialogProperty, value);
+        }
+        public static readonly DependencyProperty IsShowDialogProperty =
+            DependencyProperty.Register(nameof(IsShowDialog), typeof(bool), typeof(WindowBase), new PropertyMetadata(false));
+
         public Brush ThemeBrush
         {
             get => (Brush)GetValue(ThemeBrushProperty);
@@ -93,8 +101,13 @@ namespace ShareClientWpf
 
                 if (isModal)
                 {
-                    window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                    window.WindowStartupLocation = WindowStartupLocation.Manual;
+                    window.Top = (Top + Height / 2) - window.Height / 2;
+                    window.Left = (Left + Width / 2) - window.Width / 2;
+
+                    IsShowDialog = true;
                     window.ShowDialog();
+                    IsShowDialog = false;
                 }
                 else
                 {

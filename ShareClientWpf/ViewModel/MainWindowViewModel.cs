@@ -13,6 +13,13 @@ namespace ShareClientWpf
         private IClientContrloler clientContrloler = new ShreClientController();
         private SettingContext settingContext = new();
 
+        private Profile profile;
+        public Profile Profile
+        {
+            get => profile;
+            set => SetProperty(ref profile, value);
+        }
+
         private ImageSource source;
         public ImageSource Source
         {
@@ -89,26 +96,20 @@ namespace ShareClientWpf
         {
             SendStatusChange(false, "送信：接続要求");
 
-            bool doExecute = false;
             await OnShowWindow(typeof(SendWindow), executeCall: async (paramater) =>
             {
-                doExecute = true;
-
                 var sendContext = (SendContext)paramater;
-                await clientContrloler.ConnectAsync(sendContext.IPEndPoint, new(new()), (responese) => responese.IsConnect);
+                var isConnected = await clientContrloler.ConnectAsync(sendContext.IPEndPoint, new(new()), (responese) => responese.IsConnect);
 
-                var length = sendContext.WindowInfo.Title.Length;
-                SendStatusChange(false, $"送信：画面共有中【{sendContext.WindowInfo.Title.Substring(0, length > 12 ? 12 : length)}】");
-
-                await clientContrloler.SendWindowAsync(sendContext, settingContext);
+                if (isConnected)
+                {
+                    var length = sendContext.WindowInfo.Title.Length;
+                    SendStatusChange(false, $"送信：画面共有中【{sendContext.WindowInfo.Title.Substring(0, length > 12 ? 12 : length)}】");
+                    await clientContrloler.SendWindowAsync(sendContext, settingContext);
+                }
 
                 SendStatusChange(true);
             });
-
-            if (!doExecute)
-            {
-                SendStatusChange(true);
-            }
         }
 
         private async void StopSendExecute()
@@ -137,11 +138,12 @@ namespace ShareClientWpf
                 await clientContrloler.AcceptAsync((int)port, (ip, data) =>
                 {
                     bool reqConnect = false;
-                    OnShowWindow(typeof(ConnectionWindow),
-                        paramater: Tuple.Create(ip, data),
-                        executeCall: (p) => reqConnect = (bool)p).Wait();
+                    OnShowWindow(typeof(ConnectionWindow), true, Tuple.Create(ip, data), (p) => reqConnect = (bool)p).Wait();
 
-                    iPEndPoint = ip;
+                    if (reqConnect)
+                    {
+                        iPEndPoint = ip;
+                    }
                     return new ConnectionResponse(reqConnect, new(data.CleintSpec));
                 });
 

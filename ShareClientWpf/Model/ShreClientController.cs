@@ -87,10 +87,11 @@ namespace ShareClientWpf
         }
 
 
-        public async Task AcceptAsync(int port, Func<IPEndPoint, ConnectionData, ConnectionResponse> acceptCallback)
+        public async Task<bool> AcceptAsync(int port, Func<IPEndPoint, ConnectionData, ConnectionResponse> acceptCallback)
         {
             Manager = new ConnectionManager();
             receiveConnection = await manager.AcceptAsync(new IPEndPoint(IPAddress.Any, port), acceptCallback);
+            return receiveConnection != null;
         }
 
 
@@ -111,10 +112,11 @@ namespace ShareClientWpf
             await Reciever.ReceiveAsync();
         }
 
-        public async Task ConnectAsync(IPEndPoint iPEndPoint, ConnectionData connectionData, Func<ConnectionResponse, bool> connectCallback)
+        public async Task<bool> ConnectAsync(IPEndPoint iPEndPoint, ConnectionData connectionData, Func<ConnectionResponse, bool> connectCallback)
         {
             Manager = new ConnectionManager();
             sendConnection = await Manager.ConnectAsync(iPEndPoint, connectionData, connectCallback);
+            return sendConnection != null;
         }
 
         public async Task SendWindowAsync(SendContext sendContext, SettingContext settingContext)

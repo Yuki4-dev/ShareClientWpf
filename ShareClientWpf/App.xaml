@@ -15,6 +15,7 @@
         <Brush x:Key="ButtonForeGround">LightGray</Brush>
         <Brush x:Key="DialogForeGround">LightGray</Brush>
         <Brush x:Key="ListBackGround">#5F5E5E</Brush>
+        <Brush x:Key="ShowWindowBackGround">#7f000000</Brush>
 
         <GridLength x:Key="DialogRowHeight" >40</GridLength>
 
@@ -133,7 +134,8 @@
 
         <ControlTemplate TargetType="local:WindowBase" x:Key="DailogTemplate">
 
-            <Border Padding="1" Background="{TemplateBinding ThemeBrush}">
+            <Border Padding="1" 
+                    Background="{TemplateBinding ThemeBrush}">
 
                 <Grid Background="{TemplateBinding Background}">
 
@@ -178,8 +180,8 @@
             <Setter Property="Background" Value="{StaticResource WindowBackGround}"/>
             <Setter Property="Foreground" Value="{StaticResource DialogForeGround}"/>
             <Setter Property="ResizeMode" Value="NoResize" />
-            <Setter Property="Width" Value="500"/>
-            <Setter Property="Height" Value="350"/>
+            <Setter Property="Width" Value="400"/>
+            <Setter Property="Height" Value="250"/>
         </Style>
 
         <Style TargetType="TextBlock" x:Key="DialogTextBlockStyle">
