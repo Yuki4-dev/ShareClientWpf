@@ -31,13 +31,17 @@ namespace ShareClientWpf
         {
             if (ImageHelper.TryGetWindowBmp(hmdl, out var bmp))
             {
+                if (windowWidth > 0)
+                {
+                    bmp = ImageHelper.ResizeBmp(bmp, windowWidth);
+                }
                 CaputureImage?.Invoke(ImageHelper.BitMap2Byte(bmp, format));
             }
         }
 
         public void Start()
         {
-            tokenSource?.Cancel();
+            tokenSource?.Dispose();
             tokenSource = new CancellationTokenSource();
 
             var token = tokenSource.Token;

@@ -11,7 +11,7 @@ using System.Drawing.Imaging;
 
 namespace ShareClientWpf
 {
-    public class ShreClientController : ModelBase, IClientContrloler
+    public class ShreClientController : IClientContrloler
     {
         private Connection receiveConnection;
         private Connection sendConnection;
@@ -22,8 +22,11 @@ namespace ShareClientWpf
             get => manager;
             set
             {
-                manager?.Dispose();
-                SetProperty(ref manager, value);
+                if (manager != value)
+                {
+                    manager?.Dispose();
+                    manager = value;
+                }
             }
         }
 
@@ -33,8 +36,11 @@ namespace ShareClientWpf
             get => sender;
             set
             {
-                sender?.Dispose();
-                SetProperty(ref sender, value);
+                if (sender != value)
+                {
+                    sender?.Dispose();
+                    sender = value;
+                }
             }
         }
 
@@ -44,8 +50,11 @@ namespace ShareClientWpf
             get => reciever;
             set
             {
-                reciever?.Dispose();
-                SetProperty(ref reciever, value);
+                if (reciever != value)
+                {
+                    reciever?.Dispose();
+                    reciever = value;
+                }
             }
         }
 
@@ -55,8 +64,11 @@ namespace ShareClientWpf
             get => socket;
             set
             {
-                socket?.Dispose();
-                SetProperty(ref socket, value);
+                if (socket != value)
+                {
+                    socket?.Dispose();
+                    socket = value;
+                }
             }
         }
 
@@ -66,13 +78,16 @@ namespace ShareClientWpf
             get => caputure;
             set
             {
-                caputure?.Dispose();
-                SetProperty(ref caputure, value);
+                if (caputure != value)
+                {
+                    caputure?.Dispose();
+                    caputure = value;
+                }
             }
         }
 
 
-        public async Task AcceptAsync(int port, Func<IPEndPoint, ConnectionData, bool> acceptCallback)
+        public async Task AcceptAsync(int port, Func<IPEndPoint, ConnectionData, ConnectionResponse> acceptCallback)
         {
             Manager = new ConnectionManager();
             receiveConnection = await manager.AcceptAsync(new IPEndPoint(IPAddress.Any, port), acceptCallback);
@@ -96,10 +111,10 @@ namespace ShareClientWpf
             await Reciever.ReceiveAsync();
         }
 
-        public async Task ConnectAsync(IPEndPoint iPEndPoint, ConnectionData connectionData)
+        public async Task ConnectAsync(IPEndPoint iPEndPoint, ConnectionData connectionData, Func<ConnectionResponse, bool> connectCallback)
         {
             Manager = new ConnectionManager();
-            sendConnection = await Manager.ConnectAsync(iPEndPoint, connectionData);
+            sendConnection = await Manager.ConnectAsync(iPEndPoint, connectionData, connectCallback);
         }
 
         public async Task SendWindowAsync(SendContext sendContext, SettingContext settingContext)

@@ -145,9 +145,10 @@ namespace ShareClientWpf
                     OnShowWindow(typeof(ConnectionWindow),
                         paramater: Tuple.Create(ip, data),
                         executeCall: (p) => reqConnect = (bool)p).Wait();
-
+                    
                     iPEndPoint = ip;
-                    return reqConnect;
+                    var rsponse = new ConnectionResponse(reqConnect, new ConnectionData(data.CleintSpec));
+                    return rsponse;
                 });
 
                 if (iPEndPoint != null)
