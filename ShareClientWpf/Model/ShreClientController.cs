@@ -134,6 +134,7 @@ namespace ShareClientWpf
                                                 settingContext.SendWidth);
             Caputure.CaputureImage += Caputure_CaputureImage;
             await Caputure.StartAsync();
+            Caputure.CaputureImage -= Caputure_CaputureImage;
         }
 
         private void Caputure_CaputureImage(byte[] obj)
@@ -153,6 +154,5 @@ namespace ShareClientWpf
             Socket?.Close();
             Manager?.Cancel();
         }
-
     }
 }

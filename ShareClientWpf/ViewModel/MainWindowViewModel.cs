@@ -1,12 +1,7 @@
-﻿using ShareClient.Component;
-using ShareClient.Model;
+﻿using ShareClient.Model;
 using System;
-using System.Collections.Generic;
 using System.Drawing.Imaging;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -16,7 +11,7 @@ namespace ShareClientWpf
     public class MainWindowViewModel : ViewModelBase
     {
         private IClientContrloler clientContrloler = new ShreClientController();
-        private SettingContext settingContext = new SettingContext();
+        private SettingContext settingContext = new();
 
         private ImageSource source;
         public ImageSource Source
@@ -100,7 +95,7 @@ namespace ShareClientWpf
                 doExecute = true;
 
                 var sendContext = (SendContext)paramater;
-                await clientContrloler.ConnectAsync(sendContext.IPEndPoint, new ConnectionData(new ShareClientSpec()));
+                await clientContrloler.ConnectAsync(sendContext.IPEndPoint, new(new()), (responese) => responese.IsConnect);
 
                 var length = sendContext.WindowInfo.Title.Length;
                 SendStatusChange(false, $"送信：画面共有中【{sendContext.WindowInfo.Title.Substring(0, length > 12 ? 12 : length)}】");
@@ -145,10 +140,9 @@ namespace ShareClientWpf
                     OnShowWindow(typeof(ConnectionWindow),
                         paramater: Tuple.Create(ip, data),
                         executeCall: (p) => reqConnect = (bool)p).Wait();
-                    
+
                     iPEndPoint = ip;
-                    var rsponse = new ConnectionResponse(reqConnect, new ConnectionData(data.CleintSpec));
-                    return rsponse;
+                    return new ConnectionResponse(reqConnect, new(data.CleintSpec));
                 });
 
                 if (iPEndPoint != null)
