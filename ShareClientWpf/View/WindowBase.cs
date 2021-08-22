@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -50,30 +51,22 @@ namespace ShareClientWpf
         {
             if (DataContext is ViewModelBase vm)
             {
-                vm.ShowMessageBox += Vm_ShowMessageBox;
-                vm.ShowWindow += Vm_ShowWindow;
-                vm.CloseWindow += Vm_CloseWindow;
+                vm.ShowMessageBox += ShowMessageBox;
+                vm.ShowWindow += ShowWindow;
+                vm.ShowCommonDialog += ShowCommonDialog;
+                vm.CloseWindow += CloseWindow;
                 Closing += (s, e) => e.Cancel = vm.PostProcces();
 
                 vm.LoadedProcces(paramater, executeCallback);
             }
         }
 
-        protected virtual bool Vm_CloseWindow()
+        protected virtual async Task<MessageBoxResult> ShowMessageBox(string arg1, MessageBoxButton arg2)
         {
-            if (IsCasheWindow)
-            {
-                Hide();
-            }
-            else
-            {
-                Close();
-            }
-
-            return true;
+            return await Dispatcher.InvokeAsync(() => MessageDialog.Show(Title, arg1, arg2));
         }
 
-        protected virtual async Task Vm_ShowWindow(Type windowType, bool isModal, object paramater, Action<object> callback)
+        protected virtual async Task ShowWindow(Type windowType, bool isModal, object paramater, Action<object> callback)
         {
             await Dispatcher.InvokeAsync(() =>
             {
@@ -97,12 +90,12 @@ namespace ShareClientWpf
                     windowBase.LoadViewModel(paramater, callback);
                 }
 
+                window.WindowStartupLocation = WindowStartupLocation.Manual;
+                window.Top = Top + (Height / 2) - window.Height / 2;
+                window.Left = Left + (Width / 2) - window.Width / 2;
+
                 if (isModal)
                 {
-                    window.WindowStartupLocation = WindowStartupLocation.Manual;
-                    window.Top = Top + (Height / 2) - window.Height / 2;
-                    window.Left = Left + (Width / 2) - window.Width / 2;
-
                     IsShowDialog = true;
                     window.ShowDialog();
                     IsShowDialog = false;
@@ -112,17 +105,46 @@ namespace ShareClientWpf
                     window.Show();
                 }
             });
-
         }
+
+        private async Task<bool> ShowCommonDialog(Type dialogType, Action<CommonDialog> preCallback, Action<CommonDialog> sucessCallback)
+        {
+            return await Dispatcher.InvokeAsync(() =>
+            {
+                var dialog = (CommonDialog)Activator.CreateInstance(dialogType);
+                preCallback?.Invoke(dialog);
+
+                IsShowDialog = true;
+                var result = dialog.ShowDialog().GetValueOrDefault(false);
+                IsShowDialog = false;
+
+                if (result)
+                {
+                    sucessCallback?.Invoke(dialog);
+                }
+
+                return result;
+            });
+        }
+
+        protected virtual bool CloseWindow()
+        {
+            if (IsCasheWindow)
+            {
+                Hide();
+            }
+            else
+            {
+                Close();
+            }
+
+            return true;
+        }
+
 
         private void WindowBase_Closed(object sender, EventArgs e)
         {
             casheWindows.Remove(GetType());
-        }
-
-        protected virtual async Task<MessageBoxResult> Vm_ShowMessageBox(string arg1, MessageBoxButton arg2)
-        {
-            return await Dispatcher.InvokeAsync(() => MessageDialog.Show(Title, arg1, arg2));
         }
 
         protected static void ClearCasheWindow()

@@ -39,13 +39,35 @@ namespace ShareClientWpf
             SelectCommand = new Command(SelectExecute);
         }
 
-        private void SelectExecute()
+        private async void SelectExecute()
         {
-            var f = new OpenFileDialog();
-            f.ShowDialog();
-            var file = f.FileName;
-            var image = ImageHelper.ResizeImage(Image.FromFile(file), 150);
-            Profile.IconImage = ImageHelper.Image2Byte(image, ImageFormat.Jpeg);
+            await OnShowCommonDialog(typeof(OpenFileDialog), (dialog) =>
+            {
+                ((OpenFileDialog)dialog).Title = "プロフィール画像";
+                ((OpenFileDialog)dialog).Filter = "Jpeg|*.jpg;*.jpeg;|Png|*.png|Gif|*.gif;*.GIF";
+            },
+            (dialog) =>
+            {
+                SetProfileImage(((OpenFileDialog)dialog).FileName);
+            });
+        }
+
+        private void SetProfileImage(string filename)
+        {
+            if(filename == null)
+            {
+                return;
+            }
+
+            try
+            {
+                var image = ImageHelper.ResizeImage(Image.FromFile(filename), 150);
+                Profile.IconImage = ImageHelper.Image2Byte(image, ImageFormat.Jpeg);
+            }
+            catch(Exception ex)
+            {
+                OnShowMessageBox(ex.Message);
+            }
         }
 
     }

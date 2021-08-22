@@ -47,7 +47,12 @@
         <StackPanel>
 
             <Image Style="{StaticResource IconImageStyle}"
-                   Source="{Binding Path=Profile.IconImage}"/>
+                   Source="{Binding Path=Profile.IconImage}">
+
+                <Image.Effect>
+                    <DropShadowEffect ShadowDepth="10"/>
+                </Image.Effect>
+            </Image>
 
             <TextBlock Text="{Binding Path=Profile.Name}"
                        Margin="0"

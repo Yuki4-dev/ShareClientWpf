@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace ShareClientWpf
     {
         public event Func<string, MessageBoxButton, Task<MessageBoxResult>> ShowMessageBox;
         public event Func<Type, bool, object, Action<object>, Task> ShowWindow;
+        public event Func<Type, Action<CommonDialog>, Action<CommonDialog>, Task<bool>> ShowCommonDialog;
         public event Func<bool> CloseWindow;
 
         private bool isBusy;
@@ -54,6 +56,9 @@ namespace ShareClientWpf
 
         protected Task OnShowWindow(Type windowType, bool isModal = true, object paramater = null, Action<object> executeCall = null) =>
             ShowWindow?.Invoke(windowType, isModal, paramater, executeCall) ?? Task.CompletedTask;
+
+        protected Task<bool> OnShowCommonDialog(Type dialogType, Action<CommonDialog> preCallback = null, Action<CommonDialog> succesCallback = null) =>
+            ShowCommonDialog?.Invoke(dialogType, preCallback, succesCallback) ?? Task.FromResult(false);
 
         protected Task<MessageBoxResult> OnShowMessageBox(string msg, MessageBoxButton button = MessageBoxButton.OK) =>
             ShowMessageBox?.Invoke(msg, button) ?? Task.FromResult(MessageBoxResult.None);
