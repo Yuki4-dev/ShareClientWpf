@@ -47,7 +47,13 @@
 
                     <Button Content="参照"
                             Command="{Binding SelectCommand}"
-                            Style="{StaticResource AccentButtonStyle}"
+                            Style="{StaticResource DialogAccentButtonStyle}"
+                            Width="60"
+                            VerticalAlignment="Bottom"/>
+
+                    <Button Content="クリア"
+                            Command="{Binding ClearCommand}"
+                            Width="60"
                             VerticalAlignment="Bottom"/>
 
                 </StackPanel>

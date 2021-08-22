@@ -26,6 +26,13 @@ namespace ShareClientWpf
             set => SetProperty(ref message, value);
         }
 
+        private ICommand clearCommand;
+        public ICommand ClearCommand
+        {
+            get => clearCommand;
+            set => SetProperty(ref clearCommand, value);
+        }
+
         private ICommand selectCommand;
         public ICommand SelectCommand
         {
@@ -33,10 +40,21 @@ namespace ShareClientWpf
             set => SetProperty(ref selectCommand, value);
         }
 
+        public ProfileWindowViewModel()
+        {
+            SelectCommand = new Command(SelectExecute);
+            ClearCommand = new Command(() =>
+            {
+                if (Profile != null)
+                {
+                    Profile.IconImage = null;
+                }
+            });
+        }
+
         public override void LoadedProcces(object paramater, Action<object> executeCallback)
         {
             Profile = (Profile)paramater;
-            SelectCommand = new Command(SelectExecute);
         }
 
         private async void SelectExecute()
@@ -54,7 +72,7 @@ namespace ShareClientWpf
 
         private void SetProfileImage(string filename)
         {
-            if(filename == null)
+            if (filename == null)
             {
                 return;
             }
@@ -64,7 +82,7 @@ namespace ShareClientWpf
                 var image = ImageHelper.ResizeImage(Image.FromFile(filename), 150);
                 Profile.IconImage = ImageHelper.Image2Byte(image, ImageFormat.Jpeg);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 OnShowMessageBox(ex.Message);
             }

@@ -61,6 +61,18 @@ namespace ShareClientWpf
             }
         }
 
+        protected void UnLoadViewModel()
+        {
+            if (DataContext is ViewModelBase vm)
+            {
+                vm.ShowMessageBox -= ShowMessageBox;
+                vm.ShowWindow -= ShowWindow;
+                vm.ShowCommonDialog -= ShowCommonDialog;
+                vm.CloseWindow -= CloseWindow;
+                Closing -= (s, e) => e.Cancel = vm.PostProcces();
+            }
+        }
+
         protected virtual async Task<MessageBoxResult> ShowMessageBox(string arg1, MessageBoxButton arg2)
         {
             return await Dispatcher.InvokeAsync(() => MessageDialog.Show(Title, arg1, arg2));
@@ -82,9 +94,12 @@ namespace ShareClientWpf
 
                 if (window is WindowBase windowBase)
                 {
-                    if (windowBase.IsCasheWindow && !casheWindows.ContainsKey(windowType))
+                    if (windowBase.IsCasheWindow)
                     {
-                        casheWindows[windowType] = windowBase;
+                        if (!casheWindows.ContainsKey(windowType))
+                        {
+                            casheWindows[windowType] = windowBase;
+                        }
                     }
 
                     windowBase.LoadViewModel(paramater, callback);
@@ -137,6 +152,8 @@ namespace ShareClientWpf
             {
                 Close();
             }
+
+            UnLoadViewModel();
 
             return true;
         }
