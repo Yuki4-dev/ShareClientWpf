@@ -16,7 +16,7 @@
     </Window.DataContext>
 
     <Window.Resources>
-        <local:WindowInmageInfo2ImageSourceConveter x:Key="WindowInfoConverter" />
+        <local:WindowHandle2ImageSourceConveter x:Key="WindowHandleConverter" />
     </Window.Resources>
 
     <Grid>
@@ -60,7 +60,7 @@
                  BorderThickness="0"
                  Foreground="{StaticResource DialogForeGround}"
                  Background="Transparent"
-                 ItemsSource="{Binding WindowImageInfos}">
+                 ItemsSource="{Binding WindowInfos}">
 
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="local:WindowImageInfo">
@@ -98,9 +98,9 @@
                             <Grid Background="{StaticResource WindowBackGround}">
 
                                 <Image HorizontalAlignment="Stretch"
-                                   VerticalAlignment="Stretch"
-                                   Stretch="Fill"
-                                   Source="{Binding WindowHandle,Converter={StaticResource WindowInfoConverter}, ConverterParameter=150}"/>
+                                       VerticalAlignment="Stretch"
+                                       Stretch="Fill"
+                                       Source="{Binding WindowHandle,Converter={StaticResource WindowHandleConverter}, ConverterParameter=150}"/>
 
                                 <TextBlock Text="{Binding Title}"
                                            Foreground="{StaticResource DialogForeGround}"/>

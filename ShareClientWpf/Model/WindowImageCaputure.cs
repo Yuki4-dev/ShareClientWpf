@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
@@ -29,13 +30,13 @@ namespace ShareClientWpf
 
         public void Caputure()
         {
-            if (ImageHelper.TryGetWindowBmp(hmdl, out var bmp))
+            if (ImageHelper.TryGetWindowImage(hmdl, out Image image))
             {
                 if (windowWidth > 0)
                 {
-                    bmp = ImageHelper.ResizeBmp(bmp, windowWidth);
+                    image = ImageHelper.ResizeImage(image, windowWidth);
                 }
-                CaputureImage?.Invoke(ImageHelper.BitMap2Byte(bmp, format));
+                CaputureImage?.Invoke(ImageHelper.Image2Byte(image, format));
             }
         }
 

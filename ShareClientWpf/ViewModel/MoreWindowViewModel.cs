@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace ShareClientWpf
 {
@@ -11,37 +10,33 @@ namespace ShareClientWpf
     {
         private Action<object> callback;
 
-        private string nameText;
-        public string NameText
+        private ImageFormat[] formats = new ImageFormat[] { ImageFormat.Jpeg, ImageFormat.Png, ImageFormat.Gif };
+
+        private int selectIndex = 0;
+        public int SelectIndex
         {
-            get => nameText;
-            set => SetProperty(ref nameText, value);
+            get => selectIndex;
+            set => SetProperty(ref selectIndex, value);
         }
 
         private string sendDelayText;
         public string SendDelayText
         {
             get => sendDelayText;
-            set
-            {
-                SetProperty(ref sendDelayText,
+            set => SetProperty(ref sendDelayText,
                                 value,
-                                ModelBase.IntValidate<string>((_) => Message = "Portには数字を入れてください。"),
+                                IntValidate<string>((_) => Message = "送信間隔には数字を入れてください。"),
                                 () => Message = "");
-            }
         }
 
         private string sendWidthText;
         public string SendWidthText
         {
             get => sendWidthText;
-            set
-            {
-                SetProperty(ref sendWidthText,
+            set => SetProperty(ref sendWidthText,
                                 value,
-                                ModelBase.IntValidate<string>((_) => Message = "Portには数字を入れてください。"),
+                                IntValidate<string>((_) => Message = "画面幅には数字を入れてください。"),
                                 () => Message = "");
-            }
         }
 
         private string message;
@@ -56,9 +51,9 @@ namespace ShareClientWpf
             callback = executeCallback;
             if (paramater is SettingContext context)
             {
-                NameText = context.Name;
                 SendDelayText = context.SendDelay.ToString();
                 SendWidthText = context.SendWidth.ToString();
+                SelectIndex = Array.IndexOf(formats, context.Format);
             }
         }
 
@@ -68,9 +63,9 @@ namespace ShareClientWpf
             {
                 var context = new SettingContext()
                 {
-                    Name = NameText,
                     SendDelay = int.Parse(SendDelayText),
                     SendWidth = int.Parse(SendWidthText),
+                    Format = formats[SelectIndex]
                 };
                 callback?.Invoke(context);
             }

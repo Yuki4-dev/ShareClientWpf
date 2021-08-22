@@ -14,46 +14,46 @@ namespace ShareClientWpf
     {
         private Action<object> callback;
 
-        public ICollection<WindowInfo> WindowImageInfos { get; } = new ObservableCollection<WindowInfo>();
+        public ICollection<WindowInfo> WindowInfos { get; } = new ObservableCollection<WindowInfo>();
 
         private WindowInfo selectWindowInfo;
-        private WindowInfo SelectWindowInfo 
-        { 
+        public WindowInfo SelectWindowInfo
+        {
             get => selectWindowInfo;
             set
             {
-                if(selectWindowInfo != null)
+                if (selectWindowInfo != null)
+                {
                     selectWindowInfo.IsSelected = false;
-                selectWindowInfo = value;
-                selectWindowInfo.IsSelected = true;
-            } 
+                }
+                if (value != null)
+                {
+                    value.IsSelected = true;
+                }
+
+                SetProperty(ref selectWindowInfo, value);
+            }
         }
 
         private string ipText;
         public string IpText
         {
             get => ipText;
-            set
-            {
-                SetProperty(ref ipText,
-                            value,
-                            ModelBase.Validate<string>((_) => IPAddress.TryParse(value, out var __),
-                                (_) => Message = "有効なIPを入力してください。"),
-                            () => Message = "");
-            }
+            set => SetProperty(ref ipText,
+                                value,
+                                Validate<string>((_) => IPAddress.TryParse(value, out var __),
+                                    (_) => Message = "有効なIPを入力してください。"),
+                                () => Message = "");
         }
 
         private string portText;
         public string PortText
         {
             get => portText;
-            set
-            {
-                SetProperty(ref portText,
-                            value,
-                             ModelBase.IntValidate<string>((_) => Message = "Portには数字を入れてください。"),
-                            () => Message = "");
-            }
+            set => SetProperty(ref portText,
+                                value,
+                                IntValidate<string>((_) => Message = "Portには数字を入れてください。"),
+                                () => Message = "");
         }
 
         private string message;
@@ -80,7 +80,7 @@ namespace ShareClientWpf
         public SendWindowViewModel()
         {
             SendCommand = new Command(SendExecute);
-            SelectedCommand = new Command(SelectedExecute);
+            SelectedCommand = new Command(p => SelectWindowInfo = (WindowInfo)p);
 #if DEBUG
             IpText = "127.0.0.1";
             PortText = "2002";
@@ -95,25 +95,17 @@ namespace ShareClientWpf
 
         private void LoadWindows()
         {
-            WindowImageInfos.Clear();
-            foreach (Process p in Process.GetProcesses())
-            {
-                if (p.MainWindowTitle.Length != 0)
-                {
-                    var w = new WindowInfo()
-                    {
-                        Title = p.MainWindowTitle,
-                        WindowHandle = p.MainWindowHandle
-                    };
-                    WindowImageInfos.Add(w);
-                }
-            }
-        }
+            WindowInfos.Clear();
+            Process.GetProcesses()
+                   .Where(p => p.MainWindowTitle.Length != 0)
+                   .Select(p => new WindowInfo() { Title = p.MainWindowTitle, WindowHandle = p.MainWindowHandle })
+                   .ToList()
+                   .ForEach(info => WindowInfos.Add(info));
 
-        private void SelectedExecute(object paramater)
-        {
-            var info = (WindowInfo)paramater;
-            SelectWindowInfo = info;
+            if (WindowInfos.Count > 0)
+            {
+                SelectWindowInfo = WindowInfos.First();
+            }
         }
 
         private void SendExecute()

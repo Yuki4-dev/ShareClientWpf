@@ -13,6 +13,13 @@ namespace ShareClientWpf
     {
         private Action<object> callback;
 
+        private Profile profile;
+        public Profile Profile
+        {
+            get => profile;
+            set => SetProperty(ref profile, value);
+        }
+
         private string connectText;
         public string ConnectText
         {
@@ -36,15 +43,16 @@ namespace ShareClientWpf
         {
             if (paramater is Tuple<IPEndPoint, ConnectionData> data)
             {
-                SetConnectText(data.Item1, data.Item2);
+                SetConnectionData(data.Item1, data.Item2);
             }
 
             callback = executeCallback;
         }
 
-        private void SetConnectText(IPEndPoint iPEndPoint, ConnectionData connectionData)
+        private void SetConnectionData(IPEndPoint iPEndPoint, ConnectionData connectionData)
         {
             ConnectText = iPEndPoint.Address.ToString();
+            Profile = Profile.FromJson(Encoding.UTF8.GetString(connectionData.MetaData));
         }
 
         private void Execute(object paramater)

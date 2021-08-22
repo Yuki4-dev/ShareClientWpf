@@ -89,21 +89,19 @@ namespace ShareClientWpf
 
                 if (window is WindowBase windowBase)
                 {
-                    windowBase.LoadViewModel(paramater, callback);
-                    if (windowBase.IsCasheWindow)
+                    if (windowBase.IsCasheWindow && !casheWindows.ContainsKey(windowType))
                     {
-                        if (!casheWindows.ContainsKey(windowType))
-                        {
-                            casheWindows[windowType] = windowBase;
-                        }
+                        casheWindows[windowType] = windowBase;
                     }
+
+                    windowBase.LoadViewModel(paramater, callback);
                 }
 
                 if (isModal)
                 {
                     window.WindowStartupLocation = WindowStartupLocation.Manual;
-                    window.Top = (Top + Height / 2) - window.Height / 2;
-                    window.Left = (Left + Width / 2) - window.Width / 2;
+                    window.Top = Top + (Height / 2) - window.Height / 2;
+                    window.Left = Left + (Width / 2) - window.Width / 2;
 
                     IsShowDialog = true;
                     window.ShowDialog();

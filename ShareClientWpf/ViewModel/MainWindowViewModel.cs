@@ -2,6 +2,7 @@
 using System;
 using System.Drawing.Imaging;
 using System.Net;
+using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -13,7 +14,7 @@ namespace ShareClientWpf
         private IClientContrloler clientContrloler = new ShreClientController();
         private SettingContext settingContext = new();
 
-        private Profile profile;
+        private Profile profile = new Profile();
         public Profile Profile
         {
             get => profile;
@@ -39,6 +40,13 @@ namespace ShareClientWpf
         {
             get => sendStatus;
             set => SetProperty(ref sendStatus, value);
+        }
+
+        private ICommand profileCommand;
+        public ICommand ProfileCommand
+        {
+            get => profileCommand;
+            set => SetProperty(ref profileCommand, value);
         }
 
         private ICommand sendCommand;
@@ -78,6 +86,7 @@ namespace ShareClientWpf
 
         public MainWindowViewModel()
         {
+            ProfileCommand = new Command(ProfileExecute);
             SendCommand = new Command(SendExecute);
             RecieveCommand = new Command(RecieveExecute);
             MoreCommand = new Command(MoreExecute);
@@ -85,11 +94,16 @@ namespace ShareClientWpf
             StopSendCommand = new Command(StopSendExecute);
 
 #if DEBUG
-            settingContext.Name = "test";
             settingContext.SendWidth = 0;
             settingContext.SendDelay = 30;
             settingContext.Format = ImageFormat.Jpeg;
+            Profile.Name = "Test1";
 #endif
+        }
+
+        private async void ProfileExecute()
+        {
+            await OnShowWindow(typeof(ProfileWindow), paramater: Profile);
         }
 
         private async void SendExecute()
@@ -99,7 +113,7 @@ namespace ShareClientWpf
             await OnShowWindow(typeof(SendWindow), executeCall: async (paramater) =>
             {
                 var sendContext = (SendContext)paramater;
-                var isConnected = await clientContrloler.ConnectAsync(sendContext.IPEndPoint, new(new()), (responese) => responese.IsConnect);
+                var isConnected = await clientContrloler.ConnectAsync(sendContext.IPEndPoint, GetConnectionData(), (responese) => responese.IsConnect);
 
                 if (isConnected)
                 {
@@ -110,6 +124,11 @@ namespace ShareClientWpf
             });
 
             SendStatusChange(true);
+        }
+
+        private ConnectionData GetConnectionData()
+        {
+            return new(new(), Encoding.UTF8.GetBytes(Profile.GetJsonString()));
         }
 
         private async void StopSendExecute()

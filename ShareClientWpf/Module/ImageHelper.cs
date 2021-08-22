@@ -25,18 +25,31 @@ namespace ShareClientWpf
             return bitmap;
         }
 
-        public static byte[] BitMap2Byte(Bitmap bitmap, ImageFormat format)
+        public static byte[] Image2Byte(Image image, ImageFormat format)
         {
             using var ms = new MemoryStream();
-            bitmap.Save(ms, format);
+            image.Save(ms, format);
             return ms.GetBuffer();
         }
 
-        public static bool TryGetWindowBmp(IntPtr hWnd, out Bitmap bmp)
+
+        public static Image Byte2Image(byte[] data, ImageFormat format)
+        {
+            var ms = new WrappingStream(new MemoryStream(data));
+            return Image.FromStream(ms);
+        }
+
+        public static ImageSource Image2ImageSource(Image image, ImageFormat format)
+        {
+            var byteBmp = Image2Byte(image, format);
+            return Byte2ImageSourse(byteBmp);
+        }
+
+        public static bool TryGetWindowImage(IntPtr hWnd, out Image image)
         {
             if (!NativeMethod.GetWindowRect(hWnd, out var rect))
             {
-                bmp = null;
+                image = null;
                 return false;
             }
 
@@ -44,20 +57,20 @@ namespace ShareClientWpf
             int height = rect.bottom - rect.top;
             if (width <= 0 || height <= 0)
             {
-                bmp = null;
+                image = null;
                 return false;
             }
 
             var rectangle = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
-            bmp = new Bitmap(rectangle.Width, rectangle.Height);
+            image = new Bitmap(rectangle.Width, rectangle.Height);
 
-            using var g = Graphics.FromImage(bmp);
+            using var g = Graphics.FromImage(image);
             g.CopyFromScreen(new Point(rectangle.X, rectangle.Y), new Point(0, 0), rectangle.Size);
 
             return true;
         }
 
-        public static bool TryGetWindow(IntPtr hWnd, out ImageSource image)
+        public static bool TryGetWindowImageSource(IntPtr hWnd, out ImageSource image)
         {
             if (!NativeMethod.GetWindowRect(hWnd, out var rect))
             {
@@ -94,23 +107,18 @@ namespace ShareClientWpf
             return true;
         }
 
-        public static Bitmap ResizeBmp(Bitmap baseBmp, int width, InterpolationMode mode = InterpolationMode.Low)
+        public static Image ResizeImage(Image image, int width, InterpolationMode mode = InterpolationMode.Low)
         {
-            var height = (int)(baseBmp.Height * (width / (double)baseBmp.Width));
-            return ResizeBmp(baseBmp, height, width, mode);
+            var height = (int)(image.Height * (width / (double)image.Width));
+            return ResizeImage(image, height, width, mode);
         }
 
-        public static Bitmap ResizeBmp(Bitmap baseBmp, int height, int width, InterpolationMode mode = InterpolationMode.Low)
-        {
-            if (baseBmp == null)
-            {
-                throw new ArgumentNullException(nameof(baseBmp));
-            }
-
+        public static Image ResizeImage(Image image, int height, int width, InterpolationMode mode = InterpolationMode.Low)
+        { 
             var resizeBmp = new Bitmap(width, height);
             using var g = Graphics.FromImage(resizeBmp);
             g.InterpolationMode = mode;
-            g.DrawImage(baseBmp, 0, 0, width, height);
+            g.DrawImage(image, 0, 0, width, height);
 
             return resizeBmp;
         }

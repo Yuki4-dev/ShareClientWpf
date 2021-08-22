@@ -15,13 +15,10 @@ namespace ShareClientWpf
         public string PortText
         {
             get => portText;
-            set
-            {
-                SetProperty(ref portText,
+            set => SetProperty(ref portText,
                                 value,
-                                ModelBase.IntValidate<string>((_) => Message = "Portには数字を入れてください。"),
+                                IntValidate<string>((_) => Message = "Portには数字を入れてください。"),
                                 () => Message = "");
-            }
         }
 
         private string message;

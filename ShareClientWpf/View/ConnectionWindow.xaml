@@ -44,7 +44,16 @@
             <Style TargetType="Button" BasedOn="{StaticResource DialogButtonStyle}"/>
         </Grid.Resources>
 
-        <TextBlock Text="{Binding ConnectText}"/>
+        <StackPanel>
+
+            <Image Style="{StaticResource IconImageStyle}"
+                   Source="{Binding Path=Profile.IconImage}"/>
+
+            <TextBlock Text="{Binding Path=Profile.Name}"
+                       Margin="0"
+                       HorizontalAlignment="Center"/>
+
+        </StackPanel>
 
         <Border Grid.Row="1"
                 Background="{StaticResource DialogBorderBackGround}"/>

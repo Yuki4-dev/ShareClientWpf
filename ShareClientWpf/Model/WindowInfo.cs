@@ -20,32 +20,30 @@ namespace ShareClientWpf
         }
     }
 
-    public class WindowInmageInfo2ImageSourceConveter : IValueConverter
+    public class WindowHandle2ImageSourceConveter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var handle = (IntPtr)value;
-            if(parameter != null && int.TryParse(parameter.ToString(),out var width))
-            {
-                if (ImageHelper.TryGetWindowBmp(handle, out var bmp))
-                {
-                    var resizeBmp = ImageHelper.ResizeBmp(bmp, width);
-                    return ImageHelper.Byte2ImageSourse(ImageHelper.BitMap2Byte(resizeBmp, ImageFormat.Jpeg));
-                }
-                else
-                {
-                    return DependencyProperty.UnsetValue;
-                }
-            }
-
-            if (ImageHelper.TryGetWindow(handle, out var image))
-            {
-                return image;
-            }
-            else
+            if (value == null)
             {
                 return DependencyProperty.UnsetValue;
             }
+
+            var handle = (IntPtr)value;
+            if (parameter != null && int.TryParse(parameter.ToString(), out var width))
+            {
+                if (ImageHelper.TryGetWindowImage(handle, out var bmp))
+                {
+                    var resizeBmp = ImageHelper.ResizeImage(bmp, width);
+                    return ImageHelper.Byte2ImageSourse(ImageHelper.Image2Byte(resizeBmp, ImageFormat.Jpeg));
+                }
+            }
+            else if (ImageHelper.TryGetWindowImageSource(handle, out var image))
+            {
+                return image;
+            }
+
+            return DependencyProperty.UnsetValue;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
