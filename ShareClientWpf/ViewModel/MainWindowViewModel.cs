@@ -88,10 +88,11 @@ namespace ShareClientWpf
             StopReceiveCommand = new Command(StopReceiveExecute);
             StopSendCommand = new Command(StopSendExecute);
 
-#if DEBUG
             settingContext.SendWidth = 0;
             settingContext.SendDelay = 30;
             settingContext.Format = ImageFormat.Jpeg;
+
+#if DEBUG
             profile.Name = "Test1";
 #endif
         }
