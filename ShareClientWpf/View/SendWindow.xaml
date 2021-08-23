@@ -75,7 +75,8 @@
                         </Grid.RowDefinitions>
 
                         <Border Width="Auto"
-                                Margin="24,0,24,0">
+                                Margin="24,0,24,0"
+                                CornerRadius="6">
                             
                             <Border.Style>
                                 <Style TargetType="Border">
