@@ -46,7 +46,7 @@ namespace ShareClientWpf
             set => SetProperty(ref message, value);
         }
 
-        public override void LoadedProcces(object paramater, Action<object> executeCallback)
+        public override void LoadedProcess(object paramater, Action<object> executeCallback)
         {
             callback = executeCallback;
             if (paramater is SettingContext context)

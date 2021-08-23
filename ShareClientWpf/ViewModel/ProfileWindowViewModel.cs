@@ -52,7 +52,7 @@ namespace ShareClientWpf
             });
         }
 
-        public override void LoadedProcces(object paramater, Action<object> executeCallback)
+        public override void LoadedProcess(object paramater, Action<object> executeCallback)
         {
             Profile = (Profile)paramater;
         }
@@ -62,7 +62,7 @@ namespace ShareClientWpf
             await OnShowCommonDialog(typeof(OpenFileDialog), (dialog) =>
             {
                 ((OpenFileDialog)dialog).Title = "プロフィール画像";
-                ((OpenFileDialog)dialog).Filter = "Jpeg|*.jpg;*.jpeg;|Png|*.png|Gif|*.gif;*.GIF";
+                ((OpenFileDialog)dialog).Filter = "Jpeg|*.jpg;*.jpeg|Png|*.png|Gif|*.gif;*.GIF";
             },
             (dialog) =>
             {

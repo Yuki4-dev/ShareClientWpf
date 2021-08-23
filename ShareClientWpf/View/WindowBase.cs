@@ -57,7 +57,7 @@ namespace ShareClientWpf
                 vm.CloseWindow += CloseWindow;
                 Closing += (s, e) => e.Cancel = vm.PostProcces();
 
-                vm.LoadedProcces(paramater, executeCallback);
+                vm.LoadedProcess(paramater, executeCallback);
             }
         }
 

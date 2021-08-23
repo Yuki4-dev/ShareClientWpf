@@ -44,7 +44,7 @@ namespace ShareClientWpf
             OnCloseWindow();
         }
 
-        public virtual void LoadedProcces(object paramater, Action<object> executeCallback)
+        public virtual void LoadedProcess(object paramater, Action<object> executeCallback)
         {
             return;
         }

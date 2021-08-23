@@ -157,6 +157,17 @@
             </Style.Triggers>
         </Style>
 
+        <Style TargetType="Border" x:Key="DialogWindowBorderStyle">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsShowDialog, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Setter Property="Background" Value="{StaticResource ShowWindowBackGround}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
         <Style x:Key="DefaultWindowStyle" 
                TargetType="{x:Type local:WindowBase}">
 
@@ -164,10 +175,10 @@
                 <Setter.Value>
                     <WindowChrome
                         CaptionHeight="0"
-                        CornerRadius="2"
+                        CornerRadius="8"
                         GlassFrameThickness="0"
                         ResizeBorderThickness="5"
-                        UseAeroCaptionButtons="True" />
+                        UseAeroCaptionButtons="False"/>
                 </Setter.Value>
             </Setter>
             <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -216,7 +227,7 @@
                         CornerRadius="2"
                         GlassFrameThickness="0"
                         ResizeBorderThickness="0"
-                        UseAeroCaptionButtons="True" />
+                        UseAeroCaptionButtons="False" />
                 </Setter.Value>
             </Setter>
             <Setter Property="Template" Value="{StaticResource DailogTemplate }"/>
