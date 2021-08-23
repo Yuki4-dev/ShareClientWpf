@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace ShareClientWpf
@@ -8,7 +9,15 @@ namespace ShareClientWpf
     /// </summary>
     public partial class MessageDialog : WindowBase
     {
-        private readonly MessageBoxResult[] buttonResult;
+        private static readonly IDictionary<MessageBoxButton, MessageBoxResult[]> results = new Dictionary<MessageBoxButton, MessageBoxResult[]>()
+        {
+            {MessageBoxButton.OK,  new MessageBoxResult[] { MessageBoxResult.OK }},
+            {MessageBoxButton.OKCancel,  new MessageBoxResult[] { MessageBoxResult.Cancel, MessageBoxResult.OK }},
+            {MessageBoxButton.YesNoCancel,  new MessageBoxResult[] { MessageBoxResult.Cancel, MessageBoxResult.No, MessageBoxResult.Yes }},
+            {MessageBoxButton.YesNo, new MessageBoxResult[] { MessageBoxResult.No, MessageBoxResult.Yes }}
+        };
+
+        private readonly MessageBoxButton button;
         private MessageBoxResult result = MessageBoxResult.None;
 
         private MessageDialog(string title, string message, MessageBoxButton button) : base()
@@ -16,37 +25,22 @@ namespace ShareClientWpf
             InitializeComponent();
             Title = title;
             MessageTextBlock.Text = message;
+            this.button = button;
 
-            if (button == MessageBoxButton.OK)
+            var msgButtons = new Button[] { PrimaryButton, SecondryButton, ThirdButton };
+            var res = results[button];
+            for (int i = 0; i < res.Length; i++)
             {
-                buttonResult = new MessageBoxResult[] { MessageBoxResult.OK };
-            }
-            else if (button == MessageBoxButton.OKCancel)
-            {
-                buttonResult = new MessageBoxResult[] { MessageBoxResult.Cancel, MessageBoxResult.OK };
-            }
-            else if (button == MessageBoxButton.YesNoCancel)
-            {
-                buttonResult = new MessageBoxResult[] { MessageBoxResult.Cancel, MessageBoxResult.No, MessageBoxResult.Yes };
-            }
-            else if (button == MessageBoxButton.YesNo)
-            {
-                buttonResult = new MessageBoxResult[] { MessageBoxResult.No, MessageBoxResult.Yes };
-            }
-
-            var b = new Button[] { PrimaryButton, SecondryButton, ThirdButton };
-            for (int i = 0; i < buttonResult.Length; i++)
-            {
-                b[i].Visibility = Visibility.Visible;
-                b[i].Content = buttonResult[i].ToString();
+                msgButtons[i].Visibility = Visibility.Visible;
+                msgButtons[i].Content = res[i].ToString();
             }
         }
 
         private void StackPanel_Click(object sender, RoutedEventArgs e)
         {
-            if (e.Source is Button btn)
+            if (e.Source is Button clickButtonn)
             {
-                result = buttonResult[int.Parse(btn.Tag.ToString())];
+                result = results[button][int.Parse(clickButtonn.Tag.ToString())];
                 Close();
             }
         }

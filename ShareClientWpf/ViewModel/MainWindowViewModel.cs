@@ -1,5 +1,6 @@
 ﻿using ShareClient.Model;
 using System;
+using System.Drawing.Imaging;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
