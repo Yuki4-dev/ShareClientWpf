@@ -3,6 +3,7 @@ using System;
 using System.Drawing.Imaging;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -11,16 +12,10 @@ namespace ShareClientWpf
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private IClientContrloler clientContrloler = new ShreClientController();
+        private readonly Profile profile = new();
+        private readonly IClientController clientController = new ShreClientController();
         private SettingContext settingContext = new();
-
-        private Profile profile = new Profile();
-        public Profile Profile
-        {
-            get => profile;
-            set => SetProperty(ref profile, value);
-        }
-
+        
         private ImageSource source;
         public ImageSource Source
         {
@@ -97,38 +92,50 @@ namespace ShareClientWpf
             settingContext.SendWidth = 0;
             settingContext.SendDelay = 30;
             settingContext.Format = ImageFormat.Jpeg;
-            Profile.Name = "Test1";
+            profile.Name = "Test1";
 #endif
         }
 
-        private async void ProfileExecute()
+        public MainWindowViewModel(IClientController controller, SettingContext context, Profile profile) : this()
         {
-            await OnShowWindow(typeof(ProfileWindow), paramater: Profile);
+            clientController = controller;
+            settingContext = context;
+            this.profile = profile;
         }
+
+        private void ProfileExecute() => OnShowWindow(typeof(ProfileWindow), paramater: profile);
 
         private async void SendExecute()
         {
             SendStatusChange(false, "送信：接続要求");
+            SendContext context = null;
+            await OnShowWindow(typeof(SendWindow), executeCall: (paramater) => context = (SendContext)paramater);
 
-            await OnShowWindow(typeof(SendWindow), executeCall: async (paramater) =>
+            if (context != null)
             {
-                var sendContext = (SendContext)paramater;
-                var isConnected = await clientContrloler.ConnectAsync(sendContext.IPEndPoint, GetConnectionData(), (responese) => responese.IsConnect);
-
-                if (isConnected)
+                SendStatusChange(false, "送信：画面共有中");
+                try
                 {
-                    var length = sendContext.WindowInfo.Title.Length;
-                    SendStatusChange(false, $"送信：画面共有中【{sendContext.WindowInfo.Title.Substring(0, length > 12 ? 12 : length)}】");
-                    await clientContrloler.SendWindowAsync(sendContext, settingContext);
+                    await SendWindow(context);
                 }
-            });
+                catch (Exception ex)
+                {
+                    await OnShowMessageBox(ex.Message);
+                }
 
+            }
             SendStatusChange(true);
         }
 
-        private ConnectionData GetConnectionData()
+        private async Task SendWindow(SendContext context)
         {
-            return new(new(), Encoding.UTF8.GetBytes(Profile.GetJsonString()));
+            var data = new ConnectionData(new(), Encoding.UTF8.GetBytes(profile.GetJsonString()));
+            var isConnected = await clientController.ConnectAsync(context.IPEndPoint, data, (responese) => responese.IsConnect);
+
+            if (isConnected)
+            {
+                await clientController.SendWindowAsync(context, settingContext);
+            }
         }
 
         private async void StopSendExecute()
@@ -136,7 +143,7 @@ namespace ShareClientWpf
             var result = await OnShowMessageBox("送信処理を中止しますか？", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-                clientContrloler.Dispose();
+                clientController.Dispose();
                 SendStatusChange(true);
             }
         }
@@ -149,31 +156,33 @@ namespace ShareClientWpf
 
         private void RecieveExecute()
         {
-            OnShowWindow(typeof(RecieveWindow), executeCall: async (port) =>
+            ReceiveStatusChange(false, "受信：待機中");
+            OnShowWindow(typeof(RecieveWindow), executeCall: (port) => ReceiveWindow((int)port));
+            ReceiveStatusChange(true);
+        }
+
+        private async void ReceiveWindow(int port)
+        {
+
+
+            IPEndPoint iPEndPoint = null;
+            await clientController.AcceptAsync(port, (ip, data) =>
             {
-                ReceiveStatusChange(false, "受信：待機中");
+                bool reqConnect = false;
+                OnShowWindow(typeof(ConnectionWindow), true, Tuple.Create(ip, data), (p) => reqConnect = (bool)p).Wait();
 
-                IPEndPoint iPEndPoint = null;
-                await clientContrloler.AcceptAsync((int)port, (ip, data) =>
+                if (reqConnect)
                 {
-                    bool reqConnect = false;
-                    OnShowWindow(typeof(ConnectionWindow), true, Tuple.Create(ip, data), (p) => reqConnect = (bool)p).Wait();
-
-                    if (reqConnect)
-                    {
-                        iPEndPoint = ip;
-                    }
-                    return new ConnectionResponse(reqConnect, new(data.CleintSpec));
-                });
-
-                if (iPEndPoint != null)
-                {
-                    ReceiveStatusChange(false, $"受信：{iPEndPoint.Address}");
-                    await clientContrloler.ReceiveWindowAsync((img) => Source = img);
+                    iPEndPoint = ip;
                 }
-
-                ReceiveStatusChange(true);
+                return new ConnectionResponse(reqConnect, new(data.CleintSpec));
             });
+
+            if (iPEndPoint != null)
+            {
+                ReceiveStatusChange(false, $"受信：{iPEndPoint.Address}");
+                await clientController.ReceiveWindowAsync((img) => Source = img);
+            }
         }
 
         private async void StopReceiveExecute()
@@ -181,7 +190,7 @@ namespace ShareClientWpf
             var result = await OnShowMessageBox("受信処理を中止しますか？", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-                clientContrloler.Dispose();
+                clientController.Dispose();
                 ReceiveStatusChange(true);
             }
         }
@@ -210,7 +219,7 @@ namespace ShareClientWpf
             var result = await OnShowMessageBox("終了しますか？", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-                clientContrloler.Dispose();
+                clientController.Dispose();
                 OnCloseWindow();
             }
         }

@@ -118,8 +118,12 @@ namespace ShareClientWpf
                     IPEndPoint = new IPEndPoint(IPAddress.Parse(IpText), int.Parse(PortText))
                 };
 
-                callback?.Invoke(context);
+                callback.Invoke(context);
                 OnCloseWindow();
+            }
+            else
+            {
+                Message = "IpまたはPortを入力してください。";
             }
         }
 

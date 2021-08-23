@@ -41,12 +41,9 @@ namespace ShareClientWpf
 
         public override void LoadedProcess(object paramater, Action<object> executeCallback)
         {
-            if (paramater is Tuple<IPEndPoint, ConnectionData> data)
-            {
-                SetConnectionData(data.Item1, data.Item2);
-            }
-
             callback = executeCallback;
+            var data = (Tuple<IPEndPoint, ConnectionData>)paramater;
+            SetConnectionData(data.Item1, data.Item2);
         }
 
         private void SetConnectionData(IPEndPoint iPEndPoint, ConnectionData connectionData)
@@ -57,7 +54,7 @@ namespace ShareClientWpf
 
         private void Execute(object paramater)
         {
-            callback?.Invoke(paramater.ToString().Equals("1"));
+            callback.Invoke(paramater.ToString().Equals("1"));
         }
     }
 }

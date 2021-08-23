@@ -13,11 +13,6 @@
         <local:MoreWindowViewModel/>
     </Window.DataContext>
 
-    <Window.Resources>
-        <local:ImageFormat2TextConveter x:Key="ImageFormatConverter" />
-    </Window.Resources>
-
-
     <Grid>
 
         <Grid.RowDefinitions>
@@ -39,12 +34,12 @@
                 <TextBlock Text="画像フォーマット"/>
                 <ComboBox FontSize="18"
                           Opacity="0.85"
-                          SelectedIndex="{Binding SelectIndex}"
+                          SelectedIndex="{Binding SelectIndex,Mode=TwoWay}"
                           FontWeight="ExtraLight">
 
-                    <ComboBoxItem Content="Jpeg"/>
-                    <ComboBoxItem Content="Png"/>
-                    <ComboBoxItem Content="Gif"/>
+                    <ComboBoxItem Content="JPEG"/>
+                    <ComboBoxItem Content="PNG"/>
+                    <ComboBoxItem Content="GIF"/>
 
                 </ComboBox>
 
@@ -58,9 +53,9 @@
                            Style="{StaticResource WarnningTextBlockStyle}"/>
 
             </StackPanel>
-            
+
         </ScrollViewer>
-        
+
         <Border Grid.Row="1"
                 Background="{StaticResource DialogBorderBackGround}"/>
 
@@ -72,7 +67,8 @@
                     Command="{Binding CloseCommand}"
                     CommandParameter="1"/>
             <Button Content="Cancel"
-                    Command="{Binding CloseCommand}"/>
+                    Command="{Binding CloseCommand}"
+                    CommandParameter="0"/>
 
         </StackPanel>
 

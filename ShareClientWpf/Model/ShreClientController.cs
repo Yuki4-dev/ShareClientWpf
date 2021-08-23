@@ -11,7 +11,7 @@ using System.Drawing.Imaging;
 
 namespace ShareClientWpf
 {
-    public class ShreClientController : IClientContrloler
+    public class ShreClientController : IClientController
     {
         private Connection receiveConnection;
         private Connection sendConnection;

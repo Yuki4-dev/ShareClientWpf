@@ -50,7 +50,7 @@ namespace ShareClientWpf
 
         public void RecieveExecute()
         {
-            callback?.Invoke(int.Parse(PortText));
+            callback.Invoke(int.Parse(PortText));
             OnCloseWindow();
             Message = "";
         }

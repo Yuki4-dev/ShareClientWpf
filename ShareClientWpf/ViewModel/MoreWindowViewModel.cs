@@ -9,10 +9,9 @@ namespace ShareClientWpf
     public class MoreWindowViewModel : ViewModelBase
     {
         private Action<object> callback;
+        private readonly ImageFormat[] formats = new ImageFormat[] { ImageFormat.Jpeg, ImageFormat.Png, ImageFormat.Gif };
 
-        private ImageFormat[] formats = new ImageFormat[] { ImageFormat.Jpeg, ImageFormat.Png, ImageFormat.Gif };
-
-        private int selectIndex = 0;
+        private int selectIndex;
         public int SelectIndex
         {
             get => selectIndex;
@@ -49,17 +48,16 @@ namespace ShareClientWpf
         public override void LoadedProcess(object paramater, Action<object> executeCallback)
         {
             callback = executeCallback;
-            if (paramater is SettingContext context)
-            {
-                SendDelayText = context.SendDelay.ToString();
-                SendWidthText = context.SendWidth.ToString();
-                SelectIndex = Array.IndexOf(formats, context.Format);
-            }
+            var context = (SettingContext)paramater;
+
+            SendDelayText = context.SendDelay.ToString();
+            SendWidthText = context.SendWidth.ToString();
+            SelectIndex = context.Format != null ? Array.IndexOf(formats, context.Format) : 0;
         }
 
         protected override void CloseExecute(object paramater)
         {
-            if (paramater?.ToString().Equals("1") ?? false)
+            if (paramater.ToString() == "1")
             {
                 var context = new SettingContext()
                 {
@@ -67,7 +65,7 @@ namespace ShareClientWpf
                     SendWidth = int.Parse(SendWidthText),
                     Format = formats[SelectIndex]
                 };
-                callback?.Invoke(context);
+                callback.Invoke(context);
             }
 
             OnCloseWindow();

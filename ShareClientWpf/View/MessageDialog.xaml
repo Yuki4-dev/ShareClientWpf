@@ -23,8 +23,8 @@
             </Style>
 
             <Style BasedOn="{StaticResource DialogTextBlockStyle}" TargetType="TextBlock">
-                <Setter Property="Margin" Value="22" />
-                <Setter Property="FontSize" Value="26" />
+                <Setter Property="Margin" Value="4" />
+                <Setter Property="FontSize" Value="24" />
             </Style>
 
         </Grid.Resources>
@@ -34,9 +34,14 @@
             <RowDefinition Height="72" />
         </Grid.RowDefinitions>
 
-        <TextBlock
-            x:Name="MessageTextBlock"
-            Grid.Row="0"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            
+            <TextBlock x:Name="MessageTextBlock"
+                       Width="500"
+                       TextWrapping="Wrap"/>
+
+        </ScrollViewer>
+ 
 
         <StackPanel
             Grid.Row="1"

@@ -20,7 +20,7 @@ namespace ShareClientWpf
         }
     }
 
-    public class WindowHandle2ImageSourceConveter : IValueConverter
+    public class WindowHandleConveter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -32,9 +32,9 @@ namespace ShareClientWpf
             var handle = (IntPtr)value;
             if (parameter != null && int.TryParse(parameter.ToString(), out var width))
             {
-                if (ImageHelper.TryGetWindowImage(handle, out var bmp))
+                if (ImageHelper.TryGetWindowImage(handle, out var img))
                 {
-                    var resizeBmp = ImageHelper.ResizeImage(bmp, width);
+                    var resizeBmp = ImageHelper.ResizeImage(img, width);
                     return ImageHelper.Byte2ImageSourse(ImageHelper.Image2Byte(resizeBmp, ImageFormat.Jpeg));
                 }
             }

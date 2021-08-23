@@ -16,7 +16,7 @@
     </Window.DataContext>
 
     <Window.Resources>
-        <local:WindowHandle2ImageSourceConveter x:Key="WindowHandleConverter" />
+        <local:WindowHandleConveter x:Key="WindowHandleConveter" />
     </Window.Resources>
 
     <Grid>
@@ -101,7 +101,7 @@
                                 <Image HorizontalAlignment="Stretch"
                                        VerticalAlignment="Stretch"
                                        Stretch="Fill"
-                                       Source="{Binding WindowHandle,Converter={StaticResource WindowHandleConverter}, ConverterParameter=150}"/>
+                                       Source="{Binding WindowHandle,Converter={StaticResource WindowHandleConveter}, ConverterParameter=150}"/>
 
                                 <TextBlock Text="{Binding Title}"
                                            Foreground="{StaticResource DialogForeGround}"/>

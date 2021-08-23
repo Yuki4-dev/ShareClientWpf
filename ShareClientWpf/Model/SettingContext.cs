@@ -16,23 +16,4 @@ namespace ShareClientWpf
         public int SendWidth { get; set; }
         public ImageFormat Format { get; set; }
     }
-
-    public class ImageFormat2TextConveter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if(value == null)
-            {
-                return "";
-            }
-
-            var f = (ImageFormat)value;
-            return f.ToString().Trim();
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return DependencyProperty.UnsetValue;
-        }
-    }
 }

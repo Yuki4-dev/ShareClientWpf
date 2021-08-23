@@ -10,7 +10,7 @@ using System.Windows.Media;
 
 namespace ShareClientWpf
 {
-    public interface IClientContrloler : IDisposable
+    public interface IClientController : IDisposable
     {
         public Task<bool> AcceptAsync(int port, Func<IPEndPoint, ConnectionData, ConnectionResponse> acceptCallback);
         public Task ReceiveWindowAsync(Action<ImageSource> pushImage);
