@@ -113,7 +113,7 @@ namespace ShareClientWpf
 
             if (context != null)
             {
-                SendStatusChange(false, "送信：画面共有中");
+                SendStatusChange(false, $"送信：{context.IPEndPoint.Address}");
                 try
                 {
                     await SendWindow(context);
@@ -164,8 +164,6 @@ namespace ShareClientWpf
 
         private async void ReceiveWindow(int port)
         {
-
-
             IPEndPoint iPEndPoint = null;
             await clientController.AcceptAsync(port, (ip, data) =>
             {
