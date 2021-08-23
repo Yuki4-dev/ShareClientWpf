@@ -1,28 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 
 namespace ShareClientWpf
 {
     public class WindowImageCaputure : IDisposable
     {
-        private IntPtr hmdl;
+        private readonly object obj = new();
+        private IntPtr handle;
         private int delay;
         private int windowWidth;
         private ImageFormat format;
-        private CancellationTokenSource tokenSource;
+        private bool isCaputure = false;
 
         public event Action<byte[]> CaputureImage;
 
         public WindowImageCaputure(IntPtr hmdl, int delay, ImageFormat format, int windowWidth = 0)
         {
-            this.hmdl = hmdl;
+            this.handle = hmdl;
             this.delay = delay;
             this.windowWidth = windowWidth;
             this.format = format;
@@ -30,23 +27,29 @@ namespace ShareClientWpf
 
         public void Caputure()
         {
-            if (ImageHelper.TryGetWindowImage(hmdl, out Image image))
+            if (ImageHelper.TryGetWindowImage(handle, out Image image))
             {
                 if (windowWidth > 0)
                 {
                     image = ImageHelper.ResizeImage(image, windowWidth);
                 }
+
                 CaputureImage?.Invoke(ImageHelper.Image2Byte(image, format));
+                image.Dispose();
             }
         }
 
         public void Start()
         {
-            tokenSource?.Dispose();
-            tokenSource = new CancellationTokenSource();
+            lock (obj)
+            {
+                if (isCaputure)
+                    throw new Exception("Do Caputure.");
 
-            var token = tokenSource.Token;
-            while (!token.IsCancellationRequested)
+                isCaputure = true;
+            }
+
+            while (isCaputure)
             {
                 Caputure();
                 Thread.Sleep(delay);
@@ -60,7 +63,7 @@ namespace ShareClientWpf
 
         public void Stop()
         {
-            tokenSource?.Cancel();
+            isCaputure = false;
         }
 
         public void Dispose()

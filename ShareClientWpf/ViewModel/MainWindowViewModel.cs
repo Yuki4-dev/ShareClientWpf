@@ -1,6 +1,5 @@
 ﻿using ShareClient.Model;
 using System;
-using System.Drawing.Imaging;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -143,7 +142,8 @@ namespace ShareClientWpf
             var result = await OnShowMessageBox("送信処理を中止しますか？", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-                clientController.Dispose();
+                clientController.CancelConnect();
+                clientController.CancelSendWindow();
                 SendStatusChange(true);
             }
         }

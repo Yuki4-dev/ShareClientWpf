@@ -1,160 +1,99 @@
 ﻿using ShareClient.Model;
 using ShareClient.Component;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
-using System.Drawing.Imaging;
 
 namespace ShareClientWpf
 {
     public class ShreClientController : IClientController
     {
-        private Connection receiveConnection;
-        private Connection sendConnection;
-
-        private IConnectionManager manager;
-        private IConnectionManager Manager
-        {
-            get => manager;
-            set
-            {
-                if (manager != value)
-                {
-                    manager?.Dispose();
-                    manager = value;
-                }
-            }
-        }
-
+        private Connection senderConnection;
         private ShareClientSender sender;
-        private ShareClientSender Sender
-        {
-            get => sender;
-            set
-            {
-                if (sender != value)
-                {
-                    sender?.Dispose();
-                    sender = value;
-                }
-            }
-        }
+        private IConnectionManager senderManager;
 
+        private Connection receiverConnection;
         private ShareClientReceiver reciever;
-        private ShareClientReceiver Reciever
-        {
-            get => reciever;
-            set
-            {
-                if (reciever != value)
-                {
-                    reciever?.Dispose();
-                    reciever = value;
-                }
-            }
-        }
-
-        private IClientSocket socket;
-        private IClientSocket Socket
-        {
-            get => socket;
-            set
-            {
-                if (socket != value)
-                {
-                    socket?.Dispose();
-                    socket = value;
-                }
-            }
-        }
+        private IConnectionManager receiverManager;
 
         private WindowImageCaputure caputure;
-        private WindowImageCaputure Caputure
-        {
-            get => caputure;
-            set
-            {
-                if (caputure != value)
-                {
-                    caputure?.Dispose();
-                    caputure = value;
-                }
-            }
-        }
-
 
         public async Task<bool> AcceptAsync(int port, Func<IPEndPoint, ConnectionData, ConnectionResponse> acceptCallback)
         {
-            Manager = new ConnectionManager();
-            receiveConnection = await manager.AcceptAsync(new IPEndPoint(IPAddress.Any, port), acceptCallback);
-            return receiveConnection != null;
+            receiverManager = new ConnectionManager();
+            receiverConnection = await receiverManager.AcceptAsync(new IPEndPoint(IPAddress.Any, port), acceptCallback);
+            receiverManager.Dispose();
+            return receiverConnection != null;
         }
-
 
         public async Task ReceiveWindowAsync(Action<ImageSource> pushImage)
         {
-            if (receiveConnection == null)
+            if (receiverConnection == null)
             {
-                throw new Exception($"{nameof(receiveConnection)} is null.");
+                throw new Exception($"No Accept, Connection is null");
             }
 
-            Socket = ShareClientSocket.CreateUdpSocket();
-            Socket.Open(receiveConnection);
+            using var socket = ShareClientSocket.CreateUdpSocket();
+            socket.Open(receiverConnection);
 
-            Reciever = new ShareClientReceiver(new ShareClientManager(receiveConnection.ClientSpec),
-                Socket,
-                new ReciveImageProvider(pushImage));
+            reciever = new ShareClientReceiver(new ShareClientManager(receiverConnection.ClientSpec),
+                                                socket,
+                                                new ReciveImageProvider(pushImage));
 
-            await Reciever.ReceiveAsync();
+            await reciever.ReceiveAsync();
+
+            receiverConnection = null;
+            reciever.Dispose();
         }
 
         public async Task<bool> ConnectAsync(IPEndPoint iPEndPoint, ConnectionData connectionData, Func<ConnectionResponse, bool> connectCallback)
         {
-            Manager = new ConnectionManager();
-            sendConnection = await Manager.ConnectAsync(iPEndPoint, connectionData, connectCallback);
-            return sendConnection != null;
+            senderManager = new ConnectionManager();
+            senderConnection = await senderManager.ConnectAsync(iPEndPoint, connectionData, connectCallback);
+            return senderConnection != null;
         }
 
         public async Task SendWindowAsync(SendContext sendContext, SettingContext settingContext)
         {
-            if (sendConnection == null)
+            if (senderConnection == null)
             {
-                throw new Exception($"{nameof(sendConnection)} is null.");
+                throw new Exception($"No Connect, Connection is null");
             }
 
-            var SendSocket = ShareClientSocket.CreateUdpSocket();
-            SendSocket.Open(sendConnection);
+            using var socket = ShareClientSocket.CreateUdpSocket();
+            socket.Open(senderConnection);
 
-            Sender = new ShareClientSender(new ShareClientManager(sendConnection.ClientSpec), SendSocket);
-            Caputure = new WindowImageCaputure(sendContext.WindowInfo.WindowHandle,
+            sender = new ShareClientSender(new ShareClientManager(senderConnection.ClientSpec), socket);
+            caputure = new WindowImageCaputure(sendContext.WindowInfo.WindowHandle,
                                                 settingContext.SendDelay,
                                                 settingContext.Format,
                                                 settingContext.SendWidth);
-            Caputure.CaputureImage += Caputure_CaputureImage;
-            await Caputure.StartAsync();
-            Caputure.CaputureImage -= Caputure_CaputureImage;
+
+            caputure.CaputureImage += (img) => sender.Send(img); ;
+            await caputure.StartAsync();
+
+            senderConnection = null;
+            caputure.Dispose();
+            sender.Dispose();
         }
 
-        private void Caputure_CaputureImage(byte[] obj)
+        public void CancelAccept() => receiverManager?.Cancel();
+        public void CancelReceiveWindow() => reciever?.Close();
+        public void CancelConnect() => senderManager?.Cancel();
+        public void CancelSendWindow()
         {
-            Sender.Send(obj);
+            caputure?.Stop();
+            sender?.Close();
         }
 
         public void Dispose()
         {
-            Cancel();
-        }
-
-        public void Cancel()
-        {
-            Caputure?.Stop();
-            Reciever?.Close();
-            Socket?.Close();
-            Manager?.Cancel();
+            caputure?.Stop();
+            reciever?.Close();
+            sender?.Close();
+            senderManager?.Cancel();
+            receiverManager?.Cancel();
         }
     }
 }

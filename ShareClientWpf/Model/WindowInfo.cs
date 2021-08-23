@@ -30,25 +30,34 @@ namespace ShareClientWpf
             }
 
             var handle = (IntPtr)value;
-            if (parameter != null && int.TryParse(parameter.ToString(), out var width))
-            {
-                if (ImageHelper.TryGetWindowImage(handle, out var img))
-                {
-                    var resizeBmp = ImageHelper.ResizeImage(img, width);
-                    return ImageHelper.Byte2ImageSourse(ImageHelper.Image2Byte(resizeBmp, ImageFormat.Jpeg));
-                }
-            }
-            else if (ImageHelper.TryGetWindowImageSource(handle, out var image))
-            {
-                return image;
-            }
+            int width = parameter != null ? int.Parse((string)parameter) : 0;
+            var image = GetImageSource(handle, width);
 
-            return DependencyProperty.UnsetValue;
+            return image != null ? image : DependencyProperty.UnsetValue;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return DependencyProperty.UnsetValue;
+        }
+
+        private ImageSource GetImageSource(IntPtr handle, int width)
+        {
+            ImageSource imageSrc = null;
+            if (width > 0)
+            {
+                if (ImageHelper.TryGetWindowImage(handle, out var image))
+                {
+                    var resizeImagep = ImageHelper.ResizeImage(image, width);
+                    imageSrc = ImageHelper.Byte2ImageSourse(ImageHelper.Image2Byte(resizeImagep, ImageFormat.Jpeg));
+                }
+            }
+            else if (ImageHelper.TryGetWindowImageSource(handle, out var image))
+            {
+                imageSrc = image;
+            }
+
+            return imageSrc;
         }
     }
 }

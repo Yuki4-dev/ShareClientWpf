@@ -72,7 +72,7 @@ namespace ShareClientWpf
 
         private void SetProfileImage(string filename)
         {
-            if (filename == null)
+            if (string.IsNullOrEmpty(filename))
             {
                 return;
             }
