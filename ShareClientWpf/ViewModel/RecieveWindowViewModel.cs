@@ -46,9 +46,16 @@ namespace ShareClientWpf
 
         public void RecieveExecute()
         {
-            callback.Invoke(int.Parse(PortText));
-            OnCloseWindow();
-            Message = "";
+            if (!string.IsNullOrEmpty(PortText))
+            {
+                callback.Invoke(int.Parse(PortText));
+                OnCloseWindow();
+                Message = "";
+            }
+            else
+            {
+                Message = "Portを入力してください。";
+            }
         }
     }
 }

@@ -161,11 +161,27 @@ namespace ShareClientWpf
             {
                 ReceiveStatusChange(false, "受信：待機中");
 
-                var iPEndPoint = await AcceptAsync((int)paramater);
+                IPEndPoint iPEndPoint = null;
+                try
+                {
+                    iPEndPoint = await AcceptAsync((int)paramater);
+                }
+                catch (Exception ex)
+                {
+                    await OnShowMessageBox(ex.Message);
+                }
+
                 if (iPEndPoint != null)
                 {
                     ReceiveStatusChange(false, $"受信：{iPEndPoint.Address}");
-                    await clientController.ReceiveWindowAsync((img) => Source = img);
+                    try
+                    {
+                        await clientController.ReceiveWindowAsync((img) => Source = img);
+                    }
+                    catch (Exception ex)
+                    {
+                        await OnShowMessageBox(ex.Message);
+                    }
                 }
 
                 ReceiveStatusChange(true);
