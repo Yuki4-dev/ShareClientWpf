@@ -161,20 +161,7 @@ namespace ShareClientWpf
             ReceiveStatusChange(false, "受信：待機中");
             OnShowWindow(typeof(RecieveWindow), executeCall: async (paramater) =>
             {
-                var port = (int)paramater;
-                IPEndPoint iPEndPoint = null;
-                await clientController.AcceptAsync(port, (ip, data) =>
-                {
-                    bool reqConnect = false;
-                    OnShowWindow(typeof(ConnectionWindow), true, Tuple.Create(ip, data), (p) => reqConnect = (bool)p).Wait();
-
-                    if (reqConnect)
-                    {
-                        iPEndPoint = ip;
-                    }
-                    return new ConnectionResponse(reqConnect, new(data.CleintSpec));
-                });
-
+                var iPEndPoint = await AcceptAsync((int)paramater); ;
                 if (iPEndPoint != null)
                 {
                     ReceiveStatusChange(false, $"受信：{iPEndPoint.Address}");
@@ -183,6 +170,24 @@ namespace ShareClientWpf
 
                 ReceiveStatusChange(true);
             });
+        }
+
+        private async Task<IPEndPoint> AcceptAsync(int port)
+        {
+            IPEndPoint iPEndPoint = null;
+            await clientController.AcceptAsync(port, (ip, data) =>
+            {
+                bool reqConnect = false;
+                OnShowWindow(typeof(ConnectionWindow), true, Tuple.Create(ip, data), (p) => reqConnect = (bool)p).Wait();
+
+                if (reqConnect)
+                {
+                    iPEndPoint = ip;
+                }
+                return new ConnectionResponse(reqConnect, new(data.CleintSpec));
+            });
+
+            return iPEndPoint;
         }
 
         private async void StopReceiveExecute()
