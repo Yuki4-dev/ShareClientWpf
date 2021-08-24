@@ -132,7 +132,6 @@ namespace ShareClientWpf
         {
             var data = new ConnectionData(new(), Encoding.UTF8.GetBytes(profile.GetJsonString()));
             var isConnected = await clientController.ConnectAsync(context.IPEndPoint, data, (responese) => responese.IsConnect);
-
             if (isConnected)
             {
                 await clientController.SendWindowAsync(context, settingContext);
@@ -158,10 +157,11 @@ namespace ShareClientWpf
 
         private void RecieveExecute()
         {
-            ReceiveStatusChange(false, "受信：待機中");
             OnShowWindow(typeof(RecieveWindow), executeCall: async (paramater) =>
             {
-                var iPEndPoint = await AcceptAsync((int)paramater); ;
+                ReceiveStatusChange(false, "受信：待機中");
+
+                var iPEndPoint = await AcceptAsync((int)paramater);
                 if (iPEndPoint != null)
                 {
                     ReceiveStatusChange(false, $"受信：{iPEndPoint.Address}");
@@ -209,10 +209,7 @@ namespace ShareClientWpf
 
         private void MoreExecute()
         {
-            OnShowWindow(typeof(MoreWindow), paramater: settingContext, executeCall: (context) =>
-            {
-                settingContext = (SettingContext)context;
-            });
+            OnShowWindow(typeof(MoreWindow), paramater: settingContext, executeCall: (context) => settingContext = (SettingContext)context);
         }
 
         protected override void CloseExecute(object paramater)
