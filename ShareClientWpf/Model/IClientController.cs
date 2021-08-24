@@ -13,8 +13,8 @@ namespace ShareClientWpf
         public Task<bool> AcceptAsync(int port, Func<IPEndPoint, ConnectionData, ConnectionResponse> acceptCallback);
         public Task ReceiveWindowAsync(Action<ImageSource> pushImage);
         public void CancelConnect();
-        public void CancelSendWindow();
+        public void CloseSendWindow();
         public void CancelAccept();
-        public void CancelReceiveWindow();
+        public void CloseReceiveWindow();
     }
 }

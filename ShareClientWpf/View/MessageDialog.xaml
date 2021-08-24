@@ -31,21 +31,20 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="72" />
+            <RowDefinition Height="44" />
         </Grid.RowDefinitions>
 
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            
+
             <TextBlock x:Name="MessageTextBlock"
-                       Width="500"
+                       Width="550"
                        TextWrapping="Wrap"/>
 
         </ScrollViewer>
- 
 
         <StackPanel
             Grid.Row="1"
-            Margin="18"
+            Margin="20,4,20,4"
             HorizontalAlignment="Right"
             ButtonBase.Click="StackPanel_Click"
             Orientation="Horizontal">

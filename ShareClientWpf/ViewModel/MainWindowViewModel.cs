@@ -15,7 +15,7 @@ namespace ShareClientWpf
         private readonly Profile profile = new();
         private readonly IClientController clientController = new ShreClientController();
         private SettingContext settingContext = new();
-        
+
         private ImageSource source;
         public ImageSource Source
         {
@@ -145,7 +145,7 @@ namespace ShareClientWpf
             if (result == MessageBoxResult.Yes)
             {
                 clientController.CancelConnect();
-                clientController.CancelSendWindow();
+                clientController.CloseSendWindow();
                 SendStatusChange(true);
             }
         }
@@ -159,30 +159,30 @@ namespace ShareClientWpf
         private void RecieveExecute()
         {
             ReceiveStatusChange(false, "受信：待機中");
-            OnShowWindow(typeof(RecieveWindow), executeCall: (port) => ReceiveWindow((int)port));
-            ReceiveStatusChange(true);
-        }
-
-        private async void ReceiveWindow(int port)
-        {
-            IPEndPoint iPEndPoint = null;
-            await clientController.AcceptAsync(port, (ip, data) =>
+            OnShowWindow(typeof(RecieveWindow), executeCall: async (paramater) =>
             {
-                bool reqConnect = false;
-                OnShowWindow(typeof(ConnectionWindow), true, Tuple.Create(ip, data), (p) => reqConnect = (bool)p).Wait();
-
-                if (reqConnect)
+                var port = (int)paramater;
+                IPEndPoint iPEndPoint = null;
+                await clientController.AcceptAsync(port, (ip, data) =>
                 {
-                    iPEndPoint = ip;
-                }
-                return new ConnectionResponse(reqConnect, new(data.CleintSpec));
-            });
+                    bool reqConnect = false;
+                    OnShowWindow(typeof(ConnectionWindow), true, Tuple.Create(ip, data), (p) => reqConnect = (bool)p).Wait();
 
-            if (iPEndPoint != null)
-            {
-                ReceiveStatusChange(false, $"受信：{iPEndPoint.Address}");
-                await clientController.ReceiveWindowAsync((img) => Source = img);
-            }
+                    if (reqConnect)
+                    {
+                        iPEndPoint = ip;
+                    }
+                    return new ConnectionResponse(reqConnect, new(data.CleintSpec));
+                });
+
+                if (iPEndPoint != null)
+                {
+                    ReceiveStatusChange(false, $"受信：{iPEndPoint.Address}");
+                    await clientController.ReceiveWindowAsync((img) => Source = img);
+                }
+
+                ReceiveStatusChange(true);
+            });
         }
 
         private async void StopReceiveExecute()
@@ -190,7 +190,8 @@ namespace ShareClientWpf
             var result = await OnShowMessageBox("受信処理を中止しますか？", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-                clientController.Dispose();
+                clientController.CancelAccept();
+                clientController.CloseReceiveWindow();
                 ReceiveStatusChange(true);
             }
         }
