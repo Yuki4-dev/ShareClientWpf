@@ -27,6 +27,38 @@
         <GridLength x:Key="DialogRowHeight" >40</GridLength>
         <local:IconSizeConverter x:Key="IconConverter" />
 
+        <DataTemplate DataType="{x:Type local:SendStatusPageViewModel}">
+            <local:SendStatusPage/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type local:ReceiveStatusPageViewModel}">
+            <local:ReceiveStatusPage/>
+        </DataTemplate>
+
+        <ControlTemplate x:Key="StatusPageTemplate"
+                         TargetType="UserControl">
+            
+            <ControlTemplate.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ThicknessAnimation Storyboard.TargetName="RootGrid"
+                                                Storyboard.TargetProperty="Margin"
+                                                Duration="00:00:00.2"
+                                                From="0,100,0,0"
+                                                To="0" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </ControlTemplate.Triggers>
+
+            <Grid x:Name="RootGrid">
+                <ContentPresenter HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch"/>
+            </Grid>
+            
+        </ControlTemplate>
+
         <ControlTemplate x:Key="DefaultButtonTemplate"
                          TargetType="{x:Type ContentControl}">
 
@@ -74,6 +106,21 @@
                          TargetType="{x:Type ContentControl}">
             <Grid>
 
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup Name="CommonStates">
+                        <VisualState Name="Normal" />
+                        <VisualState Name="MouseOver">
+                            <Storyboard>
+                                <ThicknessAnimation Storyboard.TargetName="SelectBorder"
+                                        Storyboard.TargetProperty="Margin"
+                                        Duration="00:00:00.1"
+                                        To="0" />
+                            </Storyboard>
+                        </VisualState>
+                        <VisualState Name="Pressed"/>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+
                 <Grid.RowDefinitions>
                         <RowDefinition Height="9*"/>
                         <RowDefinition Height="1*"/>
@@ -86,8 +133,10 @@
                            Text="{TemplateBinding Content}" />
 
                     <Border Grid.Row="1"
-                            BorderBrush="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"
+                            Margin="8,0,8,0"
+                            x:Name="SelectBorder"
                             BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"
                             VerticalAlignment="Bottom" 
                             HorizontalAlignment="Stretch">
 
@@ -106,10 +155,26 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <Border BorderBrush="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup Name="CommonStates">
+                        <VisualState Name="Normal" />
+                        <VisualState Name="MouseOver">
+                            <Storyboard>
+                                <ThicknessAnimation Storyboard.TargetName="SelectBorder"
+                                        Storyboard.TargetProperty="Margin"
+                                        Duration="00:00:00.1"
+                                        To="0" />
+                            </Storyboard>
+                        </VisualState>
+                        <VisualState Name="Pressed"/>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+
+                <Border x:Name="SelectBorder"
+                        BorderBrush="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         CornerRadius="4"
-                        Margin="32,0,32,0"
+                        Margin="16,0,16,0"
                         HorizontalAlignment="Stretch"/>
                 
                 <ContentPresenter VerticalAlignment="Stretch"
@@ -125,38 +190,33 @@
             
             <Setter Property="Foreground" Value="{StaticResource ButtonForeGround}"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Template" Value="{StaticResource TextButtonTemplate}"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Foreground" Value="{StaticResource ButtonMouseOver}" />
-                    <Setter Property="BorderThickness"  Value="1"/>
+                    <Setter Property="BorderThickness" Value="4"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
 
         <Style x:Key="TextToggleButtonStyle" 
+               BasedOn="{StaticResource TextButtonStyle}"
                TargetType="ToggleButton">
-
-            <Setter Property="Foreground" Value="{StaticResource ButtonForeGround}"/>
-            <Setter Property="BorderThickness" Value="0"/>
+            
             <Setter Property="Template" Value="{StaticResource TextButtonTemplate}"/>
             <Style.Triggers>
                 <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Foreground" Value="{StaticResource ButtonMouseOver}" />
-                    <Setter Property="BorderThickness"  Value="1"/>
+                    <Setter Property="BorderThickness" Value="4"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
 
         <Style x:Key="SelectToggleButtonStyle" 
+               BasedOn="{StaticResource TextButtonStyle}"
                TargetType="ToggleButton">
 
-            <Setter Property="Foreground" Value="{StaticResource ButtonForeGround}"/>
-            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Template" Value="{StaticResource SelectButtonTemplate}"/>
             <Style.Triggers>
                 <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Foreground" Value="{StaticResource ButtonMouseOver}" />
                     <Setter Property="BorderThickness"  Value="4"/>
                 </Trigger>
             </Style.Triggers>
@@ -239,7 +299,9 @@
             </Style.Triggers>
         </Style>
 
-        <Style TargetType="Border" x:Key="DialogWindowBorderStyle">
+        <Style  x:Key="DialogWindowBorderStyle"
+                TargetType="Border">
+            
             <Setter Property="Visibility" Value="Collapsed"/>
             <Setter Property="Background" Value="Transparent"/>
             <Style.Triggers>

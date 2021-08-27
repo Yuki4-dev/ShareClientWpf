@@ -3,11 +3,11 @@
 namespace ShareClientWpf
 {
     /// <summary>
-    /// StatusPage.xaml の相互作用ロジック
+    /// ReceiveStatusPage.xaml の相互作用ロジック
     /// </summary>
-    public partial class StatusPage : UserControl
+    public partial class ReceiveStatusPage : UserControl
     {
-        public StatusPage()
+        public ReceiveStatusPage()
         {
             InitializeComponent();
         }

@@ -12,15 +12,16 @@
     </UserControl.DataContext>
 
     <UserControl.Resources>
-        
+
         <local:StatusPageCheckConverter x:Key="StatusPageConverter"/>
         <Style TargetType="RadioButton" BasedOn="{StaticResource TextToggleButtonStyle}">
             <Setter Property="Margin" Value="4"/>
             <Setter Property="FontSize" Value="24"/>
         </Style>
     </UserControl.Resources>
-    
+
     <Grid>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="64"/>
             <RowDefinition Height="*"/>

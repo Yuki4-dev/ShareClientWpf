@@ -73,27 +73,24 @@
                Source="{Binding Source, Mode=OneWay}"
                Stretch="UniformToFill" />
 
-        <Grid Grid.Column="1"
-              Panel.ZIndex="1"
-              Background="{StaticResource HeaderBackGround}"
-              HorizontalAlignment="Right"
-              VerticalAlignment="Stretch"
-              Width="300">
+        <local:StatusPage Grid.Column="1"
+                          Panel.ZIndex="1"
+                          Background="{StaticResource HeaderBackGround}"
+                          HorizontalAlignment="Right"
+                          VerticalAlignment="Stretch">
 
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Setter Property="Visibility" Value="Collapsed"/>
+            <local:StatusPage.Style>
+                <Style TargetType="local:StatusPage">
+                    <Setter Property="Width" Value="0"/>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsStatusOpen}" Value="True">
-                            <Setter Property="Visibility" Value="Visible"/>
+                        <DataTrigger Binding="{Binding IsStatusOpen, ElementName=ViewModel}" Value="True">
+                            <Setter Property="Width" Value="300"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </Grid.Style>
+            </local:StatusPage.Style>
 
-            <local:StatusPage/>
-
-        </Grid>
+        </local:StatusPage>
     </Grid>
     
 </local:WindowBase>
