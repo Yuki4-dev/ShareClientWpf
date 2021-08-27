@@ -16,11 +16,25 @@ namespace ShareClientWpf
         private readonly IClientController clientController = new ShreClientController();
         private SettingContext settingContext = new();
 
-        private ImageSource source;
+        private ImageSource source; 
         public ImageSource Source
         {
             get => source;
             set => SetProperty(ref source, value);
+        }
+
+        private HeaderMenuCommands headerCommands;
+        public HeaderMenuCommands HeaderCommands
+        {
+            get => headerCommands;
+            set => SetProperty(ref headerCommands, value);
+        }
+
+        private bool isStatusOpen; 
+        public bool IsStatusOpen
+        {
+            get => isStatusOpen;
+            set => SetProperty(ref isStatusOpen, value);
         }
 
         private string recieveStatus;
@@ -35,34 +49,6 @@ namespace ShareClientWpf
         {
             get => sendStatus;
             set => SetProperty(ref sendStatus, value);
-        }
-
-        private ICommand profileCommand;
-        public ICommand ProfileCommand
-        {
-            get => profileCommand;
-            set => SetProperty(ref profileCommand, value);
-        }
-
-        private ICommand sendCommand;
-        public ICommand SendCommand
-        {
-            get => sendCommand;
-            set => SetProperty(ref sendCommand, value);
-        }
-
-        private ICommand recieveCommand;
-        public ICommand RecieveCommand
-        {
-            get => recieveCommand;
-            set => SetProperty(ref recieveCommand, value);
-        }
-
-        private ICommand moreCommand;
-        public ICommand MoreCommand
-        {
-            get => moreCommand;
-            set => SetProperty(ref moreCommand, value);
         }
 
         private ICommand stopReceiveCommand;
@@ -81,10 +67,14 @@ namespace ShareClientWpf
 
         public MainWindowViewModel()
         {
-            ProfileCommand = new Command(ProfileExecute);
-            SendCommand = new Command(SendExecute);
-            RecieveCommand = new Command(RecieveExecute);
-            MoreCommand = new Command(MoreExecute);
+            HeaderCommands = new HeaderMenuCommands()
+            {
+                ProfileCommand = new Command(ProfileExecute),
+                SendCommand = new Command(SendExecute),
+                RecieveCommand = new Command(RecieveExecute),
+                MoreCommand = new Command(MoreExecute)
+            };
+
             StopReceiveCommand = new Command(StopReceiveExecute);
             StopSendCommand = new Command(StopSendExecute);
 
@@ -151,7 +141,7 @@ namespace ShareClientWpf
 
         private void SendStatusChange(bool execute, string message = "")
         {
-            ((Command)SendCommand).CanExecuteValue = execute;
+            ((Command)HeaderCommands.SendCommand).CanExecuteValue = execute;
             SendStatus = message;
         }
 
@@ -219,7 +209,7 @@ namespace ShareClientWpf
 
         private void ReceiveStatusChange(bool execute, string message = "")
         {
-            ((Command)RecieveCommand).CanExecuteValue = execute;
+            ((Command)HeaderCommands.RecieveCommand).CanExecuteValue = execute;
             RecieveStatus = message;
         }
 
