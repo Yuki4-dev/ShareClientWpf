@@ -13,7 +13,6 @@
 
     <UserControl.Resources>
 
-        <local:StatusPageCheckConverter x:Key="StatusPageConverter"/>
         <Style TargetType="RadioButton" BasedOn="{StaticResource TextToggleButtonStyle}">
             <Setter Property="Margin" Value="4"/>
             <Setter Property="FontSize" Value="24"/>
@@ -33,10 +32,10 @@
             <RadioButton Content="送信"
                          IsChecked="True"
                          Command="{Binding SelectedCommand}"
-                         CommandParameter="1"/>
+                         CommandParameter="0"/>
             <RadioButton Content="受信"
                          Command="{Binding SelectedCommand}"
-                         CommandParameter="0"/>
+                         CommandParameter="1"/>
         </StackPanel>
 
         <ContentControl Grid.Row="1"

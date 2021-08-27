@@ -334,7 +334,24 @@
         <ControlTemplate x:Key="DailogTemplate" 
                          TargetType="local:WindowBase">
 
+            <ControlTemplate.Triggers>
+                <Trigger Property="Visibility" Value="Visible">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="MainContent"
+                                                 Storyboard.TargetProperty="Opacity"
+                                                 Duration="0:0:.2"
+                                                 From="0"
+                                                 To="1" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                </Trigger>
+            </ControlTemplate.Triggers>
+
             <Border Padding="1" 
+                    x:Name="MainContent"
                     Background="{TemplateBinding ThemeBrush}">
 
                 <Grid Background="{TemplateBinding Background}">

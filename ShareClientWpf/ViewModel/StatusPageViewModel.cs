@@ -1,8 +1,4 @@
-﻿
-using System;
-using System.Globalization;
-using System.Windows.Data;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace ShareClientWpf
 {
@@ -11,6 +7,8 @@ namespace ShareClientWpf
         private SendStatusPageViewModel sendStatusPageViewModel = new SendStatusPageViewModel();
 
         private ReceiveStatusPageViewModel receiveStatusPageViewModel = new ReceiveStatusPageViewModel();
+
+        private ModelBase[] pages;
 
         private ModelBase contentPage;
         public ModelBase ContentPage
@@ -29,38 +27,15 @@ namespace ShareClientWpf
         public StatusPageViewModel()
         {
             SelectedCommand = new Command(SelectExecute);
+            pages = new ModelBase[] { sendStatusPageViewModel, receiveStatusPageViewModel };
+
             ContentPage = sendStatusPageViewModel;
         }
 
         private void SelectExecute(object parameter)
         {
-            ContentPage = parameter.ToString().Equals("1") ? sendStatusPageViewModel : receiveStatusPageViewModel;
+            var index = int.Parse(parameter.ToString());
+            ContentPage = pages[index];
         }
-    }
-
-    public class StatusPageCheckConverter : IValueConverter
-    {
-
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            var pageType = (string)parameter == "Send" ? typeof(SendStatusPageViewModel) 
-                : (string)parameter == "Receive" ? typeof(ReceiveStatusPageViewModel) : null;
-            return pageType != null && value != null && pageType.Equals(value.GetType());
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return null;
-        }
-    }
-
-    public class SendStatusPageViewModel : ModelBase
-    {
-
-    }
-
-    public class ReceiveStatusPageViewModel : ModelBase
-    {
-
     }
 }
