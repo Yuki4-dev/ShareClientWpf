@@ -18,19 +18,7 @@ namespace ShareClientWpf
         public WindowInfo SelectWindowInfo
         {
             get => selectWindowInfo;
-            set
-            {
-                if (selectWindowInfo != null)
-                {
-                    selectWindowInfo.IsSelected = false;
-                }
-                if (value != null)
-                {
-                    value.IsSelected = true;
-                }
-
-                SetProperty(ref selectWindowInfo, value);
-            }
+            set => SetProperty(ref selectWindowInfo, value);
         }
 
         private string ipText;
@@ -99,30 +87,30 @@ namespace ShareClientWpf
                    .Select(p => new WindowInfo() { Title = p.MainWindowTitle, WindowHandle = p.MainWindowHandle })
                    .ToList()
                    .ForEach(info => WindowInfos.Add(info));
-
-            if (WindowInfos.Count > 0)
-            {
-                SelectWindowInfo = WindowInfos.First();
-            }
         }
 
         private void SendExecute()
         {
-            if (!string.IsNullOrEmpty(IpText) && !string.IsNullOrEmpty(PortText))
-            {
-                var context = new SendContext()
-                {
-                    WindowInfo = SelectWindowInfo,
-                    IPEndPoint = new IPEndPoint(IPAddress.Parse(IpText), int.Parse(PortText))
-                };
-
-                callback.Invoke(context);
-                OnCloseWindow();
-            }
-            else
+            if(string.IsNullOrEmpty(IpText) && string.IsNullOrEmpty(PortText))
             {
                 Message = "IpまたはPortを入力してください。";
+                return;
             }
+
+            if(SelectWindowInfo == null)
+            {
+                Message = "Windowを選択してください。";
+                return;
+            }
+
+            var context = new SendContext()
+            {
+                WindowInfo = SelectWindowInfo,
+                IPEndPoint = new IPEndPoint(IPAddress.Parse(IpText), int.Parse(PortText))
+            };
+
+            callback.Invoke(context);
+            OnCloseWindow();
         }
 
     }

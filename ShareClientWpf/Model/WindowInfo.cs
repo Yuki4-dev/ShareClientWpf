@@ -7,17 +7,10 @@ using System.Windows.Media;
 
 namespace ShareClientWpf
 {
-    public class WindowInfo : ModelBase
+    public class WindowInfo 
     {
         public string Title { get; set; }
         public IntPtr WindowHandle { get; set; }
-
-        private bool isSelected = false;
-        public bool IsSelected
-        {
-            get => isSelected;
-            set => SetProperty(ref isSelected, value);
-        }
     }
 
     public class WindowHandleConveter : IValueConverter
