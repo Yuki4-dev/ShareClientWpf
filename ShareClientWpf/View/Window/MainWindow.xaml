@@ -77,6 +77,7 @@
 
         <local:HeaderMenu Background="{StaticResource HeaderBackGround}"
                           Commands="{Binding HeaderCommands}"
+                          MouseDoubleClick="HeaderMenu_MouseDoubleClick"
                           MouseLeftButtonDown="HeaderMenu_MouseLeftButtonDown"/>
 
         <Image Grid.Column="1"

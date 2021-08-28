@@ -18,6 +18,11 @@ namespace ShareClientWpf
             }
         }
 
+        private void HeaderMenu_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             LoadViewModel(null, null);
