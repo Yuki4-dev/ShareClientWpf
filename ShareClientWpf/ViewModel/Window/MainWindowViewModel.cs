@@ -5,7 +5,6 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Media;
 
 namespace ShareClientWpf
@@ -15,6 +14,8 @@ namespace ShareClientWpf
         private readonly Profile profile = new();
         private readonly IClientController clientController = new ShreClientController();
         private SettingContext settingContext = new();
+        private readonly SendStatusPageViewModel sendStatusPageViewModel = new();
+        private readonly ReceiveStatusPageViewModel receuveStatusPageViewModel = new();
 
         private ImageSource source;
         public ImageSource Source
@@ -30,6 +31,20 @@ namespace ShareClientWpf
             set => SetProperty(ref headerCommands, value);
         }
 
+        private ModelBase rightPageContent;
+        public ModelBase RightPageContent
+        {
+            get => rightPageContent;
+            set => SetProperty(ref rightPageContent, value);
+        }
+
+        private Command selectedCommand;
+        public Command SelectedCommand
+        {
+            get => selectedCommand;
+            set => SetProperty(ref selectedCommand, value);
+        }
+
         private bool isStatusOpen;
         public bool IsStatusOpen
         {
@@ -37,36 +52,9 @@ namespace ShareClientWpf
             set => SetProperty(ref isStatusOpen, value);
         }
 
-        private string recieveStatus;
-        public string RecieveStatus
-        {
-            get => recieveStatus;
-            set => SetProperty(ref recieveStatus, value);
-        }
-
-        private string sendStatus;
-        public string SendStatus
-        {
-            get => sendStatus;
-            set => SetProperty(ref sendStatus, value);
-        }
-
-        private ICommand stopReceiveCommand;
-        public ICommand StopReceiveCommand
-        {
-            get => stopReceiveCommand;
-            set => SetProperty(ref stopReceiveCommand, value);
-        }
-
-        private ICommand stopSendCommand;
-        public ICommand StopSendCommand
-        {
-            get => stopSendCommand;
-            set => SetProperty(ref stopSendCommand, value);
-        }
-
         public MainWindowViewModel()
         {
+            SelectedCommand = new Command(SelectExecute);
             HeaderCommands = new HeaderMenuCommands()
             {
                 ProfileCommand = new Command(ProfileExecute),
@@ -75,8 +63,12 @@ namespace ShareClientWpf
                 MoreCommand = new Command(MoreExecute)
             };
 
-            StopReceiveCommand = new Command(StopReceiveExecute);
-            StopSendCommand = new Command(StopSendExecute);
+            sendStatusPageViewModel.StopCommand = new Command(StopSendExecute);
+            sendStatusPageViewModel.SetSendViewMoelState(SendViewModelState.None);
+            receuveStatusPageViewModel.StopCommand = new Command(StopReceiveExecute);
+            receuveStatusPageViewModel.SetReceiveViewMoelState(ReceiveViewModelState.None);
+
+            RightPageContent = sendStatusPageViewModel;
 
             settingContext.SendWidth = 0;
             settingContext.SendDelay = 30;
@@ -94,6 +86,18 @@ namespace ShareClientWpf
             this.profile = profile;
         }
 
+        private void SelectExecute(object parameter)
+        {
+            if (parameter.ToString() == "0")
+            {
+                RightPageContent = sendStatusPageViewModel;
+            }
+            else
+            {
+                RightPageContent = receuveStatusPageViewModel;
+            }
+        }
+
         private void ProfileExecute()
         {
             OnShowWindow(typeof(ProfileWindow), paramater: profile);
@@ -101,13 +105,13 @@ namespace ShareClientWpf
 
         private async void SendExecute()
         {
-            SendStatusChange(false, "送信：接続要求");
+            HeaderCommands.SendCommand.CanExecuteValue = false;
+
             SendContext context = null;
             await OnShowWindow(typeof(SendWindow), executeCall: (paramater) => context = (SendContext)paramater);
 
             if (context != null)
             {
-                SendStatusChange(false, $"送信：{context.IPEndPoint.Address}");
                 try
                 {
                     await SendWindow(context);
@@ -116,17 +120,21 @@ namespace ShareClientWpf
                 {
                     await OnShowMessageBox(ex.Message);
                 }
-
             }
-            SendStatusChange(true);
+
+            sendStatusPageViewModel.SetSendViewMoelState(SendViewModelState.None);
+            HeaderCommands.SendCommand.CanExecuteValue = true;
         }
 
         private async Task SendWindow(SendContext context)
         {
+            sendStatusPageViewModel.SetSendViewMoelState(SendViewModelState.Connect, context);
+
             var data = new ConnectionData(new(), Encoding.UTF8.GetBytes(profile.GetJsonString()));
             var isConnected = await clientController.ConnectAsync(context.IPEndPoint, data, (responese) => responese.IsConnect);
             if (isConnected)
             {
+                sendStatusPageViewModel.SetSendViewMoelState(SendViewModelState.Sending, context);
                 await clientController.SendWindowAsync(context, settingContext);
             }
         }
@@ -138,37 +146,31 @@ namespace ShareClientWpf
             {
                 clientController.CancelConnect();
                 clientController.CloseSendWindow();
-                SendStatusChange(true);
             }
-        }
-
-        private void SendStatusChange(bool execute, string message = "")
-        {
-            ((Command)HeaderCommands.SendCommand).CanExecuteValue = execute;
-            SendStatus = message;
         }
 
         private void RecieveExecute()
         {
             OnShowWindow(typeof(RecieveWindow), executeCall: async (paramater) =>
             {
-                ReceiveStatusChange(false, "受信：待機中");
+                HeaderCommands.RecieveCommand.CanExecuteValue = false;
 
-                IPEndPoint iPEndPoint = null;
+                ReceiveContext context = null;
                 try
                 {
-                    iPEndPoint = await AcceptAsync((int)paramater);
+                    receuveStatusPageViewModel.SetReceiveViewMoelState(ReceiveViewModelState.Accept);
+                    context = await AcceptAsync((int)paramater);
                 }
                 catch (Exception ex)
                 {
                     await OnShowMessageBox(ex.Message);
                 }
 
-                if (iPEndPoint != null)
+                if (context != null)
                 {
-                    ReceiveStatusChange(false, $"受信：{iPEndPoint.Address}");
                     try
                     {
+                        receuveStatusPageViewModel.SetReceiveViewMoelState(ReceiveViewModelState.Receiving, context);
                         await clientController.ReceiveWindowAsync((img) => Source = img);
                     }
                     catch (Exception ex)
@@ -177,26 +179,32 @@ namespace ShareClientWpf
                     }
                 }
 
-                ReceiveStatusChange(true);
+                receuveStatusPageViewModel.SetReceiveViewMoelState(ReceiveViewModelState.None);
+                HeaderCommands.RecieveCommand.CanExecuteValue = true;
             });
         }
 
-        private async Task<IPEndPoint> AcceptAsync(int port)
+        private async Task<ReceiveContext> AcceptAsync(int port)
         {
-            IPEndPoint iPEndPoint = null;
+            ReceiveContext context = null;
             await clientController.AcceptAsync(port, (ip, data) =>
             {
-                bool reqConnect = false;
-                OnShowWindow(typeof(ConnectionWindow), true, Tuple.Create(ip, data), (p) => reqConnect = (bool)p).Wait();
-
-                if (reqConnect)
+                var reqConnect = false;
+                context = new ReceiveContext()
                 {
-                    iPEndPoint = ip;
+                    Profile = Profile.FromJson(Encoding.UTF8.GetString(data.MetaData)),
+                    IPEndPoint = ip
+                };
+                OnShowWindow(typeof(ConnectionWindow), true, context, (p) => reqConnect = (bool)p).Wait();
+
+                if (!reqConnect)
+                {
+                    context = null;
                 }
                 return new ConnectionResponse(reqConnect, new(data.CleintSpec));
             });
 
-            return iPEndPoint;
+            return context;
         }
 
         private async void StopReceiveExecute()
@@ -206,14 +214,7 @@ namespace ShareClientWpf
             {
                 clientController.CancelAccept();
                 clientController.CloseReceiveWindow();
-                ReceiveStatusChange(true);
             }
-        }
-
-        private void ReceiveStatusChange(bool execute, string message = "")
-        {
-            ((Command)HeaderCommands.RecieveCommand).CanExecuteValue = execute;
-            RecieveStatus = message;
         }
 
         private void MoreExecute()

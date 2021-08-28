@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace ShareClientWpf
 {
@@ -25,29 +24,29 @@ namespace ShareClientWpf
 
     public class HeaderMenuCommands : ModelBase
     {
-        private ICommand profileCommand;
-        public ICommand ProfileCommand
+        private Command profileCommand;
+        public Command ProfileCommand
         {
             get => profileCommand;
             set => SetProperty(ref profileCommand, value);
         }
 
-        private ICommand sendCommand;
-        public ICommand SendCommand
+        private Command sendCommand;
+        public Command SendCommand
         {
             get => sendCommand;
             set => SetProperty(ref sendCommand, value);
         }
 
-        private ICommand recieveCommand;
-        public ICommand RecieveCommand
+        private Command recieveCommand;
+        public Command RecieveCommand
         {
             get => recieveCommand;
             set => SetProperty(ref recieveCommand, value);
         }
 
-        private ICommand moreCommand;
-        public ICommand MoreCommand
+        private Command moreCommand;
+        public Command MoreCommand
         {
             get => moreCommand;
             set => SetProperty(ref moreCommand, value);

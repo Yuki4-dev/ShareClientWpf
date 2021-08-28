@@ -6,12 +6,55 @@
              xmlns:local="clr-namespace:ShareClientWpf"
              mc:Ignorable="d" 
              Template="{StaticResource StatusPageTemplate}"
+             d:DataContext="{d:DesignInstance Type=local:SendStatusPageViewModel,IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
-        <Style TargetType="Button" BasedOn="{StaticResource TextButtonStyle}"/>
+        <Thickness x:Key="IndentMargin">24,0,0,0</Thickness>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource DialogTextBlockStyle}"/>
+        <Style TargetType="TextBox" BasedOn="{StaticResource DialogTextBoxStyle}"/>
+        <Style TargetType="Button" BasedOn="{StaticResource DialogButtonStyle}"/>
+        <Style TargetType="TextBlock" x:Key="InfoText">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="Margin" Value="{StaticResource IndentMargin}"/>
+            <Setter Property="FontWeight" Value="ExtraLight"/>
+        </Style>
     </UserControl.Resources>
-    <Grid VerticalAlignment="Center">
-        <Button Content="Send" Width="100"></Button>
-    </Grid>
+    
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        
+        <StackPanel HorizontalAlignment="Left"
+                    Margin="12,0,0,0">
+
+            <TextBlock Text="状態"/>
+            <TextBlock Text="{Binding Message}"
+                       Style="{StaticResource InfoText}"/>
+
+            <TextBlock Text="送信IP"/>
+            <TextBlock Text="{Binding IPEndPoint.Address}"
+                       Style="{StaticResource InfoText}"/>
+
+            <TextBlock Text="画面"/>
+            <Grid Margin="{StaticResource IndentMargin}"
+                  Width="150">
+
+                <TextBlock Text="{Binding WindowInfo.Title}"/>
+                <Image Source="{Binding WindowInfo.WindowHandle, Converter={StaticResource WindowHandleConveter }, ConverterParameter=150}"/>
+            </Grid>
+
+            <TextBlock Text="送信バイトサイズ"/>
+            <TextBlock Text="{Binding ByteSizeText}"
+                       Style="{StaticResource InfoText}"/>
+
+            <Button Content="停止"
+                    Margin="0,4,12,12"
+                    HorizontalAlignment="Left"
+                    Width="100"
+                    Style="{StaticResource AccentButtonStyle}"
+                    Command="{Binding StopCommand}"/>
+
+        </StackPanel>
+        
+    </ScrollViewer>
+    
 </UserControl>

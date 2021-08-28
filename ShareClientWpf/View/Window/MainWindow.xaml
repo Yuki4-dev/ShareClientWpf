@@ -24,8 +24,11 @@
         <Grid.Resources>
             <Style TargetType="Button" BasedOn="{StaticResource IconButtonStyle}"/>
             <Style TargetType="ToolTip" BasedOn="{StaticResource DefaultToolTipStyle}"/>
-            <Style TargetType="local:StatusPage">
+            <Style TargetType="Grid" x:Key="RightPageStyle">
                 <Setter Property="Visibility" Value="Hidden"/>
+                <Setter Property="Width" Value="300"/>
+                <Setter Property="Background" Value="{StaticResource HeaderBackGround}"/>
+                <Setter Property="HorizontalAlignment" Value="Right"/>
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsStatusOpen, ElementName=ViewModel}" Value="True">
                         <Setter Property="Visibility" Value="Visible"/>
@@ -81,13 +84,39 @@
                Source="{Binding Source, Mode=OneWay}"
                Stretch="UniformToFill" />
 
-        <local:StatusPage Grid.Column="1"
-                          Panel.ZIndex="1"
-                          Width="300"
-                          Background="{StaticResource HeaderBackGround}"
-                          HorizontalAlignment="Right"
-                          VerticalAlignment="Stretch"/>
-        
+        <Grid Grid.Column="1"
+              Panel.ZIndex="1"
+              Style="{StaticResource RightPageStyle}">
+
+            <Grid.Resources>
+                <Style TargetType="RadioButton" BasedOn="{StaticResource TextToggleButtonStyle}">
+                    <Setter Property="FontSize" Value="24"/>
+                    <Setter Property="Margin" Value="4"/>
+                </Style>
+            </Grid.Resources>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="64"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal"
+                        Margin="12">
+
+                <RadioButton Content="送信"
+                             IsChecked="True"
+                             Command="{Binding SelectedCommand}"
+                             CommandParameter="0"/>
+                <RadioButton Content="受信"
+                             Command="{Binding SelectedCommand}"
+                             CommandParameter="1"/>
+            </StackPanel>
+
+            <ContentControl Grid.Row="1"
+                            Content="{Binding RightPageContent}"/>
+
+        </Grid>
+
     </Grid>
     
 </local:WindowBase>

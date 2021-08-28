@@ -2,7 +2,7 @@
 
 namespace ShareClientWpf
 {
-    public class SendContext : ModelBase
+    public class ReceiveContext : ModelBase
     {
         private IPEndPoint iPEndPoint;
         public IPEndPoint IPEndPoint
@@ -11,11 +11,11 @@ namespace ShareClientWpf
             set => SetProperty(ref iPEndPoint, value);
         }
 
-        private WindowInfo windowInfo;
-        public WindowInfo WindowInfo
+        private Profile profile;
+        public Profile Profile
         {
-            get => windowInfo;
-            set => SetProperty(ref windowInfo, value);
+            get => profile;
+            set => SetProperty(ref profile, value);
         }
     }
 }

@@ -48,12 +48,12 @@
         <StackPanel Grid.Row="2"
                     Style="{StaticResource DialogButtonStackPanelStyle}">
 
-            <Button Command="{Binding ExecuteCommand}"
+            <Button Command="{Binding CloseCommand}"
                     Style="{StaticResource DialogAccentButtonStyle}"
                     CommandParameter="1"
                     Content="OK"/>
 
-            <Button Command="{Binding ExecuteCommand}"
+            <Button Command="{Binding CloseCommand}"
                     CommandParameter="2"
                     Content="Cancel"/>
 

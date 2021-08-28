@@ -24,34 +24,18 @@ namespace ShareClientWpf
             set => SetProperty(ref connectText, value);
         }
 
-        private ICommand executeCommand;
-        public ICommand ExecuteCommand
-        {
-            get => executeCommand;
-            set => SetProperty(ref executeCommand, value);
-        }
-
-        public ConnectionWindowViewModel()
-        {
-            ExecuteCommand = new Command(Execute, () => OnCloseWindow());
-        }
-
         public override void LoadedProcess(object paramater, Action<object> executeCallback)
         {
             callback = executeCallback;
-            var data = (Tuple<IPEndPoint, ConnectionData>)paramater;
-            SetConnectionData(data.Item1, data.Item2);
+            var context = (ReceiveContext) paramater;
+            ConnectText = context.IPEndPoint.Address.ToString();
+            Profile = context.Profile;
         }
 
-        private void SetConnectionData(IPEndPoint iPEndPoint, ConnectionData connectionData)
-        {
-            ConnectText = iPEndPoint.Address.ToString();
-            Profile = Profile.FromJson(Encoding.UTF8.GetString(connectionData.MetaData));
-        }
-
-        private void Execute(object paramater)
+        protected override void CloseExecute(object paramater)
         {
             callback.Invoke(paramater.ToString().Equals("1"));
+            base.CloseExecute(paramater);
         }
     }
 }
