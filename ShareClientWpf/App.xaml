@@ -122,8 +122,8 @@
                 </VisualStateManager.VisualStateGroups>
 
                 <Grid.RowDefinitions>
-                        <RowDefinition Height="9*"/>
-                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="4"/>
                     </Grid.RowDefinitions>
 
                     <TextBlock x:Name="ContentText"
@@ -190,6 +190,7 @@
             
             <Setter Property="Foreground" Value="{StaticResource ButtonForeGround}"/>
             <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template" Value="{StaticResource TextButtonTemplate}"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Foreground" Value="{StaticResource ButtonMouseOver}" />
@@ -202,7 +203,6 @@
                BasedOn="{StaticResource TextButtonStyle}"
                TargetType="ToggleButton">
             
-            <Setter Property="Template" Value="{StaticResource TextButtonTemplate}"/>
             <Style.Triggers>
                 <Trigger Property="IsChecked" Value="True">
                     <Setter Property="BorderThickness" Value="4"/>
