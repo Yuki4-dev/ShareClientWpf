@@ -38,7 +38,7 @@
             <TextBlock Text="{Binding Profile.Name}"
     	               Style="{StaticResource InfoText}"/>
             <Image Source="{Binding Profile.IconImage}" 
-    	           Height="100"/>
+                   MaxHeight="100"/>
 
             <TextBlock Text="受信バイトサイズ"/>
             <TextBlock Text="{Binding ByteSizeText}"

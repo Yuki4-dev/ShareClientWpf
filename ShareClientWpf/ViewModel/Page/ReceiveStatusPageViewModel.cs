@@ -53,6 +53,7 @@ namespace ShareClientWpf
                 Message = "受信待機中";
                 IPEndPoint = null;
                 Profile = null;
+                stopExecute = true;
             }
             else if (state == ReceiveViewModelState.Receiving)
             {
