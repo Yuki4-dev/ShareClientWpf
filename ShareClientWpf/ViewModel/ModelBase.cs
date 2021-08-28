@@ -8,10 +8,15 @@ namespace ShareClientWpf
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void OnPropertyChanged([CallerMemberName] string name = "") => PropertyChanged?.Invoke(this, new(name));
+        protected void OnPropertyChanged([CallerMemberName] string name = "")
+        {
+            PropertyChanged?.Invoke(this, new(name));
+        }
 
-        protected void SetProperty<T>(ref T prop, T value, Action postCallMethod = null, [CallerMemberName] string name = "") =>
+        protected void SetProperty<T>(ref T prop, T value, Action postCallMethod = null, [CallerMemberName] string name = "")
+        {
             SetProperty(ref prop, value, postCallMethod != null ? (_) => postCallMethod.Invoke() : null, name);
+        }
 
         protected void SetProperty<T>(ref T prop, T value, Action<T> postCallMethod, [CallerMemberName] string name = "")
         {
@@ -23,8 +28,10 @@ namespace ShareClientWpf
             }
         }
 
-        protected void SetProperty<T>(ref T prop, T value, Func<T, T, bool> valiedate, Action postCallMethod = null, [CallerMemberName] string name = "") =>
+        protected void SetProperty<T>(ref T prop, T value, Func<T, T, bool> valiedate, Action postCallMethod = null, [CallerMemberName] string name = "")
+        {
             SetProperty(ref prop, value, valiedate, postCallMethod != null ? (_) => postCallMethod.Invoke() : null, name);
+        }
 
         protected void SetProperty<T>(ref T prop, T value, Func<T, T, bool> valiedate, Action<T> postCallMethod, [CallerMemberName] string name = "")
         {

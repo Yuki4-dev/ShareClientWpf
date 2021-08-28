@@ -16,7 +16,7 @@ namespace ShareClientWpf
         private readonly IClientController clientController = new ShreClientController();
         private SettingContext settingContext = new();
 
-        private ImageSource source; 
+        private ImageSource source;
         public ImageSource Source
         {
             get => source;
@@ -30,7 +30,7 @@ namespace ShareClientWpf
             set => SetProperty(ref headerCommands, value);
         }
 
-        private bool isStatusOpen; 
+        private bool isStatusOpen;
         public bool IsStatusOpen
         {
             get => isStatusOpen;
@@ -94,7 +94,10 @@ namespace ShareClientWpf
             this.profile = profile;
         }
 
-        private void ProfileExecute() => OnShowWindow(typeof(ProfileWindow), paramater: profile);
+        private void ProfileExecute()
+        {
+            OnShowWindow(typeof(ProfileWindow), paramater: profile);
+        }
 
         private async void SendExecute()
         {

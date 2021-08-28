@@ -12,7 +12,7 @@ namespace ShareClientWpf
         public static extern bool GetWindowRect(IntPtr hwnd, out RECT lpRect);
 
         [DllImport("User32.dll")]
-        public extern static bool PrintWindow(IntPtr hwnd, IntPtr hDC, uint nFlags);
+        public static extern bool PrintWindow(IntPtr hwnd, IntPtr hDC, uint nFlags);
 
         [DllImport("user32.dll")]
         public static extern IntPtr GetWindowDC(IntPtr hwnd);

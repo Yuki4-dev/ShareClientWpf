@@ -6,7 +6,7 @@ namespace ShareClientWpf
 {
     public class ReciveImageProvider : IReceiveDataProvider
     {
-        private Action<ImageSource> push;
+        private readonly Action<ImageSource> push;
 
         public ReciveImageProvider(Action<ImageSource> push)
         {

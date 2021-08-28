@@ -9,10 +9,10 @@ namespace ShareClientWpf
     public class WindowImageCaputure : IDisposable
     {
         private readonly object obj = new();
-        private IntPtr handle;
-        private int delay;
-        private int windowWidth;
-        private ImageFormat format;
+        private readonly IntPtr handle;
+        private readonly int delay;
+        private readonly int windowWidth;
+        private readonly ImageFormat format;
         private bool isCaputure = false;
 
         public event Action<byte[]> CaputureImage;

@@ -10,7 +10,7 @@ namespace ShareClientWpf
 {
     public class WindowBase : Window
     {
-        private readonly static Dictionary<Type, WindowBase> casheWindows = new();
+        private static readonly Dictionary<Type, WindowBase> casheWindows = new();
 
         public bool IsCasheWindow
         {

@@ -4,11 +4,11 @@ namespace ShareClientWpf
 {
     public class StatusPageViewModel : ModelBase
     {
-        private SendStatusPageViewModel sendStatusPageViewModel = new SendStatusPageViewModel();
+        private readonly SendStatusPageViewModel sendStatusPageViewModel = new SendStatusPageViewModel();
 
-        private ReceiveStatusPageViewModel receiveStatusPageViewModel = new ReceiveStatusPageViewModel();
+        private readonly ReceiveStatusPageViewModel receiveStatusPageViewModel = new ReceiveStatusPageViewModel();
 
-        private ModelBase[] pages;
+        private readonly ModelBase[] pages;
 
         private ModelBase contentPage;
         public ModelBase ContentPage

@@ -1,23 +1,19 @@
 ﻿<local:WindowBase x:Class="ShareClientWpf.SendWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ShareClientWpf"
-        mc:Ignorable="d"
-        IsCasheWindow="True"
-        Style="{StaticResource DialogWindowStyle}"
-        Width="800"
-        Height="450"
-        Title="送信">
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:local="clr-namespace:ShareClientWpf"
+                  mc:Ignorable="d"
+                  IsCasheWindow="True"
+                  Style="{StaticResource DialogWindowStyle}"
+                  Width="800"
+                  Height="450"
+                  Title="送信">
 
     <Window.DataContext>
         <local:SendWindowViewModel x:Name="ViewModel"/>
     </Window.DataContext>
-
-    <Window.Resources>
-        <local:WindowHandleConveter x:Key="WindowHandleConveter" />
-    </Window.Resources>
 
     <Grid>
 

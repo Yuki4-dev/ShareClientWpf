@@ -24,6 +24,14 @@
         <Grid.Resources>
             <Style TargetType="Button" BasedOn="{StaticResource IconButtonStyle}"/>
             <Style TargetType="ToolTip" BasedOn="{StaticResource DefaultToolTipStyle}"/>
+            <Style TargetType="local:StatusPage">
+                <Setter Property="Visibility" Value="Hidden"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsStatusOpen, ElementName=ViewModel}" Value="True">
+                        <Setter Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
@@ -78,20 +86,8 @@
                           Width="300"
                           Background="{StaticResource HeaderBackGround}"
                           HorizontalAlignment="Right"
-                          VerticalAlignment="Stretch">
-
-            <local:StatusPage.Style>
-                <Style TargetType="local:StatusPage">
-                    <Setter Property="Visibility" Value="Hidden"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsStatusOpen, ElementName=ViewModel}" Value="True">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </local:StatusPage.Style>
-
-        </local:StatusPage>
+                          VerticalAlignment="Stretch"/>
+        
     </Grid>
     
 </local:WindowBase>

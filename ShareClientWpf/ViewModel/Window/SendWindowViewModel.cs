@@ -91,13 +91,13 @@ namespace ShareClientWpf
 
         private void SendExecute()
         {
-            if(string.IsNullOrEmpty(IpText) && string.IsNullOrEmpty(PortText))
+            if (string.IsNullOrEmpty(IpText) && string.IsNullOrEmpty(PortText))
             {
                 Message = "IpまたはPortを入力してください。";
                 return;
             }
 
-            if(SelectWindowInfo == null)
+            if (SelectWindowInfo == null)
             {
                 Message = "Windowを選択してください。";
                 return;

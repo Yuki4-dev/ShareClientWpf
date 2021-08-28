@@ -114,7 +114,7 @@ namespace ShareClientWpf
         }
 
         public static Image ResizeImage(Image image, int height, int width, InterpolationMode mode = InterpolationMode.Low)
-        { 
+        {
             var resizeBmp = new Bitmap(width, height);
             using var g = Graphics.FromImage(resizeBmp);
             g.InterpolationMode = mode;
