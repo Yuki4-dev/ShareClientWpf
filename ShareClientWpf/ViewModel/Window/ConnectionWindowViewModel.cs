@@ -1,8 +1,4 @@
-﻿using ShareClient.Model;
-using System;
-using System.Net;
-using System.Text;
-using System.Windows.Input;
+﻿using System;
 
 namespace ShareClientWpf
 {
@@ -27,7 +23,7 @@ namespace ShareClientWpf
         public override void LoadedProcess(object paramater, Action<object> executeCallback)
         {
             callback = executeCallback;
-            var context = (ReceiveContext) paramater;
+            var context = (ReceiveContext)paramater;
             ConnectText = context.IPEndPoint.Address.ToString();
             Profile = context.Profile;
         }

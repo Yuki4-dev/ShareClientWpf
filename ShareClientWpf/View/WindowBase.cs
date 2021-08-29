@@ -12,6 +12,10 @@ namespace ShareClientWpf
     {
         private static readonly Dictionary<Type, WindowBase> casheWindows = new();
 
+        private double ContentTop => WindowState == WindowState.Maximized ? 0 : Top;
+
+        private double ContentLeft => WindowState == WindowState.Maximized ? 0 : Left;
+
         public bool IsCasheWindow
         {
             get => (bool)GetValue(IsCasheWindowProperty);
@@ -104,8 +108,8 @@ namespace ShareClientWpf
                 }
 
                 window.WindowStartupLocation = WindowStartupLocation.Manual;
-                window.Top = Top + (Height / 2) - window.Height / 2;
-                window.Left = Left + (Width / 2) - window.Width / 2;
+                window.Top = ContentTop + (Height / 2) - window.Height / 2;
+                window.Left = ContentLeft + (Width / 2) - window.Width / 2;
 
                 if (isModal)
                 {

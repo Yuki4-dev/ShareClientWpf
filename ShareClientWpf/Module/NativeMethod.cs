@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace ShareClientWpf
 {
-    class NativeMethod
+    internal class NativeMethod
     {
         public const int SRCCOPY = 13369376;
         public const int DWMWA_EXTENDED_FRAME_BOUNDS = 9;

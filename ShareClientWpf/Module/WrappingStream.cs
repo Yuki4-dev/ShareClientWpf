@@ -6,7 +6,7 @@ namespace ShareClientWpf
 {
     public class WrappingStream : Stream
     {
-        Stream m_streamBase;
+        private Stream m_streamBase;
 
         public WrappingStream(Stream streamBase)
         {

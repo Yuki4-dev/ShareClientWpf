@@ -63,7 +63,7 @@ namespace ShareClientWpf
                 stopExecute = true;
             }
 
-            if(StopCommand != null)
+            if (StopCommand != null)
             {
                 StopCommand.CanExecuteValue = stopExecute;
             }
