@@ -58,6 +58,20 @@
                  Background="Transparent"
                  ItemsSource="{Binding WindowInfos}">
 
+            <ListBox.Template>
+                <ControlTemplate>
+                    <local:CustomScrollViewer>
+                        <ItemsPresenter></ItemsPresenter>
+                    </local:CustomScrollViewer>
+                </ControlTemplate>
+            </ListBox.Template>
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="local:WindowImageInfo">
                     
@@ -92,14 +106,8 @@
                 
             </ListBox.ItemTemplate>
 
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-
             <ItemsControl.ItemContainerStyle>
-                
+
                 <Style TargetType="ListBoxItem">
                     <Setter Property="OverridesDefaultStyle" Value="True" />
                     <Setter Property="Template">
@@ -110,12 +118,11 @@
                                 </Border>
                             </ControlTemplate>
                         </Setter.Value>
-                     </Setter>
-                     <Setter Property="Focusable" Value="False"/>
+                    </Setter>
+                    <Setter Property="Focusable" Value="False"/>
                 </Style>
 
             </ItemsControl.ItemContainerStyle>
-
         </ListBox>
 
         <Border Grid.Row="1"

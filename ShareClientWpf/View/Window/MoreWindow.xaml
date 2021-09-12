@@ -27,7 +27,7 @@
             <Style TargetType="Button" BasedOn="{StaticResource DialogButtonStyle}"/>
         </Grid.Resources>
 
-        <ScrollViewer>
+        <local:CustomScrollViewer>
 
             <StackPanel HorizontalAlignment="Left">
 
@@ -54,7 +54,7 @@
 
             </StackPanel>
 
-        </ScrollViewer>
+        </local:CustomScrollViewer>
 
         <Border Grid.Row="1"
                 Background="{StaticResource DialogBorderBackGround}"/>

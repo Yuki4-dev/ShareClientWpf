@@ -27,7 +27,7 @@
             <Style TargetType="Button" BasedOn="{StaticResource DialogButtonStyle}"/>
         </Grid.Resources>
 
-        <ScrollViewer>
+        <local:CustomScrollViewer>
             <StackPanel HorizontalAlignment="Left">
 
                 <TextBlock Text="名前"/>
@@ -62,7 +62,7 @@
                        Text="{Binding Message}"/>
 
             </StackPanel>
-        </ScrollViewer>
+        </local:CustomScrollViewer>
         
         <Border Grid.Row="1"
                 Background="{StaticResource DialogBorderBackGround}"/>
