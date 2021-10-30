@@ -439,20 +439,23 @@
                TargetType="local:CustomComboBox">
 
             <Setter Property="MouseOverBrush" Value="{StaticResource ButtonMouseOver}"/>
-            <Setter Property="MouseOverItemBrush" Value="{StaticResource ButtonMouseOver}"/>
-            <Setter Property="PopupBackground" Value="{StaticResource TextboxBackGround}"/>
-            <Setter Property="SelectedItemBrush" Value="{StaticResource ButtonMouseOver}"/>
+            <Setter Property="MouseOverItemBrush" Value="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"/>
+            <Setter Property="PopupBackground" Value="{StaticResource WindowBackGround}"/>
+            <Setter Property="PopupBorderBrush" Value="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"/>
+            <Setter Property="SelectedItemBrush" Value="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"/>
+            <Setter Property="ItemSelectCornerRadius" Value="4"/>
             <Setter Property="Margin" Value="2"/>
+            <Setter Property="ItemMargin" Value="4"/>
             <Setter Property="BorderBrush" Value="{StaticResource DialogForeGround}"/>
             <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="{StaticResource TextboxForeGround}"/>
+            <Setter Property="Background" Value="{StaticResource TextboxBackGround}"/>
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Width" Value="220"/>
             <Setter Property="Height" Value="32"/>
             <Setter Property="FontWeight" Value="ExtraLight"/>
-            <Setter Property="Background" Value="{StaticResource TextboxBackGround}" />
-            <Setter Property="Foreground" Value="{StaticResource TextboxForeGround}" />
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
         </Style>
 
         <Style x:Key="DialogButtonStackPanelStyle" 

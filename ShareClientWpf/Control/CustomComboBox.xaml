@@ -5,7 +5,8 @@
           xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
           xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" xmlns:local="clr-namespace:ShareClientWpf"
           mc:Ignorable="d" 
-          Style="{DynamicResource CustomComboBoxStyle}"
+          ItemContainerStyle="{DynamicResource CustomComboBoxItemContainerStyle}"
+          Template="{DynamicResource ComboBoxTemplate}"
           d:DesignHeight="50" d:DesignWidth="300">
 
     <ComboBox.Resources>
@@ -90,7 +91,7 @@
                               BorderThickness="{TemplateBinding BorderThickness}"
                               Background="{TemplateBinding Background}"/>
 
-                <Popup x:Name="DropDownPopup"
+                <Popup x:Name="PART_Popup"
                        IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" 
                        AllowsTransparency="true"
                        Placement="Bottom" 
@@ -136,7 +137,7 @@
 
             <ControlTemplate.Triggers>
 
-                <Trigger Property="HasDropShadow" SourceName="DropDownPopup" Value="true">
+                <Trigger Property="HasDropShadow" SourceName="PART_Popup" Value="true">
                     <Setter Property="Margin" TargetName="Shadow" Value="0,0,5,5"/>
                     <Setter Property="Color" TargetName="Shadow" Value="#71000000"/>
                 </Trigger>
@@ -210,12 +211,6 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>
-
-        <Style x:Key="CustomComboBoxStyle" TargetType="ComboBox">
-            <Setter Property="OverridesDefaultStyle" Value="True"/>
-            <Setter Property="ItemContainerStyle" Value="{StaticResource CustomComboBoxItemContainerStyle}"/>
-            <Setter Property="Template" Value="{StaticResource ComboBoxTemplate}"/>
         </Style>
 
     </ComboBox.Resources>

@@ -32,30 +32,12 @@
             <StackPanel HorizontalAlignment="Left">
 
                 <TextBlock Text="画像フォーマット"/>
-                <local:CustomComboBox MouseOverBrush="{StaticResource ButtonMouseOver}"
-                                      MouseOverItemBrush="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"
-                                      PopupBackground="{StaticResource WindowBackGround}"
-                                      PopupBorderBrush="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"
-                                      SelectedItemBrush="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"
-                                      ItemSelectCornerRadius="4"
-                                      Margin="2"
-                                      ItemMargin="4"
-                                      BorderBrush="{StaticResource DialogForeGround}"
-                                      BorderThickness="1"
-                                      HorizontalContentAlignment="Left"
-                                      VerticalContentAlignment="Center"
-                                      Foreground="{StaticResource TextboxForeGround}"
-                                      Background="{StaticResource TextboxBackGround}"
-                                      FontSize="20"
-                                      Width="220"
-                                      Height="32"
-                                      FontWeight="ExtraLight"
+                <local:CustomComboBox Style="{StaticResource DialogComboBoxStyle}"
                                       SelectedIndex="{Binding SelectIndex,Mode=TwoWay}">
 
                     <ComboBoxItem Content="JPEG"/>
                     <ComboBoxItem Content="PNG"/>
                     <ComboBoxItem Content="GIF"/>
-
                 </local:CustomComboBox>
 
                 <TextBlock Text="送信間隔(msec)"/>
