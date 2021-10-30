@@ -37,7 +37,7 @@
                                       PopupBackground="{StaticResource WindowBackGround}"
                                       PopupBorderBrush="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"
                                       SelectedItemBrush="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"
-                                      ItemSelectCornerRadius="4t"
+                                      ItemSelectCornerRadius="4"
                                       Margin="2"
                                       ItemMargin="4"
                                       BorderBrush="{StaticResource DialogForeGround}"
