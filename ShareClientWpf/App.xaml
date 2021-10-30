@@ -114,9 +114,9 @@
                         <VisualState Name="MouseOver">
                             <Storyboard>
                                 <ThicknessAnimation Storyboard.TargetName="SelectBorder"
-                                        Storyboard.TargetProperty="Margin"
-                                        Duration="00:00:00.1"
-                                        To="0" />
+                                                    Storyboard.TargetProperty="Margin"
+                                                    Duration="00:00:00.1"
+                                                    To="0" />
                             </Storyboard>
                         </VisualState>
                         <VisualState Name="Pressed"/>
@@ -124,27 +124,27 @@
                 </VisualStateManager.VisualStateGroups>
 
                 <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="4"/>
-                    </Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="4"/>
+                </Grid.RowDefinitions>
 
-                    <TextBlock x:Name="ContentText"
+                <TextBlock x:Name="ContentText"
                            HorizontalAlignment="Center"
                            FontSize="{TemplateBinding FontSize}"
                            Foreground="{TemplateBinding Foreground}"
                            Text="{TemplateBinding Content}" />
 
-                    <Border Grid.Row="1"
-                            Margin="8,0,8,0"
-                            x:Name="SelectBorder"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            BorderBrush="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"
-                            VerticalAlignment="Bottom" 
-                            HorizontalAlignment="Stretch">
+                <Border Grid.Row="1"
+                        Margin="8,0,8,0"
+                        x:Name="SelectBorder"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        BorderBrush="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"
+                        VerticalAlignment="Bottom" 
+                        HorizontalAlignment="Stretch">
 
-                    </Border>
+                </Border>
 
-                </Grid>
+            </Grid>
             
         </ControlTemplate>
 
@@ -163,9 +163,9 @@
                         <VisualState Name="MouseOver">
                             <Storyboard>
                                 <ThicknessAnimation Storyboard.TargetName="SelectBorder"
-                                        Storyboard.TargetProperty="Margin"
-                                        Duration="00:00:00.1"
-                                        To="0" />
+                                                    Storyboard.TargetProperty="Margin"
+                                                    Duration="00:00:00.1"
+                                                    To="0" />
                             </Storyboard>
                         </VisualState>
                         <VisualState Name="Pressed"/>
@@ -249,18 +249,18 @@
 
                     <Canvas
                         Width="{TemplateBinding Width,
-                                                Converter={StaticResource IconConverter}}"
+                        Converter={StaticResource IconConverter}}"
                         Height="{TemplateBinding Height,
-                                                 Converter={StaticResource IconConverter}}"
+                        Converter={StaticResource IconConverter}}"
                         Margin="4"
                         HorizontalAlignment="Center"
                         Background="{TemplateBinding Background}">
 
                         <Path
                             Width="{TemplateBinding Width,
-                                                    Converter={StaticResource IconConverter}}"
+                            Converter={StaticResource IconConverter}}"
                             Height="{TemplateBinding Height,
-                                                     Converter={StaticResource IconConverter}}"
+                            Converter={StaticResource IconConverter}}"
                             Data="{TemplateBinding Content}"
                             Fill="{TemplateBinding Foreground}"
                             Stretch="Uniform" />
@@ -421,6 +421,27 @@
         <Style x:Key="DialogTextBoxStyle"
                TargetType="TextBox">
 
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="BorderBrush" Value="{StaticResource DialogForeGround}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Width" Value="220"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="FontWeight" Value="ExtraLight"/>
+            <Setter Property="Background" Value="{StaticResource TextboxBackGround}" />
+            <Setter Property="Foreground" Value="{StaticResource TextboxForeGround}" />
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+
+
+        <Style x:Key="DialogComboBoxStyle"
+               TargetType="local:CustomComboBox">
+
+            <Setter Property="MouseOverBrush" Value="{StaticResource ButtonMouseOver}"/>
+            <Setter Property="MouseOverItemBrush" Value="{StaticResource ButtonMouseOver}"/>
+            <Setter Property="PopupBackground" Value="{StaticResource TextboxBackGround}"/>
+            <Setter Property="SelectedItemBrush" Value="{StaticResource ButtonMouseOver}"/>
             <Setter Property="Margin" Value="2"/>
             <Setter Property="BorderBrush" Value="{StaticResource DialogForeGround}"/>
             <Setter Property="BorderThickness" Value="1"/>

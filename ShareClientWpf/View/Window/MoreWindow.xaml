@@ -1,13 +1,13 @@
 ﻿<local:WindowBase x:Class="ShareClientWpf.MoreWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ShareClientWpf"
-        mc:Ignorable="d"
-        IsCasheWindow="True"
-        Style="{StaticResource DialogWindowStyle}"
-        Title="設定">
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:local="clr-namespace:ShareClientWpf"
+                  mc:Ignorable="d"
+                  IsCasheWindow="True"
+                  Style="{StaticResource DialogWindowStyle}"
+                  Title="設定">
 
     <Window.DataContext>
         <local:MoreWindowViewModel/>
@@ -32,16 +32,30 @@
             <StackPanel HorizontalAlignment="Left">
 
                 <TextBlock Text="画像フォーマット"/>
-                <ComboBox FontSize="18"
-                          Opacity="0.85"
-                          SelectedIndex="{Binding SelectIndex,Mode=TwoWay}"
-                          FontWeight="ExtraLight">
+                <local:CustomComboBox MouseOverBrush="{StaticResource ButtonMouseOver}"
+                                      MouseOverItemBrush="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"
+                                      PopupBackground="{StaticResource WindowBackGround}"
+                                      PopupBorderBrush="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"
+                                      SelectedItemBrush="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"
+                                      Margin="2"
+                                      ItemMargin="4"
+                                      BorderBrush="{StaticResource DialogForeGround}"
+                                      BorderThickness="1"
+                                      HorizontalContentAlignment="Left"
+                                      VerticalContentAlignment="Center"
+                                      Foreground="{StaticResource TextboxForeGround}"
+                                      Background="{StaticResource TextboxBackGround}"
+                                      FontSize="20"
+                                      Width="220"
+                                      Height="32"
+                                      FontWeight="ExtraLight"
+                                      SelectedIndex="{Binding SelectIndex,Mode=TwoWay}">
 
                     <ComboBoxItem Content="JPEG"/>
                     <ComboBoxItem Content="PNG"/>
                     <ComboBoxItem Content="GIF"/>
 
-                </ComboBox>
+                </local:CustomComboBox>
 
                 <TextBlock Text="送信間隔(msec)"/>
                 <TextBox Text="{Binding SendDelayText,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>

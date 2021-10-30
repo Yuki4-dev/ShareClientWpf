@@ -85,9 +85,9 @@
                               Height="100">
 
                             <Image HorizontalAlignment="Stretch"
-                                       VerticalAlignment="Stretch"
-                                       Stretch="Fill"
-                                       Source="{Binding WindowHandle,Converter={StaticResource WindowHandleConveter}, ConverterParameter=150}"/>
+                                   VerticalAlignment="Stretch"
+                                   Stretch="Fill"
+                                   Source="{Binding WindowHandle,Converter={StaticResource WindowHandleConveter}, ConverterParameter=150}"/>
 
                             <TextBlock Text="{Binding Title}"
                                        VerticalAlignment="Top"

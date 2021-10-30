@@ -1,13 +1,13 @@
 ﻿<local:WindowBase x:Class="ShareClientWpf.ProfileWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ShareClientWpf"
-        mc:Ignorable="d"
-        IsCasheWindow="True"
-        Style="{StaticResource DialogWindowStyle}"
-        Title="プロフィール">
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:local="clr-namespace:ShareClientWpf"
+                  mc:Ignorable="d"
+                  IsCasheWindow="True"
+                  Style="{StaticResource DialogWindowStyle}"
+                  Title="プロフィール">
 
     <Window.DataContext>
         <local:ProfileWindowViewModel/>
@@ -59,7 +59,7 @@
                 </StackPanel>
 
                 <TextBlock Style="{StaticResource WarnningTextBlockStyle}"
-                       Text="{Binding Message}"/>
+                           Text="{Binding Message}"/>
 
             </StackPanel>
         </local:CustomScrollViewer>
