@@ -11,6 +11,9 @@
 
     <ComboBox.Resources>
 
+        <Geometry x:Key="ToggleButton.DoropDownArrow">M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z</Geometry>
+        <Geometry x:Key="ToggleButton.DoropDownArrow.IsChecked">M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z</Geometry>
+
         <Style x:Key="ComboBoxToggleButton" 
                TargetType="{x:Type ToggleButton}">
 
@@ -29,11 +32,12 @@
                                  BorderThickness="{TemplateBinding BorderThickness}"
                                  Background="{TemplateBinding Background}">
 
-                            <Path Data="F1 M 0,0 L 2.667,2.66665 L 5.3334,0 L 5.3334,-1.78168 L 2.6667,0.88501 L0,-1.78168 L0,0 Z" 
+                            <Path x:Name="DropDownArrow"
                                   Fill="{TemplateBinding Foreground}" 
-                                  HorizontalAlignment="Right" 
-                                  Margin="4,4,12,4" 
-                                  VerticalAlignment="Center"/>
+                                  HorizontalAlignment="Right"
+                                  VerticalAlignment="Center"
+                                  Margin="0,0,6,6"
+                                  Data="{StaticResource ToggleButton.DoropDownArrow}" />
 
                         </Border>
 
@@ -62,6 +66,11 @@
                                         TargetName="RootBorder"
                                         Value="{Binding IsCheckedBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}"/>
                             </MultiDataTrigger>
+
+                            <!-- IsChecked -->
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Data" TargetName="DropDownArrow" Value="{StaticResource ToggleButton.DoropDownArrow.IsChecked}"/>
+                            </Trigger>
 
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -191,16 +200,19 @@
                                 <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
                             </Trigger>
 
+                            <!-- IsSelected -->
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Background" TargetName="Bd" Value="{Binding SelectedItemBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}"/>
                                 <Setter Property="BorderBrush" TargetName="Bd" Value="{Binding SelectedItemBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}"/>
                             </Trigger>
 
+                            <!-- IsMouseOver -->
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" TargetName="Bd" Value="{Binding MouseOverItemBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}"/>
                                 <Setter Property="BorderBrush" TargetName="Bd" Value="{Binding MouseOverItemBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}"/>
                             </Trigger>
 
+                            <!-- IsKeyboardFocused -->
                             <Trigger Property="IsKeyboardFocused" Value="True">
                                 <Setter Property="Background" TargetName="Bd" Value="{Binding MouseOverItemBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}"/>
                                 <Setter Property="BorderBrush" TargetName="Bd" Value="{Binding MouseOverItemBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}"/>
