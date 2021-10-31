@@ -108,6 +108,7 @@
 
                     <theme:SystemDropShadowChrome x:Name="Shadow" 
                                                   Color="Transparent" 
+                                                  CornerRadius="{Binding PopupCornerRadius, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}"
                                                   MinWidth="{Binding ActualWidth, ElementName=templateRoot}"
                                                   MaxHeight="{TemplateBinding MaxDropDownHeight}">
 
@@ -118,7 +119,7 @@
                                 CornerRadius="{Binding PopupCornerRadius, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}"
                                 MinWidth="{Binding ActualWidth, ElementName=templateRoot}" 
                                 MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                                Margin="0,0,4,4">
+                                Margin="1">
 
                             <local:CustomScrollViewer TabBrush="{Binding PopupScrollBarBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}"
                                                       VerticalScrollBarVisibility="Auto">
