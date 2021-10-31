@@ -120,7 +120,8 @@
                                 MaxHeight="{TemplateBinding MaxDropDownHeight}"
                                 Margin="0,0,4,4">
 
-                            <local:CustomScrollViewer TabBrush="{Binding PopupScrollBarBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}">
+                            <local:CustomScrollViewer TabBrush="{Binding PopupScrollBarBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}"
+                                                      VerticalScrollBarVisibility="Auto">
                                 <StackPanel RenderOptions.ClearTypeHint="Enabled">
                                     <ItemsPresenter  KeyboardNavigation.DirectionalNavigation="Contained" 
                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
