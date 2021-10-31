@@ -16,7 +16,7 @@ namespace ShareClientWpf
             set => SetValue(MouseOverBrushProperty, value);
         }
         public static readonly DependencyProperty MouseOverBrushProperty =
-            DependencyProperty.Register(nameof(MouseOverBrush), typeof(Brush), typeof(CustomComboBox), new PropertyMetadata((new SolidColorBrush(Color.FromArgb(128, 255, 255, 255)))));
+            DependencyProperty.Register(nameof(MouseOverBrush), typeof(Brush), typeof(CustomComboBox), new PropertyMetadata(new SolidColorBrush(Colors.LightGray)));
 
         public Brush IsCheckedBrush
         {
@@ -24,7 +24,7 @@ namespace ShareClientWpf
             set => SetValue(IsCheckedBrushProperty, value);
         }
         public static readonly DependencyProperty IsCheckedBrushProperty =
-            DependencyProperty.Register(nameof(IsCheckedBrush), typeof(Brush), typeof(CustomComboBox), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(128, 255, 255, 255))));
+            DependencyProperty.Register(nameof(IsCheckedBrush), typeof(Brush), typeof(CustomComboBox), new PropertyMetadata(new SolidColorBrush(Colors.DarkGray)));
 
         public Brush PopupBackground
         {
@@ -40,7 +40,7 @@ namespace ShareClientWpf
             set => SetValue(PopupScrollBarBrushProperty, value);
         }
         public static readonly DependencyProperty PopupScrollBarBrushProperty =
-            DependencyProperty.Register(nameof(PopupScrollBarBrush), typeof(Brush), typeof(CustomComboBox), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(128, 255, 255, 255))));
+            DependencyProperty.Register(nameof(PopupScrollBarBrush), typeof(Brush), typeof(CustomComboBox), new PropertyMetadata(new SolidColorBrush(Colors.Gray)));
 
         public Brush SelectedItemBrush
         {
@@ -48,7 +48,7 @@ namespace ShareClientWpf
             set => SetValue(SelectedItemBrushProperty, value);
         }
         public static readonly DependencyProperty SelectedItemBrushProperty =
-            DependencyProperty.Register(nameof(SelectedItemBrush), typeof(Brush), typeof(CustomComboBox), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(128, 255, 255, 255))));
+            DependencyProperty.Register(nameof(SelectedItemBrush), typeof(Brush), typeof(CustomComboBox), new PropertyMetadata(new SolidColorBrush(Colors.DarkGray)));
 
         public Brush MouseOverItemBrush
         {
@@ -56,7 +56,7 @@ namespace ShareClientWpf
             set => SetValue(MouseOverItemBrushProperty, value);
         }
         public static readonly DependencyProperty MouseOverItemBrushProperty =
-            DependencyProperty.Register(nameof(MouseOverItemBrush), typeof(Brush), typeof(CustomComboBox), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(128, 255, 255, 255))));
+            DependencyProperty.Register(nameof(MouseOverItemBrush), typeof(Brush), typeof(CustomComboBox), new PropertyMetadata(new SolidColorBrush(Colors.LightGray)));
 
         public Brush PopupBorderBrush
         {
