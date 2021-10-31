@@ -438,8 +438,9 @@
         <Style x:Key="DialogComboBoxStyle"
                TargetType="local:CustomComboBox">
 
+            <Setter Property="SelectVisual" Value="Tab"/>
             <Setter Property="MouseOverBrush" Value="{StaticResource ButtonMouseOver}"/>
-            <Setter Property="MouseOverItemBrush" Value="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"/>
+            <Setter Property="MouseOverItemBrush" Value="{StaticResource ButtonMouseOver}"/>
             <Setter Property="PopupBackground" Value="{StaticResource WindowBackGround}"/>
             <Setter Property="PopupBorderBrush" Value="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"/>
             <Setter Property="SelectedItemBrush" Value="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"/>

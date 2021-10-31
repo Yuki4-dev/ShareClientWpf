@@ -169,6 +169,67 @@
 
         </ControlTemplate>
 
+        <ControlTemplate x:Key="CustomComboBoxItemContainerStyle.Tab" 
+                         TargetType="{x:Type ComboBoxItem}">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border x:Name="Bd"
+                        CornerRadius="{Binding ItemSelectCornerRadius, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}"
+                        Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}" 
+                        Margin="4,4,0,4"
+                        SnapsToDevicePixels="true"/>
+
+                <Border Grid.Column="1" 
+                        Background="Transparent">
+                    <ContentPresenter Margin="{Binding ItemMargin, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}"
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                </Border>
+            </Grid>
+
+            <ControlTemplate.Triggers>
+
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                </Trigger>
+
+                <!-- IsSelected -->
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" TargetName="Bd" Value="{Binding SelectedItemBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}"/>
+                    <Setter Property="BorderBrush" TargetName="Bd" Value="{Binding SelectedItemBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}"/>
+                </Trigger>
+
+                <!-- IsMouseOver -->
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsMouseOver" Value="True"/>
+                        <Condition Property="IsSelected" Value="False"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background" TargetName="Bd" Value="{Binding MouseOverItemBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}"/>
+                    <Setter Property="BorderBrush" TargetName="Bd" Value="{Binding MouseOverItemBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}"/>
+                </MultiTrigger>
+
+                <!-- IsKeyboardFocused -->
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsKeyboardFocused" Value="True"/>
+                        <Condition Property="IsSelected" Value="False"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background" TargetName="Bd" Value="{Binding MouseOverItemBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}"/>
+                    <Setter Property="BorderBrush" TargetName="Bd" Value="{Binding MouseOverItemBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}"/>
+                </MultiTrigger>
+
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
         <Style x:Key="CustomComboBoxItemContainerStyle" TargetType="{x:Type ComboBoxItem}">
 
             <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -178,16 +239,15 @@
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Template">
-
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+
                         <Border x:Name="Bd"
                                 CornerRadius="{Binding ItemSelectCornerRadius, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}"
                                 Margin="{Binding ItemMargin, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}"
                                 Background="{TemplateBinding Background}" 
                                 BorderBrush="{TemplateBinding BorderBrush}" 
                                 BorderThickness="{TemplateBinding BorderThickness}" 
-                                Padding="{Binding ItemPadding, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}"
                                 SnapsToDevicePixels="true">
 
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
@@ -225,6 +285,13 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SelectVisual, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomComboBox}}" Value="Tab">
+                    <Setter Property="Template" Value="{StaticResource CustomComboBoxItemContainerStyle.Tab}"/>
+                </DataTrigger>
+            </Style.Triggers>
+
         </Style>
 
     </ComboBox.Resources>

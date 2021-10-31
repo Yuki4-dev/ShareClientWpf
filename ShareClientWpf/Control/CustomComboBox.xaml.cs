@@ -10,6 +10,14 @@ namespace ShareClientWpf
     /// </summary>
     public partial class CustomComboBox : ComboBox
     {
+        public CustomComboBoxSelectVisual SelectVisual
+        {
+            get => (CustomComboBoxSelectVisual)GetValue(SelectVisualProperty);
+            set => SetValue(SelectVisualProperty, value);
+        }
+        public static readonly DependencyProperty SelectVisualProperty =
+            DependencyProperty.Register(nameof(SelectVisual), typeof(CustomComboBoxSelectVisual), typeof(CustomComboBox), new PropertyMetadata(CustomComboBoxSelectVisual.Overlay));
+
         public Brush MouseOverBrush
         {
             get => (Brush)GetValue(MouseOverBrushProperty);
@@ -82,14 +90,6 @@ namespace ShareClientWpf
         public static readonly DependencyProperty ItemMarginProperty =
             DependencyProperty.Register(nameof(ItemMargin), typeof(Thickness), typeof(CustomComboBox), new PropertyMetadata(new Thickness(0)));
 
-        public Thickness ItemPadding
-        {
-            get => (Thickness)GetValue(ItemPaddingProperty);
-            set => SetValue(ItemPaddingProperty, value);
-        }
-        public static readonly DependencyProperty ItemPaddingProperty =
-            DependencyProperty.Register(nameof(ItemPadding), typeof(Thickness), typeof(CustomComboBox), new PropertyMetadata(new Thickness(4)));
-
         public CornerRadius ButtonCornerRadius
         {
             get => (CornerRadius)GetValue(ButtonCornerRadiusProperty);
@@ -130,5 +130,10 @@ namespace ShareClientWpf
         {
             InitializeComponent();
         }
+    }
+
+    public enum CustomComboBoxSelectVisual
+    {
+        Overlay, Tab
     }
 }
