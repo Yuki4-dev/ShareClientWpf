@@ -1,11 +1,11 @@
 ﻿<Application
     x:Class="ShareClientWpf.App"
-    xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:ShareClientWpf"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
     StartupUri="View\Window\MainWindow.xaml">
-    
+
     <Application.Resources>
 
         <Brush x:Key="WindowBackGround">#FF333333</Brush>
@@ -24,50 +24,49 @@
         <Geometry x:Key="Close">M13.46,12L19,17.54V19H17.54L12,13.46L6.46,19H5V17.54L10.54,12L5,6.46V5H6.46L12,10.54L17.54,5H19V6.46L13.46,12Z</Geometry>
         <Geometry x:Key="Status">M4,2H14V4H4V14H2V4C2,2.89 2.89,2 4,2M8,6H18V8H8V18H6V8C6,6.89 6.89,6 8,6M12,10H20C21.11,10 22,10.89 22,12V20C22,21.11 21.11,22 20,22H12C10.89,22 10,21.11 10,20V12C10,10.89 10.89,10 12,10M14,12V20L20,16L14,12Z</Geometry>
 
-        <GridLength x:Key="DialogRowHeight" >40</GridLength>
-        
+        <GridLength x:Key="DialogRowHeight">40</GridLength>
+
         <local:IconSizeConverter x:Key="IconConverter" />
         <local:WindowHandleConveter x:Key="WindowHandleConveter" />
 
         <DataTemplate DataType="{x:Type local:SendStatusPageViewModel}">
-            <local:SendStatusPage/>
+            <local:SendStatusPage />
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type local:ReceiveStatusPageViewModel}">
-            <local:ReceiveStatusPage/>
+            <local:ReceiveStatusPage />
         </DataTemplate>
 
-        <ControlTemplate x:Key="StatusPageTemplate"
-                         TargetType="UserControl">
-            
+        <ControlTemplate x:Key="StatusPageTemplate" TargetType="UserControl">
+
             <ControlTemplate.Triggers>
                 <EventTrigger RoutedEvent="Loaded">
                     <BeginStoryboard>
                         <Storyboard>
-                            <ThicknessAnimation Storyboard.TargetName="RootGrid"
-                                                Storyboard.TargetProperty="Margin"
-                                                Duration="00:00:00.2"
-                                                From="0,100,0,0"
-                                                To="0" />
+                            <ThicknessAnimation
+                                Storyboard.TargetName="RootGrid"
+                                Storyboard.TargetProperty="Margin"
+                                From="0,100,0,0"
+                                To="0"
+                                Duration="00:00:00.2" />
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
             </ControlTemplate.Triggers>
 
             <Grid x:Name="RootGrid">
-                <ContentPresenter HorizontalAlignment="Stretch"
-                                  VerticalAlignment="Stretch"/>
+                <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             </Grid>
-            
+
         </ControlTemplate>
 
-        <ControlTemplate x:Key="DefaultButtonTemplate"
-                         TargetType="{x:Type ContentControl}">
+        <ControlTemplate x:Key="DefaultButtonTemplate" TargetType="{x:Type ContentControl}">
 
-            <Border Background="{TemplateBinding Background}"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    CornerRadius="6">
+            <Border
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Background="{TemplateBinding Background}"
+                CornerRadius="6">
 
                 <TextBlock
                     HorizontalAlignment="Center"
@@ -78,8 +77,7 @@
             </Border>
         </ControlTemplate>
 
-        <Style x:Key="DefaultButtonStyle" 
-               TargetType="ContentControl">
+        <Style x:Key="DefaultButtonStyle" TargetType="ContentControl">
 
             <Setter Property="Template" Value="{StaticResource DefaultButtonTemplate}" />
             <Setter Property="Background" Value="{StaticResource ButtonBackGround}" />
@@ -91,8 +89,7 @@
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="AccentButtonStyle" 
-               TargetType="ContentControl">
+        <Style x:Key="AccentButtonStyle" TargetType="ContentControl">
 
             <Setter Property="Template" Value="{StaticResource DefaultButtonTemplate}" />
             <Setter Property="Background" Value="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}" />
@@ -104,144 +101,145 @@
             </Style.Triggers>
         </Style>
 
-        <ControlTemplate x:Key="TextButtonTemplate"
-                         TargetType="{x:Type ContentControl}">
+        <ControlTemplate x:Key="TextButtonTemplate" TargetType="{x:Type ContentControl}">
             <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="4" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    x:Name="ContentText"
+                    HorizontalAlignment="Center"
+                    FontSize="{TemplateBinding FontSize}"
+                    Foreground="{TemplateBinding Foreground}"
+                    Text="{TemplateBinding Content}" />
+
+                <Border
+                    x:Name="SelectBorder"
+                    Grid.Row="1"
+                    Margin="8,0,8,0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Bottom"
+                    BorderBrush="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"
+                    BorderThickness="{TemplateBinding BorderThickness}" />
 
                 <VisualStateManager.VisualStateGroups>
                     <VisualStateGroup Name="CommonStates">
                         <VisualState Name="Normal" />
                         <VisualState Name="MouseOver">
                             <Storyboard>
-                                <ThicknessAnimation Storyboard.TargetName="SelectBorder"
-                                                    Storyboard.TargetProperty="Margin"
-                                                    Duration="00:00:00.1"
-                                                    To="0" />
+                                <ThicknessAnimation
+                                    Storyboard.TargetName="SelectBorder"
+                                    Storyboard.TargetProperty="Margin"
+                                    To="0"
+                                    Duration="00:00:00.1" />
                             </Storyboard>
                         </VisualState>
-                        <VisualState Name="Pressed"/>
+                        <VisualState Name="Pressed" />
                     </VisualStateGroup>
                 </VisualStateManager.VisualStateGroups>
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="4"/>
-                </Grid.RowDefinitions>
-
-                <TextBlock x:Name="ContentText"
-                           HorizontalAlignment="Center"
-                           FontSize="{TemplateBinding FontSize}"
-                           Foreground="{TemplateBinding Foreground}"
-                           Text="{TemplateBinding Content}" />
-
-                <Border Grid.Row="1"
-                        Margin="8,0,8,0"
-                        x:Name="SelectBorder"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        BorderBrush="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"
-                        VerticalAlignment="Bottom" 
-                        HorizontalAlignment="Stretch">
-
-                </Border>
-
             </Grid>
-            
+
         </ControlTemplate>
 
-        <ControlTemplate x:Key="SelectButtonTemplate"
-                         TargetType="{x:Type ContentControl}">
+        <ControlTemplate x:Key="SelectButtonTemplate" TargetType="{x:Type ContentControl}">
 
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="8"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="8" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
+
+                <Border
+                    x:Name="SelectBorder"
+                    Margin="16,0,16,0"
+                    HorizontalAlignment="Stretch"
+                    BorderBrush="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="4" />
+
+                <ContentPresenter
+                    Grid.Row="1"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch" />
 
                 <VisualStateManager.VisualStateGroups>
                     <VisualStateGroup Name="CommonStates">
                         <VisualState Name="Normal" />
                         <VisualState Name="MouseOver">
                             <Storyboard>
-                                <ThicknessAnimation Storyboard.TargetName="SelectBorder"
-                                                    Storyboard.TargetProperty="Margin"
-                                                    Duration="00:00:00.1"
-                                                    To="0" />
+                                <ThicknessAnimation
+                                    Storyboard.TargetName="SelectBorder"
+                                    Storyboard.TargetProperty="Margin"
+                                    To="0"
+                                    Duration="00:00:00.1" />
                             </Storyboard>
                         </VisualState>
-                        <VisualState Name="Pressed"/>
+                        <VisualState Name="Pressed" />
                     </VisualStateGroup>
                 </VisualStateManager.VisualStateGroups>
-
-                <Border x:Name="SelectBorder"
-                        BorderBrush="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="4"
-                        Margin="16,0,16,0"
-                        HorizontalAlignment="Stretch"/>
-                
-                <ContentPresenter VerticalAlignment="Stretch"
-                                  HorizontalAlignment="Stretch"
-                                  Grid.Row="1"/>
-                
             </Grid>
-            
+
         </ControlTemplate>
 
-        <Style x:Key="TextButtonStyle" 
-               TargetType="ContentControl">
-            
-            <Setter Property="Foreground" Value="{StaticResource ButtonForeGround}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Template" Value="{StaticResource TextButtonTemplate}"/>
+        <Style x:Key="TextButtonStyle" TargetType="ContentControl">
+
+            <Setter Property="Foreground" Value="{StaticResource ButtonForeGround}" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Template" Value="{StaticResource TextButtonTemplate}" />
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Foreground" Value="{StaticResource ButtonMouseOver}" />
-                    <Setter Property="BorderThickness" Value="4"/>
+                    <Setter Property="BorderThickness" Value="4" />
                 </Trigger>
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="TextToggleButtonStyle" 
-               BasedOn="{StaticResource TextButtonStyle}"
-               TargetType="ToggleButton">
-            
+        <Style
+            x:Key="TextToggleButtonStyle"
+            BasedOn="{StaticResource TextButtonStyle}"
+            TargetType="ToggleButton">
+
             <Style.Triggers>
                 <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="BorderThickness" Value="4"/>
+                    <Setter Property="BorderThickness" Value="4" />
                 </Trigger>
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="SelectToggleButtonStyle" 
-               BasedOn="{StaticResource TextButtonStyle}"
-               TargetType="ToggleButton">
+        <Style
+            x:Key="SelectToggleButtonStyle"
+            BasedOn="{StaticResource TextButtonStyle}"
+            TargetType="ToggleButton">
 
-            <Setter Property="Template" Value="{StaticResource SelectButtonTemplate}"/>
+            <Setter Property="Template" Value="{StaticResource SelectButtonTemplate}" />
             <Style.Triggers>
                 <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="BorderThickness"  Value="4"/>
+                    <Setter Property="BorderThickness" Value="4" />
                 </Trigger>
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="DialogButtonStyle"
-               TargetType="ContentControl" 
-               BasedOn="{StaticResource DefaultButtonStyle}" >
+        <Style
+            x:Key="DialogButtonStyle"
+            BasedOn="{StaticResource DefaultButtonStyle}"
+            TargetType="ContentControl">
 
-            <Setter Property="Margin" Value="4"/>
-            <Setter Property="Width" Value="100"/>
+            <Setter Property="Margin" Value="4" />
+            <Setter Property="Width" Value="100" />
         </Style>
 
-        <Style x:Key="DialogAccentButtonStyle"
-               TargetType="ContentControl" 
-               BasedOn="{StaticResource AccentButtonStyle}">
+        <Style
+            x:Key="DialogAccentButtonStyle"
+            BasedOn="{StaticResource AccentButtonStyle}"
+            TargetType="ContentControl">
 
-            <Setter Property="Margin" Value="4"/>
-            <Setter Property="Width" Value="100"/>
+            <Setter Property="Margin" Value="4" />
+            <Setter Property="Width" Value="100" />
         </Style>
 
-        <ControlTemplate  x:Key="IconButtonTemplate"
-                          TargetType="{x:Type ContentControl}">
+        <ControlTemplate x:Key="IconButtonTemplate" TargetType="{x:Type ContentControl}">
 
             <Border Background="{TemplateBinding Background}">
 
@@ -249,18 +247,18 @@
 
                     <Canvas
                         Width="{TemplateBinding Width,
-                        Converter={StaticResource IconConverter}}"
+                                                Converter={StaticResource IconConverter}}"
                         Height="{TemplateBinding Height,
-                        Converter={StaticResource IconConverter}}"
+                                                 Converter={StaticResource IconConverter}}"
                         Margin="4"
                         HorizontalAlignment="Center"
                         Background="{TemplateBinding Background}">
 
                         <Path
                             Width="{TemplateBinding Width,
-                            Converter={StaticResource IconConverter}}"
+                                                    Converter={StaticResource IconConverter}}"
                             Height="{TemplateBinding Height,
-                            Converter={StaticResource IconConverter}}"
+                                                     Converter={StaticResource IconConverter}}"
                             Data="{TemplateBinding Content}"
                             Fill="{TemplateBinding Foreground}"
                             Stretch="Uniform" />
@@ -273,16 +271,15 @@
 
         </ControlTemplate>
 
-        <Style  x:Key="IconButtonStyle" 
-                TargetType="ContentControl">
-            
-            <Setter Property="Height" Value="32"/>
-            <Setter Property="Width" Value="32"/>
+        <Style x:Key="IconButtonStyle" TargetType="ContentControl">
+
+            <Setter Property="Height" Value="32" />
+            <Setter Property="Width" Value="32" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Foreground" Value="{StaticResource ButtonForeGround}" />
-            <Setter Property="Margin" Value="10"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Template" Value="{StaticResource IconButtonTemplate}"/>
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Template" Value="{StaticResource IconButtonTemplate}" />
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Foreground" Value="{StaticResource ButtonMouseOver}" />
@@ -290,32 +287,31 @@
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="IconToggleButtonStyle" 
-               TargetType="ToggleButton"
-               BasedOn="{StaticResource IconButtonStyle}">
+        <Style
+            x:Key="IconToggleButtonStyle"
+            BasedOn="{StaticResource IconButtonStyle}"
+            TargetType="ToggleButton">
 
             <Style.Triggers>
                 <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Foreground" Value="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"/>
+                    <Setter Property="Foreground" Value="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}" />
                 </Trigger>
             </Style.Triggers>
         </Style>
 
-        <Style  x:Key="DialogWindowBorderStyle"
-                TargetType="Border">
-            
-            <Setter Property="Visibility" Value="Collapsed"/>
-            <Setter Property="Background" Value="Transparent"/>
+        <Style x:Key="DialogWindowBorderStyle" TargetType="Border">
+
+            <Setter Property="Visibility" Value="Collapsed" />
+            <Setter Property="Background" Value="Transparent" />
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsShowDialog, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}" Value="True">
-                    <Setter Property="Visibility" Value="Visible"/>
-                    <Setter Property="Background" Value="{StaticResource ShowWindowBackGround}"/>
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Setter Property="Background" Value="{StaticResource ShowWindowBackGround}" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="DefaultWindowStyle" 
-               TargetType="{x:Type local:WindowBase}">
+        <Style x:Key="DefaultWindowStyle" TargetType="{x:Type local:WindowBase}">
 
             <Setter Property="WindowChrome.WindowChrome">
                 <Setter.Value>
@@ -324,7 +320,7 @@
                         CornerRadius="8"
                         GlassFrameThickness="0"
                         ResizeBorderThickness="5"
-                        UseAeroCaptionButtons="False"/>
+                        UseAeroCaptionButtons="False" />
                 </Setter.Value>
             </Setter>
             <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -333,28 +329,29 @@
             <Setter Property="Foreground" Value="Silver" />
         </Style>
 
-        <ControlTemplate x:Key="DailogTemplate" 
-                         TargetType="local:WindowBase">
+        <ControlTemplate x:Key="DailogTemplate" TargetType="local:WindowBase">
 
             <ControlTemplate.Triggers>
                 <Trigger Property="Visibility" Value="Visible">
                     <Trigger.EnterActions>
                         <BeginStoryboard>
                             <Storyboard>
-                                <DoubleAnimation Storyboard.TargetName="MainContent"
-                                                 Storyboard.TargetProperty="Opacity"
-                                                 Duration="0:0:.2"
-                                                 From="0"
-                                                 To="1" />
+                                <DoubleAnimation
+                                    Storyboard.TargetName="MainContent"
+                                    Storyboard.TargetProperty="Opacity"
+                                    From="0"
+                                    To="1"
+                                    Duration="0:0:.2" />
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.EnterActions>
                 </Trigger>
             </ControlTemplate.Triggers>
 
-            <Border Padding="1" 
-                    x:Name="MainContent"
-                    Background="{TemplateBinding ThemeBrush}">
+            <Border
+                x:Name="MainContent"
+                Padding="1"
+                Background="{TemplateBinding ThemeBrush}">
 
                 <Grid Background="{TemplateBinding Background}">
 
@@ -363,25 +360,28 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock x:Name="TitleTextBlock"
-                               FontSize="22"
-                               HorizontalAlignment="Center"
-                               Foreground="{StaticResource DialogForeGround}"    
-                               Text="{TemplateBinding Title}" />
+                    <TextBlock
+                        x:Name="TitleTextBlock"
+                        HorizontalAlignment="Center"
+                        FontSize="22"
+                        Foreground="{StaticResource DialogForeGround}"
+                        Text="{TemplateBinding Title}" />
 
-                    <ContentPresenter Grid.Row="1" 
-                                      Margin="8"
-                                      HorizontalAlignment="Stretch" 
-                                      VerticalAlignment="Stretch"/>
+                    <ContentPresenter
+                        Grid.Row="1"
+                        Margin="8"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch" />
 
                 </Grid>
 
             </Border>
         </ControlTemplate>
 
-        <Style x:Key="DialogWindowStyle"
-               BasedOn="{StaticResource DefaultWindowStyle}"
-               TargetType="{x:Type local:WindowBase}">
+        <Style
+            x:Key="DialogWindowStyle"
+            BasedOn="{StaticResource DefaultWindowStyle}"
+            TargetType="{x:Type local:WindowBase}">
 
             <Setter Property="WindowChrome.WindowChrome">
                 <Setter.Value>
@@ -393,96 +393,89 @@
                         UseAeroCaptionButtons="False" />
                 </Setter.Value>
             </Setter>
-            <Setter Property="Template" Value="{StaticResource DailogTemplate }"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Background" Value="{StaticResource WindowBackGround}"/>
-            <Setter Property="Foreground" Value="{StaticResource DialogForeGround}"/>
+            <Setter Property="Template" Value="{StaticResource DailogTemplate}" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="Background" Value="{StaticResource WindowBackGround}" />
+            <Setter Property="Foreground" Value="{StaticResource DialogForeGround}" />
             <Setter Property="ResizeMode" Value="NoResize" />
-            <Setter Property="Width" Value="400"/>
-            <Setter Property="Height" Value="250"/>
+            <Setter Property="Width" Value="400" />
+            <Setter Property="Height" Value="250" />
         </Style>
 
-        <Style x:Key="DialogTextBlockStyle"
-               TargetType="TextBlock" >
+        <Style x:Key="DialogTextBlockStyle" TargetType="TextBlock">
 
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Margin" Value="2,16,2,2"/>
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Margin" Value="2,16,2,2" />
         </Style>
 
-        <Style x:Key="WarnningTextBlockStyle" 
-               TargetType="TextBlock" >
+        <Style x:Key="WarnningTextBlockStyle" TargetType="TextBlock">
 
-            <Setter Property="Margin" Value="4"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Foreground" Value="Red"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="4" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Foreground" Value="Red" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
         </Style>
 
-        <Style x:Key="DialogTextBoxStyle"
-               TargetType="TextBox">
+        <Style x:Key="DialogTextBoxStyle" TargetType="TextBox">
 
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="BorderBrush" Value="{StaticResource DialogForeGround}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Width" Value="220"/>
-            <Setter Property="Height" Value="32"/>
-            <Setter Property="FontWeight" Value="ExtraLight"/>
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="BorderBrush" Value="{StaticResource DialogForeGround}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="Width" Value="220" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="FontWeight" Value="ExtraLight" />
             <Setter Property="Background" Value="{StaticResource TextboxBackGround}" />
             <Setter Property="Foreground" Value="{StaticResource TextboxForeGround}" />
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
         </Style>
 
 
-        <Style x:Key="DialogComboBoxStyle"
-               TargetType="local:CustomComboBox">
+        <Style x:Key="DialogComboBoxStyle" TargetType="local:CustomComboBox">
 
-            <Setter Property="SelectVisual" Value="Tab"/>
-            <Setter Property="MouseOverBrush" Value="{StaticResource ButtonMouseOver}"/>
-            <Setter Property="MouseOverItemBrush" Value="{StaticResource ButtonMouseOver}"/>
-            <Setter Property="PopupBackground" Value="{StaticResource WindowBackGround}"/>
-            <Setter Property="PopupBorderBrush" Value="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"/>
-            <Setter Property="SelectedItemBrush" Value="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}"/>
-            <Setter Property="ItemSelectCornerRadius" Value="4"/>
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="ItemMargin" Value="4"/>
-            <Setter Property="BorderBrush" Value="{StaticResource DialogForeGround}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Foreground" Value="{StaticResource TextboxForeGround}"/>
-            <Setter Property="Background" Value="{StaticResource TextboxBackGround}"/>
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Width" Value="220"/>
-            <Setter Property="Height" Value="32"/>
-            <Setter Property="FontWeight" Value="ExtraLight"/>
+            <Setter Property="SelectVisual" Value="Tab" />
+            <Setter Property="MouseOverBrush" Value="{StaticResource ButtonMouseOver}" />
+            <Setter Property="MouseOverItemBrush" Value="{StaticResource ButtonMouseOver}" />
+            <Setter Property="PopupBackground" Value="{StaticResource WindowBackGround}" />
+            <Setter Property="PopupBorderBrush" Value="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}" />
+            <Setter Property="SelectedItemBrush" Value="{Binding ThemeBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:WindowBase}}" />
+            <Setter Property="ItemSelectCornerRadius" Value="4" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="ItemMargin" Value="4" />
+            <Setter Property="BorderBrush" Value="{StaticResource DialogForeGround}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="{StaticResource TextboxForeGround}" />
+            <Setter Property="Background" Value="{StaticResource TextboxBackGround}" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="Width" Value="220" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="FontWeight" Value="ExtraLight" />
         </Style>
 
-        <Style x:Key="DialogButtonStackPanelStyle" 
-               TargetType="StackPanel">
+        <Style x:Key="DialogButtonStackPanelStyle" TargetType="StackPanel">
 
-            <Setter Property="Margin" Value="0,14,0,0"/>
-            <Setter Property="HorizontalAlignment" Value="Right"/>
-            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="Margin" Value="0,14,0,0" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Orientation" Value="Horizontal" />
         </Style>
 
-        <Style x:Key="DefaultToolTipStyle"
-               TargetType="ToolTip">
+        <Style x:Key="DefaultToolTipStyle" TargetType="ToolTip">
 
-            <Setter Property="Background" Value="{StaticResource WindowBackGround}"/>
-            <Setter Property="Foreground" Value="{StaticResource DialogForeGround}"/>
-            <Setter Property="FontSize" Value="24"/>
-            <Setter Property="Margin" Value="4"/>
-            <Setter Property="FontWeight" Value="ExtraLight"/>
+            <Setter Property="Background" Value="{StaticResource WindowBackGround}" />
+            <Setter Property="Foreground" Value="{StaticResource DialogForeGround}" />
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="Margin" Value="4" />
+            <Setter Property="FontWeight" Value="ExtraLight" />
         </Style>
 
-        <Style x:Key="IconImageStyle" 
-               TargetType="Image">
-            
-            <Setter Property="Margin" Value="4"/>
-            <Setter Property="Width" Value="150"/>
-            <Setter Property="Height" Value="100"/>
+        <Style x:Key="IconImageStyle" TargetType="Image">
+
+            <Setter Property="Margin" Value="4" />
+            <Setter Property="Width" Value="150" />
+            <Setter Property="Height" Value="100" />
         </Style>
 
     </Application.Resources>
