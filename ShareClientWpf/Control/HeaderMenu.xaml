@@ -1,15 +1,17 @@
-﻿<UserControl x:Class="ShareClientWpf.HeaderMenu"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ShareClientWpf"
-             mc:Ignorable="d" 
-             x:Name="HeaderRoot"
-             d:DesignHeight="450" d:DesignWidth="800">
+﻿<UserControl
+    x:Class="ShareClientWpf.HeaderMenu"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ShareClientWpf"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="HeaderRoot"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
 
     <UserControl.Resources>
-        <Style TargetType="Button" BasedOn="{StaticResource IconButtonStyle}"/>
+        <Style BasedOn="{StaticResource IconButtonStyle}" TargetType="Button" />
         <Geometry x:Key="Profile">M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z</Geometry>
         <Geometry x:Key="Send">M4 6.03L11.5 9.25L4 8.25L4 6.03M11.5 14.75L4 17.97V15.75L11.5 14.75M2 3L2 10L17 12L2 14L2 21L23 12L2 3Z</Geometry>
         <Geometry x:Key="Recive">M19,19H5V5H19M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M10,8V16L15,12L10,8Z</Geometry>
@@ -19,16 +21,16 @@
     <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="100"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="100" />
         </Grid.RowDefinitions>
 
-        <StackPanel Margin="0,12,0,0"
-                    VerticalAlignment="Top">
+        <StackPanel Margin="0,12,0,0" VerticalAlignment="Top">
 
-            <Button Grid.Row="0"
-                    Content="{StaticResource Profile}"
-                    Command="{Binding Path=Commands.ProfileCommand, ElementName=HeaderRoot}">
+            <Button
+                Grid.Row="0"
+                Command="{Binding Path=Commands.ProfileCommand, ElementName=HeaderRoot}"
+                Content="{StaticResource Profile}">
 
                 <Button.ToolTip>
                     <ToolTip Content="プロフィール" />
@@ -36,9 +38,10 @@
 
             </Button>
 
-            <Button Grid.Row="1"
-                    Content="{StaticResource Send}"
-                    Command="{Binding Commands.SendCommand, ElementName=HeaderRoot}">
+            <Button
+                Grid.Row="1"
+                Command="{Binding Commands.SendCommand, ElementName=HeaderRoot}"
+                Content="{StaticResource Send}">
 
                 <Button.ToolTip>
                     <ToolTip Content="送信" />
@@ -46,9 +49,10 @@
 
             </Button>
 
-            <Button Grid.Row="2" 
-                    Content="{StaticResource Recive}"
-                    Command="{Binding Commands.RecieveCommand , ElementName=HeaderRoot}">
+            <Button
+                Grid.Row="2"
+                Command="{Binding Commands.RecieveCommand, ElementName=HeaderRoot}"
+                Content="{StaticResource Recive}">
 
                 <Button.ToolTip>
                     <ToolTip Content="受信" />
@@ -58,11 +62,12 @@
 
         </StackPanel>
 
-        <Button Grid.Row="1" 
-                VerticalAlignment="Bottom"
-                Margin="0,0,0,24"
-                Content="{StaticResource More}"
-                Command="{Binding Commands.MoreCommand , ElementName=HeaderRoot}">
+        <Button
+            Grid.Row="1"
+            Margin="0,0,0,24"
+            VerticalAlignment="Bottom"
+            Command="{Binding Commands.MoreCommand, ElementName=HeaderRoot}"
+            Content="{StaticResource More}">
 
             <Button.ToolTip>
                 <ToolTip Content="設定" />

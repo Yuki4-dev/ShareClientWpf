@@ -8,11 +8,11 @@
     Title="ShareClientWpf"
     Width="800"
     Height="450"
-    Loaded="Window_Loaded"
+    BorderBrush="{Binding RelativeSource={RelativeSource Self}, Path=ThemeBrush}"
     BorderThickness="2"
     Closing="WindowBase_Closing"
+    Loaded="Window_Loaded"
     Style="{StaticResource DefaultWindowStyle}"
-    BorderBrush="{Binding RelativeSource={RelativeSource Self}, Path=ThemeBrush}"
     mc:Ignorable="d">
 
     <Window.DataContext>
@@ -22,41 +22,44 @@
     <Grid>
 
         <Grid.Resources>
-            <Style TargetType="Button" BasedOn="{StaticResource IconButtonStyle}"/>
-            <Style TargetType="ToolTip" BasedOn="{StaticResource DefaultToolTipStyle}"/>
-            <Style TargetType="Grid" x:Key="RightPageStyle">
-                <Setter Property="Visibility" Value="Hidden"/>
-                <Setter Property="Width" Value="300"/>
-                <Setter Property="Background" Value="{StaticResource HeaderBackGround}"/>
-                <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Style BasedOn="{StaticResource IconButtonStyle}" TargetType="Button" />
+            <Style BasedOn="{StaticResource DefaultToolTipStyle}" TargetType="ToolTip" />
+            <Style x:Key="RightPageStyle" TargetType="Grid">
+                <Setter Property="Visibility" Value="Hidden" />
+                <Setter Property="Width" Value="300" />
+                <Setter Property="Background" Value="{StaticResource HeaderBackGround}" />
+                <Setter Property="HorizontalAlignment" Value="Right" />
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsStatusOpen, ElementName=ViewModel}" Value="True">
-                        <Setter Property="Visibility" Value="Visible"/>
+                        <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="84"/>
+            <ColumnDefinition Width="84" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Border Grid.ColumnSpan="2" 
-                Panel.ZIndex="2"
-                Style="{StaticResource DialogWindowBorderStyle}"/>
+        <Border
+            Grid.ColumnSpan="2"
+            Panel.ZIndex="2"
+            Style="{StaticResource DialogWindowBorderStyle}" />
 
-        <StackPanel Grid.ColumnSpan="2"
-                    Margin="8"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Panel.ZIndex="2"
-                    Orientation="Horizontal">
+        <StackPanel
+            Grid.ColumnSpan="2"
+            Margin="8"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Panel.ZIndex="2"
+            Orientation="Horizontal">
 
-            <ToggleButton x:Name="StatusToggleButton"
-                          IsChecked="{Binding IsStatusOpen, Mode=TwoWay}"
-                          Style="{StaticResource IconToggleButtonStyle}"
-                          Content="{StaticResource Status}">
+            <ToggleButton
+                x:Name="StatusToggleButton"
+                Content="{StaticResource Status}"
+                IsChecked="{Binding IsStatusOpen, Mode=TwoWay}"
+                Style="{StaticResource IconToggleButtonStyle}">
 
                 <ToggleButton.ToolTip>
                     <ToolTip Content="ステータス" />
@@ -64,8 +67,7 @@
 
             </ToggleButton>
 
-            <Button Command="{Binding CloseCommand}"
-                    Content="{StaticResource Close}">
+            <Button Command="{Binding CloseCommand}" Content="{StaticResource Close}">
 
                 <Button.ToolTip>
                     <ToolTip Content="終了" />
@@ -75,49 +77,52 @@
 
         </StackPanel>
 
-        <local:HeaderMenu Background="{StaticResource HeaderBackGround}"
-                          Commands="{Binding HeaderCommands}"
-                          MouseDoubleClick="HeaderMenu_MouseDoubleClick"
-                          MouseLeftButtonDown="HeaderMenu_MouseLeftButtonDown"/>
+        <local:HeaderMenu
+            Background="{StaticResource HeaderBackGround}"
+            Commands="{Binding HeaderCommands}"
+            MouseDoubleClick="HeaderMenu_MouseDoubleClick"
+            MouseLeftButtonDown="HeaderMenu_MouseLeftButtonDown" />
 
-        <Image Grid.Column="1"
-               HorizontalAlignment="Center"
-               Source="{Binding Source, Mode=OneWay}"
-               Stretch="UniformToFill" />
+        <Image
+            Grid.Column="1"
+            HorizontalAlignment="Center"
+            Source="{Binding Source, Mode=OneWay}"
+            Stretch="UniformToFill" />
 
-        <Grid Grid.Column="1"
-              Panel.ZIndex="1"
-              Style="{StaticResource RightPageStyle}">
+        <Grid
+            Grid.Column="1"
+            Panel.ZIndex="1"
+            Style="{StaticResource RightPageStyle}">
 
             <Grid.Resources>
-                <Style TargetType="RadioButton" BasedOn="{StaticResource TextToggleButtonStyle}">
-                    <Setter Property="FontSize" Value="24"/>
-                    <Setter Property="Margin" Value="4"/>
+                <Style BasedOn="{StaticResource TextToggleButtonStyle}" TargetType="RadioButton">
+                    <Setter Property="FontSize" Value="24" />
+                    <Setter Property="Margin" Value="4" />
                 </Style>
             </Grid.Resources>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="64"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="64" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <StackPanel Orientation="Horizontal"
-                        Margin="12">
+            <StackPanel Margin="12" Orientation="Horizontal">
 
-                <RadioButton Content="送信"
-                             IsChecked="True"
-                             Command="{Binding SelectedCommand}"
-                             CommandParameter="0"/>
-                <RadioButton Content="受信"
-                             Command="{Binding SelectedCommand}"
-                             CommandParameter="1"/>
+                <RadioButton
+                    Command="{Binding SelectedCommand}"
+                    CommandParameter="0"
+                    Content="送信"
+                    IsChecked="True" />
+                <RadioButton
+                    Command="{Binding SelectedCommand}"
+                    CommandParameter="1"
+                    Content="受信" />
             </StackPanel>
 
-            <ContentControl Grid.Row="1"
-                            Content="{Binding RightPageContent}"/>
+            <ContentControl Grid.Row="1" Content="{Binding RightPageContent}" />
 
         </Grid>
 
     </Grid>
-    
+
 </local:WindowBase>

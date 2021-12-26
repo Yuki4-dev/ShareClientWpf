@@ -1,55 +1,53 @@
-﻿<local:WindowBase x:Class="ShareClientWpf.RecieveWindow"
-                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                  xmlns:local="clr-namespace:ShareClientWpf"
-                  mc:Ignorable="d"
-                  IsCasheWindow="True"
-                  Style="{StaticResource DialogWindowStyle}"
-                  Title="受信">
+﻿<local:WindowBase
+    x:Class="ShareClientWpf.RecieveWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ShareClientWpf"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="受信"
+    IsCasheWindow="True"
+    Style="{StaticResource DialogWindowStyle}"
+    mc:Ignorable="d">
 
     <Window.DataContext>
         <local:RecieveWindowViewModel />
     </Window.DataContext>
 
     <Grid>
-        
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="2"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="2" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid.Resources>
-            <Style TargetType="TextBlock" BasedOn="{StaticResource DialogTextBlockStyle}"/>
-            <Style TargetType="TextBox" BasedOn="{StaticResource DialogTextBoxStyle}"/>
-            <Style TargetType="Button" BasedOn="{StaticResource DialogButtonStyle}"/>
+            <Style BasedOn="{StaticResource DialogTextBlockStyle}" TargetType="TextBlock" />
+            <Style BasedOn="{StaticResource DialogTextBoxStyle}" TargetType="TextBox" />
+            <Style BasedOn="{StaticResource DialogButtonStyle}" TargetType="Button" />
         </Grid.Resources>
 
         <StackPanel HorizontalAlignment="Left">
-            
-            <TextBlock Text="PORT"/>
-            <TextBox Text="{Binding PortText ,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Style="{StaticResource WarnningTextBlockStyle}"
-                       Text="{Binding Message}"/>
-            
+
+            <TextBlock Text="PORT" />
+            <TextBox Text="{Binding PortText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Style="{StaticResource WarnningTextBlockStyle}" Text="{Binding Message}" />
+
         </StackPanel>
 
-        <Border Grid.Row="1"
-                Background="{StaticResource DialogBorderBackGround}"/>
+        <Border Grid.Row="1" Background="{StaticResource DialogBorderBackGround}" />
 
-        <StackPanel Grid.Row="2"
-                    Style="{StaticResource DialogButtonStackPanelStyle}">
+        <StackPanel Grid.Row="2" Style="{StaticResource DialogButtonStackPanelStyle}">
 
-            <Button Content="開始" 
-                    Style="{StaticResource DialogAccentButtonStyle}"
-                    Command="{Binding RecieveCommand}"/>
-            <Button Content="キャンセル" 
-                    Command="{Binding CloseCommand}"/>
+            <Button
+                Command="{Binding RecieveCommand}"
+                Content="開始"
+                Style="{StaticResource DialogAccentButtonStyle}" />
+            <Button Command="{Binding CloseCommand}" Content="キャンセル" />
 
         </StackPanel>
 
     </Grid>
-    
+
 </local:WindowBase>

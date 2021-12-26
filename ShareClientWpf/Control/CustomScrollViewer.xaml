@@ -1,51 +1,55 @@
-﻿<ScrollViewer x:Class="ShareClientWpf.CustomScrollViewer"
-              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-              xmlns:local="clr-namespace:ShareClientWpf"
-              mc:Ignorable="d" 
-              Style="{DynamicResource CustomScrollViewerStyle}"
-              d:DesignHeight="450" d:DesignWidth="800">
+﻿<ScrollViewer
+    x:Class="ShareClientWpf.CustomScrollViewer"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ShareClientWpf"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    Style="{DynamicResource CustomScrollViewerStyle}"
+    mc:Ignorable="d">
 
     <ScrollViewer.Resources>
 
         <Thickness x:Key="ThumbThickness">2</Thickness>
 
-        <Style x:Key="ScrollBarThumbStyle" 
-               TargetType="{x:Type Thumb}">
+        <Style x:Key="ScrollBarThumbStyle" TargetType="{x:Type Thumb}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Thumb}">
                         <Grid Background="{Binding TrackBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomScrollViewer}}">
-                            <Border x:Name="ThumbBorder"
-                                    CornerRadius="{Binding TabRedius, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomScrollViewer}}"
-                                    Margin="{StaticResource ThumbThickness}" 
-                                    Background="{Binding TabBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomScrollViewer}}"/>
+                            <Border
+                                x:Name="ThumbBorder"
+                                Margin="{StaticResource ThumbThickness}"
+                                Background="{Binding TabBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomScrollViewer}}"
+                                CornerRadius="{Binding TabRedius, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomScrollViewer}}" />
                         </Grid>
                         <ControlTemplate.Triggers>
                             <MultiTrigger>
                                 <MultiTrigger.Conditions>
-                                    <Condition Property="IsMouseOver" Value="True"/>
-                                    <Condition Property="IsEnabled" Value="True"/>
+                                    <Condition Property="IsMouseOver" Value="True" />
+                                    <Condition Property="IsEnabled" Value="True" />
                                 </MultiTrigger.Conditions>
                                 <MultiTrigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <ThicknessAnimation Duration="0:0:0.1"
-                                                                To="0"
-                                                                Storyboard.TargetName="ThumbBorder"
-                                                                Storyboard.TargetProperty="Margin"/>
+                                            <ThicknessAnimation
+                                                Storyboard.TargetName="ThumbBorder"
+                                                Storyboard.TargetProperty="Margin"
+                                                To="0"
+                                                Duration="0:0:0.1" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </MultiTrigger.EnterActions>
                                 <MultiTrigger.ExitActions>
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <ThicknessAnimation Duration="0:0:0.1"
-                                                                To="{StaticResource ThumbThickness}" 
-                                                                Storyboard.TargetName="ThumbBorder"
-                                                                Storyboard.TargetProperty="Margin"/>
+                                            <ThicknessAnimation
+                                                Storyboard.TargetName="ThumbBorder"
+                                                Storyboard.TargetProperty="Margin"
+                                                To="{StaticResource ThumbThickness}"
+                                                Duration="0:0:0.1" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </MultiTrigger.ExitActions>
@@ -60,34 +64,31 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type RepeatButton}">
-                        <Border Background="{Binding TrackBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomScrollViewer}}"/>
+                        <Border Background="{Binding TrackBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomScrollViewer}}" />
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
 
         <Style x:Key="CustomScrollBarStyle" TargetType="{x:Type ScrollBar}">
-            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="OverridesDefaultStyle" Value="true" />
             <Style.Triggers>
                 <Trigger Property="Orientation" Value="Vertical">
-                    <Setter Property="Width" Value="{Binding BarSize, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomScrollViewer}}"/>
-                    <Setter Property="Height" Value="Auto"/>
+                    <Setter Property="Width" Value="{Binding BarSize, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomScrollViewer}}" />
+                    <Setter Property="Height" Value="Auto" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate>
                                 <Grid>
-                                    <Track x:Name="PART_Track" 
-                                           IsDirectionReversed="True">
+                                    <Track x:Name="PART_Track" IsDirectionReversed="True">
                                         <Track.DecreaseRepeatButton>
-                                            <RepeatButton Style="{StaticResource ScrollBarTrackStyle}"  
-                                                          Command="ScrollBar.PageUpCommand" />
+                                            <RepeatButton Command="ScrollBar.PageUpCommand" Style="{StaticResource ScrollBarTrackStyle}" />
                                         </Track.DecreaseRepeatButton>
                                         <Track.Thumb>
-                                            <Thumb Style="{StaticResource ScrollBarThumbStyle}"/>
+                                            <Thumb Style="{StaticResource ScrollBarThumbStyle}" />
                                         </Track.Thumb>
                                         <Track.IncreaseRepeatButton>
-                                            <RepeatButton Style="{StaticResource ScrollBarTrackStyle}" 
-                                                          Command="ScrollBar.PageDownCommand" />
+                                            <RepeatButton Command="ScrollBar.PageDownCommand" Style="{StaticResource ScrollBarTrackStyle}" />
                                         </Track.IncreaseRepeatButton>
                                     </Track>
                                 </Grid>
@@ -96,24 +97,21 @@
                     </Setter>
                 </Trigger>
                 <Trigger Property="Orientation" Value="Horizontal">
-                    <Setter Property="Width" Value="Auto"/>
-                    <Setter Property="Height" Value="{Binding BarSize, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomScrollViewer}}"/>
+                    <Setter Property="Width" Value="Auto" />
+                    <Setter Property="Height" Value="{Binding BarSize, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomScrollViewer}}" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate>
                                 <Grid>
-                                    <Track x:Name="PART_Track" 
-                                           IsDirectionReversed="False">
+                                    <Track x:Name="PART_Track" IsDirectionReversed="False">
                                         <Track.DecreaseRepeatButton>
-                                            <RepeatButton Style="{StaticResource ScrollBarTrackStyle}"  
-                                                          Command="ScrollBar.PageLeftCommand" />
+                                            <RepeatButton Command="ScrollBar.PageLeftCommand" Style="{StaticResource ScrollBarTrackStyle}" />
                                         </Track.DecreaseRepeatButton>
                                         <Track.Thumb>
-                                            <Thumb Style="{StaticResource ScrollBarThumbStyle}"/>
+                                            <Thumb Style="{StaticResource ScrollBarThumbStyle}" />
                                         </Track.Thumb>
                                         <Track.IncreaseRepeatButton>
-                                            <RepeatButton Style="{StaticResource ScrollBarTrackStyle}" 
-                                                          Command="ScrollBar.PageRightCommand" />
+                                            <RepeatButton Command="ScrollBar.PageRightCommand" Style="{StaticResource ScrollBarTrackStyle}" />
                                         </Track.IncreaseRepeatButton>
                                     </Track>
                                 </Grid>
@@ -130,45 +128,48 @@
                     <ControlTemplate TargetType="{x:Type local:CustomScrollViewer}">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition Height="Auto"/>
+                                <RowDefinition />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <ScrollContentPresenter/>
-                            <ScrollBar x:Name="PART_VerticalScrollBar" 
-                                       Grid.Column="1"
-                                       Margin="{Binding VerticalBarMargin, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomScrollViewer}}" 
-                                       Orientation="Vertical" 
-                                       Value="{TemplateBinding VerticalOffset}" 
-                                       Maximum="{TemplateBinding ScrollableHeight}" 
-                                       ViewportSize="{TemplateBinding ViewportHeight}" 
-                                       Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" 
-                                       Style="{StaticResource CustomScrollBarStyle}"/>
-                            <ScrollBar x:Name="PART_HorizontalScrollBar" 
-                                       Grid.Row="1" 
-                                       Margin="{Binding HorizontalBarMargin, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomScrollViewer}}" 
-                                       Orientation="Horizontal" 
-                                       Value="{TemplateBinding HorizontalOffset}" 
-                                       Maximum="{TemplateBinding ScrollableWidth}" 
-                                       ViewportSize="{TemplateBinding ViewportWidth}" 
-                                       Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" 
-                                       Style="{StaticResource CustomScrollBarStyle}"/>
-                            <Border x:Name="SapcingBorder"
-                                    Background="{TemplateBinding TrackBrush}"
-                                    Visibility="Collapsed"
-                                    Grid.Column="1" 
-                                    Grid.Row="1"/>
+                            <ScrollContentPresenter />
+                            <ScrollBar
+                                x:Name="PART_VerticalScrollBar"
+                                Grid.Column="1"
+                                Margin="{Binding VerticalBarMargin, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomScrollViewer}}"
+                                Maximum="{TemplateBinding ScrollableHeight}"
+                                Orientation="Vertical"
+                                Style="{StaticResource CustomScrollBarStyle}"
+                                ViewportSize="{TemplateBinding ViewportHeight}"
+                                Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                                Value="{TemplateBinding VerticalOffset}" />
+                            <ScrollBar
+                                x:Name="PART_HorizontalScrollBar"
+                                Grid.Row="1"
+                                Margin="{Binding HorizontalBarMargin, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomScrollViewer}}"
+                                Maximum="{TemplateBinding ScrollableWidth}"
+                                Orientation="Horizontal"
+                                Style="{StaticResource CustomScrollBarStyle}"
+                                ViewportSize="{TemplateBinding ViewportWidth}"
+                                Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
+                                Value="{TemplateBinding HorizontalOffset}" />
+                            <Border
+                                x:Name="SapcingBorder"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Background="{TemplateBinding TrackBrush}"
+                                Visibility="Collapsed" />
                         </Grid>
                         <ControlTemplate.Triggers>
                             <MultiTrigger>
                                 <MultiTrigger.Conditions>
-                                    <Condition Property="ComputedVerticalScrollBarVisibility"  Value="Visible"/>
-                                    <Condition Property="ComputedHorizontalScrollBarVisibility"  Value="Visible"/>
+                                    <Condition Property="ComputedVerticalScrollBarVisibility" Value="Visible" />
+                                    <Condition Property="ComputedHorizontalScrollBarVisibility" Value="Visible" />
                                 </MultiTrigger.Conditions>
-                                <Setter TargetName="SapcingBorder" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="SapcingBorder" Property="Visibility" Value="Visible" />
                             </MultiTrigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -176,5 +177,5 @@
             </Setter>
         </Style>
     </ScrollViewer.Resources>
-    
+
 </ScrollViewer>

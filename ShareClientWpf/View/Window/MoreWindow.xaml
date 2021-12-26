@@ -1,71 +1,70 @@
-﻿<local:WindowBase x:Class="ShareClientWpf.MoreWindow"
-                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                  xmlns:local="clr-namespace:ShareClientWpf"
-                  mc:Ignorable="d"
-                  IsCasheWindow="True"
-                  Style="{StaticResource DialogWindowStyle}"
-                  Title="設定">
+﻿<local:WindowBase
+    x:Class="ShareClientWpf.MoreWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ShareClientWpf"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="設定"
+    IsCasheWindow="True"
+    Style="{StaticResource DialogWindowStyle}"
+    mc:Ignorable="d">
 
     <Window.DataContext>
-        <local:MoreWindowViewModel/>
+        <local:MoreWindowViewModel />
     </Window.DataContext>
 
     <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="2"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="2" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid.Resources>
-            <Style TargetType="TextBlock" BasedOn="{StaticResource DialogTextBlockStyle}"/>
-            <Style TargetType="TextBox" BasedOn="{StaticResource DialogTextBoxStyle}"/>
-            <Style TargetType="Button" BasedOn="{StaticResource DialogButtonStyle}"/>
+            <Style BasedOn="{StaticResource DialogTextBlockStyle}" TargetType="TextBlock" />
+            <Style BasedOn="{StaticResource DialogTextBoxStyle}" TargetType="TextBox" />
+            <Style BasedOn="{StaticResource DialogButtonStyle}" TargetType="Button" />
         </Grid.Resources>
 
         <local:CustomScrollViewer>
 
             <StackPanel HorizontalAlignment="Left">
 
-                <TextBlock Text="画像フォーマット"/>
-                <local:CustomComboBox Style="{StaticResource DialogComboBoxStyle}"
-                                      SelectedIndex="{Binding SelectIndex,Mode=TwoWay}">
+                <TextBlock Text="画像フォーマット" />
+                <local:CustomComboBox SelectedIndex="{Binding SelectIndex, Mode=TwoWay}" Style="{StaticResource DialogComboBoxStyle}">
 
-                    <ComboBoxItem Content="JPEG"/>
-                    <ComboBoxItem Content="PNG"/>
-                    <ComboBoxItem Content="GIF"/>
+                    <ComboBoxItem Content="JPEG" />
+                    <ComboBoxItem Content="PNG" />
+                    <ComboBoxItem Content="GIF" />
                 </local:CustomComboBox>
 
-                <TextBlock Text="送信間隔(msec)"/>
-                <TextBox Text="{Binding SendDelayText,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="送信間隔(msec)" />
+                <TextBox Text="{Binding SendDelayText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                <TextBlock Text="送信画像サイズ(幅)"/>
-                <TextBox Text="{Binding SendWidthText,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="送信画像サイズ(幅)" />
+                <TextBox Text="{Binding SendWidthText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                <TextBlock Text="{Binding Message}"
-                           Style="{StaticResource WarnningTextBlockStyle}"/>
+                <TextBlock Style="{StaticResource WarnningTextBlockStyle}" Text="{Binding Message}" />
 
             </StackPanel>
 
         </local:CustomScrollViewer>
 
-        <Border Grid.Row="1"
-                Background="{StaticResource DialogBorderBackGround}"/>
+        <Border Grid.Row="1" Background="{StaticResource DialogBorderBackGround}" />
 
-        <StackPanel Grid.Row="2"
-                    Style="{StaticResource DialogButtonStackPanelStyle}">
+        <StackPanel Grid.Row="2" Style="{StaticResource DialogButtonStackPanelStyle}">
 
-            <Button Content="OK"
-                    Style="{StaticResource DialogAccentButtonStyle}"
-                    Command="{Binding CloseCommand}"
-                    CommandParameter="1"/>
-            <Button Content="Cancel"
-                    Command="{Binding CloseCommand}"
-                    CommandParameter="0"/>
+            <Button
+                Command="{Binding CloseCommand}"
+                CommandParameter="1"
+                Content="OK"
+                Style="{StaticResource DialogAccentButtonStyle}" />
+            <Button
+                Command="{Binding CloseCommand}"
+                CommandParameter="0"
+                Content="Cancel" />
 
         </StackPanel>
 

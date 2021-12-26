@@ -6,15 +6,15 @@
     xmlns:local="clr-namespace:ShareClientWpf"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="Dialog"
-    WindowStartupLocation="CenterScreen"
     Width="600"
     Height="200"
     BorderBrush="{Binding RelativeSource={RelativeSource Self}, Path=ThemeBrush}"
     Style="{StaticResource DialogWindowStyle}"
+    WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
     <Grid>
-        
+
         <Grid.Resources>
 
             <Style BasedOn="{StaticResource DefaultButtonStyle}" TargetType="Button">
@@ -36,9 +36,10 @@
 
         <ScrollViewer VerticalScrollBarVisibility="Auto">
 
-            <TextBlock x:Name="MessageTextBlock"
-                       Width="550"
-                       TextWrapping="Wrap"/>
+            <TextBlock
+                x:Name="MessageTextBlock"
+                Width="550"
+                TextWrapping="Wrap" />
 
         </ScrollViewer>
 
@@ -59,11 +60,12 @@
                 Tag="1"
                 Visibility="Collapsed" />
 
-            <Button x:Name="PrimaryButton" 
-                    Tag="0" 
-                    Margin="20,0,0,0"
-                    Width="120"
-                    Style="{StaticResource AccentButtonStyle}"/>
+            <Button
+                x:Name="PrimaryButton"
+                Width="120"
+                Margin="20,0,0,0"
+                Style="{StaticResource AccentButtonStyle}"
+                Tag="0" />
 
         </StackPanel>
 

@@ -1,61 +1,62 @@
-﻿<local:WindowBase x:Class="ShareClientWpf.ConnectionWindow"
-                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                  xmlns:local="clr-namespace:ShareClientWpf"
-                  mc:Ignorable="d"
-                  Style="{StaticResource DialogWindowStyle}"
-                  Title="接続要求">
+﻿<local:WindowBase
+    x:Class="ShareClientWpf.ConnectionWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ShareClientWpf"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="接続要求"
+    Style="{StaticResource DialogWindowStyle}"
+    mc:Ignorable="d">
 
     <Window.DataContext>
-        <local:ConnectionWindowViewModel/>
+        <local:ConnectionWindowViewModel />
     </Window.DataContext>
 
     <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="2"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="2" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid.Resources>
-            <Style TargetType="TextBlock" BasedOn="{StaticResource DialogTextBlockStyle}"/>
-            <Style TargetType="TextBox" BasedOn="{StaticResource DialogTextBoxStyle}"/>
-            <Style TargetType="Button" BasedOn="{StaticResource DialogButtonStyle}"/>
+            <Style BasedOn="{StaticResource DialogTextBlockStyle}" TargetType="TextBlock" />
+            <Style BasedOn="{StaticResource DialogTextBoxStyle}" TargetType="TextBox" />
+            <Style BasedOn="{StaticResource DialogButtonStyle}" TargetType="Button" />
         </Grid.Resources>
 
         <StackPanel>
 
-            <Image Style="{StaticResource IconImageStyle}"
-                   Source="{Binding Path=Profile.IconImage}">
+            <Image Source="{Binding Path=Profile.IconImage}" Style="{StaticResource IconImageStyle}">
 
                 <Image.Effect>
-                    <DropShadowEffect ShadowDepth="10"/>
+                    <DropShadowEffect ShadowDepth="10" />
                 </Image.Effect>
             </Image>
 
-            <TextBlock Text="{Binding Path=Profile.Name}"
-                       Margin="0"
-                       HorizontalAlignment="Center"/>
+            <TextBlock
+                Margin="0"
+                HorizontalAlignment="Center"
+                Text="{Binding Path=Profile.Name}" />
 
         </StackPanel>
 
-        <Border Grid.Row="1"
-                Background="{StaticResource DialogBorderBackGround}"/>
+        <Border Grid.Row="1" Background="{StaticResource DialogBorderBackGround}" />
 
-        <StackPanel Grid.Row="2"
-                    Style="{StaticResource DialogButtonStackPanelStyle}">
+        <StackPanel Grid.Row="2" Style="{StaticResource DialogButtonStackPanelStyle}">
 
-            <Button Command="{Binding CloseCommand}"
-                    Style="{StaticResource DialogAccentButtonStyle}"
-                    CommandParameter="1"
-                    Content="OK"/>
+            <Button
+                Command="{Binding CloseCommand}"
+                CommandParameter="1"
+                Content="OK"
+                Style="{StaticResource DialogAccentButtonStyle}" />
 
-            <Button Command="{Binding CloseCommand}"
-                    CommandParameter="2"
-                    Content="Cancel"/>
+            <Button
+                Command="{Binding CloseCommand}"
+                CommandParameter="2"
+                Content="Cancel" />
 
         </StackPanel>
 
