@@ -1,0 +1,16 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Brush x:Key="WindowBackGround">#FF333333</Brush>
+    <Brush x:Key="HeaderBackGround">#202020</Brush>
+    <Brush x:Key="HeaderForeGround">LightGray</Brush>
+    <Brush x:Key="ButtonBackGround">#5F5E5E</Brush>
+    <Brush x:Key="ButtonMouseOver">#7C7C7C</Brush>
+    <Brush x:Key="ButtonForeGround">LightGray</Brush>
+    <Brush x:Key="DialogForeGround">LightGray</Brush>
+    <Brush x:Key="ListBackGround">#5F5E5E</Brush>
+    <Brush x:Key="TextboxBackGround">#FF333333</Brush>
+    <Brush x:Key="TextboxForeGround">LightGray</Brush>
+    <Brush x:Key="ShowWindowBackGround">#7f000000</Brush>
+    <Brush x:Key="DialogBorderBackGround">#202020</Brush>
+
+</ResourceDictionary>

@@ -14,19 +14,6 @@ namespace ShareClientWpf
     {
     }
 
-    public class IconSizeConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return (double)value / 2;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return DependencyProperty.UnsetValue;
-        }
-    }
-
     public class WindowHandleConveter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -40,7 +27,7 @@ namespace ShareClientWpf
             int width = parameter != null ? int.Parse((string)parameter) : 0;
             var image = GetImageSource(handle, width);
 
-            return image != null ? image : DependencyProperty.UnsetValue;
+            return image ?? DependencyProperty.UnsetValue;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
