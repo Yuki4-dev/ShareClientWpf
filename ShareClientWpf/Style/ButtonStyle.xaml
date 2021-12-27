@@ -121,6 +121,16 @@
             <Trigger Property="IsChecked" Value="True">
                 <Setter TargetName="SelectBorder" Property="Visibility" Value="Visible" />
             </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver" Value="True" />
+                    <Condition Property="IsChecked" Value="False" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter TargetName="SelectBorder" Property="Visibility" Value="Visible" />
+                    <Setter TargetName="SelectBorder" Property="BorderBrush" Value="{StaticResource ButtonMouseOver}" />
+                </MultiTrigger.Setters>
+            </MultiTrigger>
         </ControlTemplate.Triggers>
 
     </ControlTemplate>
