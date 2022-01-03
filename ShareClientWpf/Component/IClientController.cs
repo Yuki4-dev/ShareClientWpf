@@ -8,7 +8,7 @@ namespace ShareClientWpf
 {
     public interface IClientController : IDisposable
     {
-        public Task<bool> ConnectAsync(IPEndPoint iPEndPoint, ConnectionData connectionData, Func<ConnectionResponse, bool> connectCallback);
+        public Task<bool> ConnectAsync(IPEndPoint iPEndPoint, ConnectionData connectionData, Action<ConnectionResponse> connectCallback);
         public Task SendWindowAsync(SendContext sendContext, SettingContext settingContext);
         public Task<bool> AcceptAsync(int port, Func<IPEndPoint, ConnectionData, ConnectionResponse> acceptCallback);
         public Task ReceiveWindowAsync(Action<ImageSource> pushImage);

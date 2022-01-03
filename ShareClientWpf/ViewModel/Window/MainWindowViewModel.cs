@@ -130,7 +130,7 @@ namespace ShareClientWpf
             sendStatusPageViewModel.SetSendViewMoelState(SendViewModelState.Connect, context);
 
             var data = new ConnectionData(new(), Encoding.UTF8.GetBytes(profile.GetJsonString()));
-            var isConnected = await clientController.ConnectAsync(context.IPEndPoint, data, (responese) => responese.IsConnect);
+            var isConnected = await clientController.ConnectAsync(context.IPEndPoint, data, null);
             if (isConnected)
             {
                 sendStatusPageViewModel.SetSendViewMoelState(SendViewModelState.Sending, context);

@@ -80,7 +80,7 @@ namespace ShareClientWpf
             }
         }
 
-        public async Task<bool> ConnectAsync(IPEndPoint iPEndPoint, ConnectionData connectionData, Func<ConnectionResponse, bool> connectCallback)
+        public async Task<bool> ConnectAsync(IPEndPoint iPEndPoint, ConnectionData connectionData, Action<ConnectionResponse> connectCallback)
         {
             ThrowIfDisposed();
             lock (obj)
@@ -177,10 +177,10 @@ namespace ShareClientWpf
 
         private IClientSocket GetSocketAndOpen(Connection connection)
         {
-            IClientSocket socket = ShareClientSocket.CreateUdpSocket();
+            IClientSocket socket = ShareClientSocket.Udp;
             try
             {
-                socket.Open(connection);
+                socket.Open(connection.LocalEndPoint, connection.RemoteEndPoint);
             }
             catch
             {
