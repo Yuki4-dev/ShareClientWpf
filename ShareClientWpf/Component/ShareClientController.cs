@@ -8,7 +8,7 @@ using System.Windows.Media;
 
 namespace ShareClientWpf
 {
-    public class ShreClientController : IClientController
+    public class ShareClientController : IClientController
     {
         private bool isDiposed = false;
 
@@ -35,7 +35,7 @@ namespace ShareClientWpf
             return receiverConnection != null;
         }
 
-        public async Task ReceiveWindowAsync(Action<ImageSource> pushImage)
+        public async Task ReceiveWindowAsync(Action<ImageSource> pushImage, Action closed)
         {
             ThrowIfDisposed();
 
@@ -52,6 +52,8 @@ namespace ShareClientWpf
                                             .SetShareClientSpec(receiverConnection.ClientSpec)
                                             .SetConnectEndoPoint(receiverConnection.RemoteEndPoint)
                                             .BuildRecieve(receiverConnection.LocalEndPoint);
+            reciever.ShareAlgorithmClosed += (_, __) => closed.Invoke();
+
             try
             {
                 await reciever.RecieveAsync((data) =>

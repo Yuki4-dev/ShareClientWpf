@@ -11,7 +11,7 @@ namespace ShareClientWpf
         public Task<bool> ConnectAsync(IPEndPoint iPEndPoint, ConnectionData connectionData);
         public Task SendWindowAsync(SendContext sendContext, SettingContext settingContext);
         public Task<bool> AcceptAsync(int port, Func<IPEndPoint, ConnectionData, ConnectionResponse> acceptCallback);
-        public Task ReceiveWindowAsync(Action<ImageSource> pushImage);
+        public Task ReceiveWindowAsync(Action<ImageSource> pushImage, Action closing);
         public void CancelConnect();
         public void CloseSendWindow();
         public void CancelAccept();

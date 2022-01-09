@@ -12,7 +12,7 @@ namespace ShareClientWpf
     {
         private readonly Profile profile = new Profile();
         private SettingContext settingContext = new SettingContext();
-        private readonly IClientController clientController = new ShreClientController();
+        private readonly IClientController clientController = new ShareClientController();
         private readonly SendStatusPageViewModel sendStatusPageViewModel = new SendStatusPageViewModel();
         private readonly RecieveStatusPageViewModel recieveStatusPageViewModel = new RecieveStatusPageViewModel();
 
@@ -172,7 +172,7 @@ namespace ShareClientWpf
                     try
                     {
                         recieveStatusPageViewModel.SetReceiveState(ReceiveViewModelState.Receiving, context);
-                        await clientController.ReceiveWindowAsync((img) => Source = img);
+                        await clientController.ReceiveWindowAsync((img) => Source = img, () => OnShowMessageBox("切断されました。"));
                     }
                     catch (Exception ex)
                     {
