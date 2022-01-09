@@ -39,7 +39,7 @@ namespace ShareClientWpf
             set => SetProperty(ref stopCommand, value);
         }
 
-        public void SetSendViewMoelState(SendViewModelState state, SendContext context = null)
+        public void SetSendState(SendViewModelState state, SendContext context = null)
         {
             bool stopExecute = false;
             if (state == SendViewModelState.None)

@@ -20,9 +20,9 @@ namespace ShareClientWpf
         {
             get => sendDelayText;
             set => SetProperty(ref sendDelayText,
-                                value,
-                                IntValidate<string>((_) => Message = "送信間隔には数字を入れてください。"),
-                                () => Message = "");
+                               value,
+                               IntValidate<string>((_) => Message = "送信間隔には数字を入れてください。"),
+                               () => Message = "");
         }
 
         private string sendWidthText;
@@ -30,9 +30,9 @@ namespace ShareClientWpf
         {
             get => sendWidthText;
             set => SetProperty(ref sendWidthText,
-                                value,
-                                IntValidate<string>((_) => Message = "画面幅には数字を入れてください。"),
-                                () => Message = "");
+                               value,
+                               IntValidate<string>((_) => Message = "画面幅には数字を入れてください。"),
+                               () => Message = "");
         }
 
         private string message;

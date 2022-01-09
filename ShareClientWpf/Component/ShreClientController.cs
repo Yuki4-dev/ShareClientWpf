@@ -1,5 +1,6 @@
-﻿using ShareClient.Component;
-using ShareClient.Model;
+﻿using ShareClient.Component.Algorithm;
+using ShareClient.Component.Connect;
+using ShareClient.Model.Connect;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -9,70 +10,54 @@ namespace ShareClientWpf
 {
     public class ShreClientController : IClientController
     {
-        private readonly object obj = new();
         private bool isDiposed = false;
 
-        private bool isSenderConnect = false;
+        private bool isCancelConnect = false;
         private Connection senderConnection;
-        private ShareClientSender sender;
-        private IConnectionManager senderManager;
+        private ISendAlgorithm sender;
 
-        private bool receiverConnect = false;
+        private bool isCancelAccept = false;
         private Connection receiverConnection;
-        private ShareClientReceiver reciever;
-        private IConnectionManager receiverManager;
+        private IRecieveAlgorithm reciever;
 
         private WindowImageCaputure caputure;
 
         public async Task<bool> AcceptAsync(int port, Func<IPEndPoint, ConnectionData, ConnectionResponse> acceptCallback)
         {
             ThrowIfDisposed();
-            lock (obj)
-            {
-                if (receiverConnect)
-                {
-                    throw new Exception($"Already Run Connecting.");
-                }
-                receiverConnect = true;
-            }
 
-            try
-            {
-
-                receiverManager = new ConnectionManager();
-                receiverConnection = await receiverManager.AcceptAsync(new IPEndPoint(IPAddress.Any, port), acceptCallback);
-            }
-            finally
-            {
-                receiverManager.Dispose();
-                receiverConnect = false;
-            }
+            isCancelAccept = false;
+            receiverConnection = await Task.Run(() => Connection.Builder()
+                                                                .SetCancellation(() => isCancelAccept)
+                                                                .SetAcceptRequest(acceptCallback)
+                                                                .Accept(new IPEndPoint(IPAddress.Any, port)));
 
             return receiverConnection != null;
         }
 
-
         public async Task ReceiveWindowAsync(Action<ImageSource> pushImage)
         {
             ThrowIfDisposed();
+
             if (receiverConnection == null)
             {
                 throw new Exception($"No Accept, Connection is null");
             }
-
-            lock (obj)
+            else if (reciever != null && !reciever.IsClosed)
             {
-                if (reciever != null && reciever.Socket.IsOpen)
-                {
-                    throw new Exception($"Already Run Receiving.");
-                }
-                reciever = new ShareClientReceiver(new ShareClientManager(receiverConnection.ClientSpec), GetSocketAndOpen(receiverConnection),
-                                                    new ReciveImageProvider(pushImage));
+                throw new Exception($"Already Run Receiving.");
             }
 
+            reciever = ShareAlgorithmBuilder.NewBuilder()
+                                            .SetShareClientSpec(receiverConnection.ClientSpec)
+                                            .SetConnectEndoPoint(receiverConnection.RemoteEndPoint)
+                                            .BuildRecieve(receiverConnection.LocalEndPoint);
             try
             {
-                await reciever.ReceiveAsync();
+                await reciever.RecieveAsync((data) =>
+                {
+                    pushImage.Invoke(ImageHelper.Byte2ImageSourse(data));
+                });
             }
             finally
             {
@@ -80,29 +65,14 @@ namespace ShareClientWpf
             }
         }
 
-        public async Task<bool> ConnectAsync(IPEndPoint iPEndPoint, ConnectionData connectionData, Action<ConnectionResponse> connectCallback)
+        public async Task<bool> ConnectAsync(IPEndPoint iPEndPoint, ConnectionData connectionData)
         {
             ThrowIfDisposed();
-            lock (obj)
-            {
-                if (isSenderConnect)
-                {
-                    throw new Exception($"Already Run Connecting.");
-                }
-                isSenderConnect = true;
-            }
 
-            try
-            {
-                senderManager = new ConnectionManager();
-                senderConnection = await senderManager.ConnectAsync(iPEndPoint, connectionData, connectCallback);
-            }
-            finally
-            {
-                senderManager.Dispose();
-                isSenderConnect = false;
-            }
-
+            isCancelConnect = false;
+            senderConnection = await Task.Run(() => Connection.Builder()
+                                                              .SetCancellation(() => isCancelConnect)
+                                                              .Connect(iPEndPoint, connectionData));
             return senderConnection != null;
         }
 
@@ -114,21 +84,28 @@ namespace ShareClientWpf
             {
                 throw new Exception($"No Connect, Connection is null");
             }
-
-            lock (obj)
+            else if (sender != null && !sender.IsClosed)
             {
-                if (sender != null && sender.Socket.IsOpen)
-                {
-                    throw new Exception($"Already Run Sending.");
-                }
-                sender = new ShareClientSender(new ShareClientManager(senderConnection.ClientSpec), GetSocketAndOpen(senderConnection));
+                throw new Exception($"Already Run Sending.");
             }
 
+            sender = ShareAlgorithmBuilder.NewBuilder()
+                                          .SetShareClientSpec(senderConnection.ClientSpec)
+                                          .SetLocalEndoPoint(senderConnection.LocalEndPoint)
+                                          .BuildSend(senderConnection.RemoteEndPoint);
+
             caputure = new WindowImageCaputure(sendContext.WindowInfo.WindowHandle,
-                                                settingContext.SendDelay,
-                                                settingContext.Format,
-                                                settingContext.SendWidth);
-            caputure.CaputureImage += (img) => sender.Send(img);
+                                               settingContext.SendDelay,
+                                               settingContext.Format,
+                                               settingContext.SendWidth);
+
+            caputure.CaputureImage += (img) =>
+            {
+                if (!sender.IsClosed)
+                {
+                    sender.Send(img);
+                }
+            };
 
             try
             {
@@ -142,29 +119,25 @@ namespace ShareClientWpf
 
         public void CancelAccept()
         {
-            receiverConnection = null;
-            receiverManager?.Cancel();
-            receiverConnect = false;
+            isCancelAccept = true;
+        }
+
+        public void CancelConnect()
+        {
+            isCancelConnect = true;
         }
 
         public void CloseReceiveWindow()
         {
             receiverConnection = null;
-            reciever?.Close();
-        }
-
-        public void CancelConnect()
-        {
-            senderConnection = null;
-            senderManager?.Cancel();
-            isSenderConnect = false;
+            reciever?.Dispose();
         }
 
         public void CloseSendWindow()
         {
             senderConnection = null;
             caputure?.Stop();
-            sender?.Close();
+            sender?.Dispose();
         }
 
         private void ThrowIfDisposed()
@@ -175,30 +148,13 @@ namespace ShareClientWpf
             }
         }
 
-        private IClientSocket GetSocketAndOpen(Connection connection)
-        {
-            IClientSocket socket = ShareClientSocket.Udp;
-            try
-            {
-                socket.Open(connection.LocalEndPoint, connection.RemoteEndPoint);
-            }
-            catch
-            {
-                socket.Dispose();
-                throw;
-            }
-
-            return socket;
-        }
-
         public void Dispose()
         {
             isDiposed = true;
-            caputure?.Stop();
-            reciever?.Close();
-            sender?.Close();
-            senderManager?.Cancel();
-            receiverManager?.Cancel();
+            CloseReceiveWindow();
+            CloseSendWindow();
+            CancelAccept();
+            CancelConnect();
         }
     }
 }

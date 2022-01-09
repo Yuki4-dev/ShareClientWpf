@@ -2,7 +2,7 @@
 
 namespace ShareClientWpf
 {
-    public class ReceiveStatusPageViewModel : ModelBase
+    public class RecieveStatusPageViewModel : ModelBase
     {
         private string message;
         public string Message
@@ -39,7 +39,7 @@ namespace ShareClientWpf
             set => SetProperty(ref stopCommand, value);
         }
 
-        public void SetReceiveViewMoelState(ReceiveViewModelState state, ReceiveContext context = null)
+        public void SetReceiveState(ReceiveViewModelState state, ReceiveContext context = null)
         {
             bool stopExecute = false;
             if (state == ReceiveViewModelState.None)

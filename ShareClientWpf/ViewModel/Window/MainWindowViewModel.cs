@@ -1,4 +1,4 @@
-﻿using ShareClient.Model;
+﻿using ShareClient.Model.Connect;
 using System;
 using System.Drawing.Imaging;
 using System.Text;
@@ -10,11 +10,11 @@ namespace ShareClientWpf
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private readonly Profile profile = new();
+        private readonly Profile profile = new Profile();
+        private SettingContext settingContext = new SettingContext();
         private readonly IClientController clientController = new ShreClientController();
-        private SettingContext settingContext = new();
-        private readonly SendStatusPageViewModel sendStatusPageViewModel = new();
-        private readonly ReceiveStatusPageViewModel receuveStatusPageViewModel = new();
+        private readonly SendStatusPageViewModel sendStatusPageViewModel = new SendStatusPageViewModel();
+        private readonly RecieveStatusPageViewModel recieveStatusPageViewModel = new RecieveStatusPageViewModel();
 
         private ImageSource source;
         public ImageSource Source
@@ -63,9 +63,9 @@ namespace ShareClientWpf
             };
 
             sendStatusPageViewModel.StopCommand = new Command(StopSendExecute);
-            sendStatusPageViewModel.SetSendViewMoelState(SendViewModelState.None);
-            receuveStatusPageViewModel.StopCommand = new Command(StopReceiveExecute);
-            receuveStatusPageViewModel.SetReceiveViewMoelState(ReceiveViewModelState.None);
+            sendStatusPageViewModel.SetSendState(SendViewModelState.None);
+            recieveStatusPageViewModel.StopCommand = new Command(StopReceiveExecute);
+            recieveStatusPageViewModel.SetReceiveState(ReceiveViewModelState.None);
 
             RightPageContent = sendStatusPageViewModel;
 
@@ -78,11 +78,13 @@ namespace ShareClientWpf
 #endif
         }
 
-        public MainWindowViewModel(IClientController controller, SettingContext context, Profile profile) : this()
+        public MainWindowViewModel(IClientController clientController,
+                                   SendStatusPageViewModel sendStatusPageViewModel,
+                                   RecieveStatusPageViewModel receiveStatusPageViewModel) : this()
         {
-            clientController = controller;
-            settingContext = context;
-            this.profile = profile;
+            this.clientController = clientController;
+            this.sendStatusPageViewModel = sendStatusPageViewModel;
+            this.recieveStatusPageViewModel = receiveStatusPageViewModel;
         }
 
         private void SelectExecute(object parameter)
@@ -93,7 +95,7 @@ namespace ShareClientWpf
             }
             else
             {
-                RightPageContent = receuveStatusPageViewModel;
+                RightPageContent = recieveStatusPageViewModel;
             }
         }
 
@@ -121,19 +123,19 @@ namespace ShareClientWpf
                 }
             }
 
-            sendStatusPageViewModel.SetSendViewMoelState(SendViewModelState.None);
+            sendStatusPageViewModel.SetSendState(SendViewModelState.None);
             HeaderCommands.SendCommand.CanExecuteValue = true;
         }
 
         private async Task SendWindow(SendContext context)
         {
-            sendStatusPageViewModel.SetSendViewMoelState(SendViewModelState.Connect, context);
+            sendStatusPageViewModel.SetSendState(SendViewModelState.Connect, context);
 
             var data = new ConnectionData(new(), Encoding.UTF8.GetBytes(profile.GetJsonString()));
-            var isConnected = await clientController.ConnectAsync(context.IPEndPoint, data, null);
+            var isConnected = await clientController.ConnectAsync(context.IPEndPoint, data);
             if (isConnected)
             {
-                sendStatusPageViewModel.SetSendViewMoelState(SendViewModelState.Sending, context);
+                sendStatusPageViewModel.SetSendState(SendViewModelState.Sending, context);
                 await clientController.SendWindowAsync(context, settingContext);
             }
         }
@@ -157,7 +159,7 @@ namespace ShareClientWpf
                 ReceiveContext context = null;
                 try
                 {
-                    receuveStatusPageViewModel.SetReceiveViewMoelState(ReceiveViewModelState.Accept);
+                    recieveStatusPageViewModel.SetReceiveState(ReceiveViewModelState.Accept);
                     context = await AcceptAsync((int)paramater);
                 }
                 catch (Exception ex)
@@ -169,7 +171,7 @@ namespace ShareClientWpf
                 {
                     try
                     {
-                        receuveStatusPageViewModel.SetReceiveViewMoelState(ReceiveViewModelState.Receiving, context);
+                        recieveStatusPageViewModel.SetReceiveState(ReceiveViewModelState.Receiving, context);
                         await clientController.ReceiveWindowAsync((img) => Source = img);
                     }
                     catch (Exception ex)
@@ -178,7 +180,7 @@ namespace ShareClientWpf
                     }
                 }
 
-                receuveStatusPageViewModel.SetReceiveViewMoelState(ReceiveViewModelState.None);
+                recieveStatusPageViewModel.SetReceiveState(ReceiveViewModelState.None);
                 HeaderCommands.RecieveCommand.CanExecuteValue = true;
             });
         }
@@ -200,7 +202,7 @@ namespace ShareClientWpf
                 {
                     context = null;
                 }
-                return new ConnectionResponse(reqConnect, new(data.CleintSpec));
+                return new ConnectionResponse(reqConnect, new ConnectionData(data.CleintSpec));
             });
 
             return context;

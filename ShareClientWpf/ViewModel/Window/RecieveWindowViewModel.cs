@@ -12,9 +12,9 @@ namespace ShareClientWpf
         {
             get => portText;
             set => SetProperty(ref portText,
-                                value,
-                                IntValidate<string>((_) => Message = "Portには数字を入れてください。"),
-                                () => Message = "");
+                               value,
+                               IntValidate<string>((_) => Message = "Portには数字を入れてください。"),
+                               () => Message = "");
         }
 
         private string message;

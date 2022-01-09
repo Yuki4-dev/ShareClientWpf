@@ -28,7 +28,7 @@
                 <local:SendStatusPage />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type local:ReceiveStatusPageViewModel}">
+            <DataTemplate DataType="{x:Type local:RecieveStatusPageViewModel}">
                 <local:ReceiveStatusPage />
             </DataTemplate>
 
