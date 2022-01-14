@@ -57,7 +57,7 @@ namespace ShareClientWpf
                 vm.ShowWindow += ShowWindow;
                 vm.ShowCommonDialog += ShowCommonDialog;
                 vm.CloseWindow += CloseWindow;
-                Closing += (s, e) => e.Cancel = vm.PostProcces();
+                Closing += WindowBase_Closing;
 
                 vm.LoadedProcess(paramater, executeCallback);
             }
@@ -71,7 +71,15 @@ namespace ShareClientWpf
                 vm.ShowWindow -= ShowWindow;
                 vm.ShowCommonDialog -= ShowCommonDialog;
                 vm.CloseWindow -= CloseWindow;
-                Closing -= (s, e) => e.Cancel = vm.PostProcces();
+                Closing -= WindowBase_Closing;
+            }
+        }
+
+        private void WindowBase_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (DataContext is ViewModelBase vm)
+            {
+                e.Cancel = vm.PostProcces();
             }
         }
 
