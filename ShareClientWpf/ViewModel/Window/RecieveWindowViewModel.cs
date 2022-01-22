@@ -24,12 +24,7 @@ namespace ShareClientWpf
             set => SetProperty(ref message, value);
         }
 
-        private ICommand recieveCommand;
-        public ICommand RecieveCommand
-        {
-            get => recieveCommand;
-            set => SetProperty(ref recieveCommand, value);
-        }
+        public ICommand RecieveCommand { get; }
 
         public RecieveWindowViewModel()
         {

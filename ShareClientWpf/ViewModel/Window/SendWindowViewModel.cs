@@ -48,19 +48,9 @@ namespace ShareClientWpf
             set => SetProperty(ref message, value);
         }
 
-        private ICommand selectedCommand;
-        public ICommand SelectedCommand
-        {
-            get => selectedCommand;
-            set => SetProperty(ref selectedCommand, value);
-        }
+        public ICommand SelectedCommand { get; }
 
-        private ICommand sendCommand;
-        public ICommand SendCommand
-        {
-            get => sendCommand;
-            set => SetProperty(ref sendCommand, value);
-        }
+        public ICommand SendCommand { get; }
 
         public SendWindowViewModel()
         {

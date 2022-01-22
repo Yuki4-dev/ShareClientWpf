@@ -22,19 +22,9 @@ namespace ShareClientWpf
             set => SetProperty(ref message, value);
         }
 
-        private ICommand clearCommand;
-        public ICommand ClearCommand
-        {
-            get => clearCommand;
-            set => SetProperty(ref clearCommand, value);
-        }
+        public ICommand ClearCommand { get; }
 
-        private ICommand selectCommand;
-        public ICommand SelectCommand
-        {
-            get => selectCommand;
-            set => SetProperty(ref selectCommand, value);
-        }
+        public ICommand SelectCommand { get; }
 
         public ProfileWindowViewModel()
         {

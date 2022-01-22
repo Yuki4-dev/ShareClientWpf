@@ -4,6 +4,7 @@ using System.Drawing.Imaging;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace ShareClientWpf
@@ -23,13 +24,6 @@ namespace ShareClientWpf
             set => SetProperty(ref source, value);
         }
 
-        private HeaderMenuCommands headerCommands;
-        public HeaderMenuCommands HeaderCommands
-        {
-            get => headerCommands;
-            set => SetProperty(ref headerCommands, value);
-        }
-
         private ModelBase rightPageContent;
         public ModelBase RightPageContent
         {
@@ -37,19 +31,9 @@ namespace ShareClientWpf
             set => SetProperty(ref rightPageContent, value);
         }
 
-        private Command selectedCommand;
-        public Command SelectedCommand
-        {
-            get => selectedCommand;
-            set => SetProperty(ref selectedCommand, value);
-        }
+        public ICommand SelectedCommand { get; }
 
-        private bool isStatusOpen;
-        public bool IsStatusOpen
-        {
-            get => isStatusOpen;
-            set => SetProperty(ref isStatusOpen, value);
-        }
+        public HeaderMenuCommands HeaderCommands { get; }
 
         public MainWindowViewModel()
         {

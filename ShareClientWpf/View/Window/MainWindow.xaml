@@ -30,7 +30,7 @@
                 <Setter Property="Background" Value="{StaticResource HeaderBackGround}" />
                 <Setter Property="HorizontalAlignment" Value="Right" />
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsStatusOpen, ElementName=ViewModel}" Value="True">
+                    <DataTrigger Binding="{Binding IsChecked, ElementName=StatusToggleButton}" Value="True">
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
                 </Style.Triggers>
@@ -58,7 +58,6 @@
             <ToggleButton
                 x:Name="StatusToggleButton"
                 Content="{StaticResource Status}"
-                IsChecked="{Binding IsStatusOpen, Mode=TwoWay}"
                 Style="{StaticResource IconToggleButtonStyle}">
 
                 <ToggleButton.ToolTip>
