@@ -8,7 +8,6 @@ namespace ShareClientWpf
 {
     public class WindowImageCaputure : IDisposable
     {
-        private readonly object obj = new();
         private readonly IntPtr handle;
         private readonly int delay;
         private readonly int windowWidth;
@@ -41,13 +40,11 @@ namespace ShareClientWpf
 
         public void Start()
         {
-            lock (obj)
+            if (isCaputure)
             {
-                if (isCaputure)
-                    throw new Exception("Do Caputure.");
-
-                isCaputure = true;
+                throw new Exception("Do Caputure.");
             }
+            isCaputure = true;
 
             while (isCaputure)
             {

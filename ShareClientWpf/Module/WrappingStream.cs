@@ -10,11 +10,7 @@ namespace ShareClientWpf
 
         public WrappingStream(Stream streamBase)
         {
-            if (streamBase == null)
-            {
-                throw new ArgumentNullException("streamBase");
-            }
-            m_streamBase = streamBase;
+            m_streamBase = streamBase ?? throw new ArgumentNullException(nameof(streamBase));
         }
 
         public override bool CanRead => m_streamBase.CanRead;
