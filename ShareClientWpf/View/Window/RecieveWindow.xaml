@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:ShareClientWpf"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="受信"
-    IsCasheWindow="True"
+    IsCashedWindow="True"
     Style="{StaticResource DialogWindowStyle}"
     mc:Ignorable="d">
 
@@ -41,7 +41,7 @@
         <StackPanel Grid.Row="2" Style="{StaticResource DialogButtonStackPanelStyle}">
 
             <Button
-                Command="{Binding RecieveCommand}"
+                Command="{Binding ReceiveCommand}"
                 Content="開始"
                 Style="{StaticResource DialogAccentButtonStyle}" />
             <Button Command="{Binding CloseCommand}" Content="キャンセル" />

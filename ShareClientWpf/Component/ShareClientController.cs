@@ -10,7 +10,7 @@ namespace ShareClientWpf
 {
     public class ShareClientController : IClientController
     {
-        private bool isDiposed = false;
+        private bool isDisposed = false;
 
         private bool isCancelConnect = false;
         private Connection senderConnection;
@@ -18,9 +18,9 @@ namespace ShareClientWpf
 
         private bool isCancelAccept = false;
         private Connection receiverConnection;
-        private IRecieveAlgorithm reciever;
+        private IReceiveAlgorithm receiver;
 
-        private WindowImageCaputure caputure;
+        private WindowImageCapture capture;
 
         public async Task<bool> AcceptAsync(int port, Func<IPEndPoint, ConnectionData, ConnectionResponse> acceptCallback)
         {
@@ -43,22 +43,22 @@ namespace ShareClientWpf
             {
                 throw new Exception($"No Accept, Connection is null");
             }
-            else if (reciever != null && !reciever.IsClosed)
+            else if (receiver != null && !receiver.IsClosed)
             {
                 throw new Exception($"Already Run Receiving.");
             }
 
-            reciever = ShareAlgorithmBuilder.NewBuilder()
+            receiver = ShareAlgorithmBuilder.NewBuilder()
                                             .SetShareClientSpec(receiverConnection.ClientSpec)
                                             .SetConnectEndoPoint(receiverConnection.RemoteEndPoint)
-                                            .BuildRecieve(receiverConnection.LocalEndPoint);
-            reciever.ShareAlgorithmClosed += (_, __) => closed.Invoke();
+                                            .BuildReceive(receiverConnection.LocalEndPoint);
+            receiver.ShareAlgorithmClosed += (_, __) => closed.Invoke();
 
             try
             {
-                await reciever.RecieveAsync((data) =>
+                await receiver.ReceiveAsync((data) =>
                 {
-                    pushImage.Invoke(ImageHelper.Byte2ImageSourse(data));
+                    pushImage.Invoke(ImageHelper.Byte2ImageSource(data));
                 });
             }
             finally
@@ -96,12 +96,12 @@ namespace ShareClientWpf
                                           .SetLocalEndoPoint(senderConnection.LocalEndPoint)
                                           .BuildSend(senderConnection.RemoteEndPoint);
 
-            caputure = new WindowImageCaputure(sendContext.WindowInfo.WindowHandle,
+            capture = new WindowImageCapture(sendContext.WindowInfo.WindowHandle,
                                                settingContext.SendDelay,
                                                settingContext.Format,
                                                settingContext.SendWidth);
 
-            caputure.CaputureImage += (img) =>
+            capture.CaptureImage += (img) =>
             {
                 if (!sender.IsClosed)
                 {
@@ -111,7 +111,7 @@ namespace ShareClientWpf
 
             try
             {
-                await caputure.StartAsync();
+                await capture.StartAsync();
             }
             finally
             {
@@ -132,19 +132,19 @@ namespace ShareClientWpf
         public void CloseReceiveWindow()
         {
             receiverConnection = null;
-            reciever?.Dispose();
+            receiver?.Dispose();
         }
 
         public void CloseSendWindow()
         {
             senderConnection = null;
-            caputure?.Stop();
+            capture?.Stop();
             sender?.Dispose();
         }
 
         private void ThrowIfDisposed()
         {
-            if (isDiposed)
+            if (isDisposed)
             {
                 throw new ObjectDisposedException(GetType().ToString());
             }
@@ -152,7 +152,7 @@ namespace ShareClientWpf
 
         public void Dispose()
         {
-            isDiposed = true;
+            isDisposed = true;
             CloseReceiveWindow();
             CloseSendWindow();
             CancelAccept();

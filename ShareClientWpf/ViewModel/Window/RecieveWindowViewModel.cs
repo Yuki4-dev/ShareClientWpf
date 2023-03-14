@@ -24,11 +24,11 @@ namespace ShareClientWpf
             set => SetProperty(ref message, value);
         }
 
-        public ICommand RecieveCommand { get; }
+        public ICommand ReceiveCommand { get; }
 
         public RecieveWindowViewModel()
         {
-            RecieveCommand = new Command(RecieveExecute);
+            ReceiveCommand = new Command(RecieveExecute);
 #if DEBUG
             PortText = "2002";
 #endif

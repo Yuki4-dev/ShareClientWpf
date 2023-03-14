@@ -11,7 +11,7 @@ namespace ShareClientWpf
 {
     public class ImageHelper
     {
-        public static ImageSource Byte2ImageSourse(byte[] data)
+        public static ImageSource Byte2ImageSource(byte[] data)
         {
             using var ms = new WrappingStream(new MemoryStream(data));
             var bitmap = new BitmapImage();
@@ -42,7 +42,7 @@ namespace ShareClientWpf
         public static ImageSource Image2ImageSource(Image image, ImageFormat format)
         {
             var byteBmp = Image2Byte(image, format);
-            return Byte2ImageSourse(byteBmp);
+            return Byte2ImageSource(byteBmp);
         }
 
         public static bool TryGetWindowImage(IntPtr hWnd, out Image image)

@@ -38,9 +38,9 @@ namespace ShareClientWpf
             });
         }
 
-        public override void LoadedProcess(object paramater, Action<object> executeCallback)
+        public override void LoadedProcess(object parameter, Action<object> executeCallback)
         {
-            Profile = (Profile)paramater;
+            Profile = (Profile)parameter;
         }
 
         private async void SelectExecute()

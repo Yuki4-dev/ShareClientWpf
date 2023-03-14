@@ -38,7 +38,7 @@
             <Grid Width="150" Margin="{StaticResource IndentMargin}">
 
                 <TextBlock Text="{Binding WindowInfo.Title}" />
-                <Image Source="{Binding WindowInfo.WindowHandle, Converter={StaticResource WindowHandleConveter}, ConverterParameter=150}" />
+                <Image Source="{Binding WindowInfo.WindowHandle, Converter={StaticResource WindowHandleConverter}, ConverterParameter=150}" />
             </Grid>
 
             <TextBlock Text="送信バイトサイズ" />

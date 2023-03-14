@@ -30,7 +30,7 @@ namespace ShareClientWpf
 
         private void WindowBase_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            ClearCasheWindow();
+            ClearCashedWindow();
         }
     }
 }

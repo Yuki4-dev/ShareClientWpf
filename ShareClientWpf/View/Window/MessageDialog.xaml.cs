@@ -38,9 +38,9 @@ namespace ShareClientWpf
 
         private void StackPanel_Click(object sender, RoutedEventArgs e)
         {
-            if (e.Source is Button clickButtonn)
+            if (e.Source is Button clickButton)
             {
-                result = results[button][int.Parse(clickButtonn.Tag.ToString())];
+                result = results[button][int.Parse(clickButton.Tag.ToString())];
                 Close();
             }
         }

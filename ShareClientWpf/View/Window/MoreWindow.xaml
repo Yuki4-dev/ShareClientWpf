@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:ShareClientWpf"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="設定"
-    IsCasheWindow="True"
+    IsCashedWindow="True"
     Style="{StaticResource DialogWindowStyle}"
     mc:Ignorable="d">
 

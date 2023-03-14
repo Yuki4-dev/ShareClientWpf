@@ -62,7 +62,7 @@ namespace ShareClientWpf
 #endif
         }
 
-        public override void LoadedProcess(object paramater, Action<object> executeCallback)
+        public override void LoadedProcess(object parameter, Action<object> executeCallback)
         {
             callback = executeCallback;
             LoadWindows();

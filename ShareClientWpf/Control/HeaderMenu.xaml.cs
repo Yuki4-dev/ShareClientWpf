@@ -38,11 +38,11 @@ namespace ShareClientWpf
             set => SetProperty(ref sendCommand, value);
         }
 
-        private Command recieveCommand;
-        public Command RecieveCommand
+        private Command receiveCommand;
+        public Command ReceiveCommand
         {
-            get => recieveCommand;
-            set => SetProperty(ref recieveCommand, value);
+            get => receiveCommand;
+            set => SetProperty(ref receiveCommand, value);
         }
 
         private Command moreCommand;

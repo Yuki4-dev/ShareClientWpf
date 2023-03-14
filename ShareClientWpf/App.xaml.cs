@@ -14,7 +14,7 @@ namespace ShareClientWpf
     {
     }
 
-    public class WindowHandleConveter : IValueConverter
+    public class WindowHandleConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -42,8 +42,8 @@ namespace ShareClientWpf
             {
                 if (ImageHelper.TryGetWindowImage(handle, out var image))
                 {
-                    var resizeImagep = ImageHelper.ResizeImage(image, width);
-                    imageSrc = ImageHelper.Byte2ImageSourse(ImageHelper.Image2Byte(resizeImagep, ImageFormat.Jpeg));
+                    var resizeImage = ImageHelper.ResizeImage(image, width);
+                    imageSrc = ImageHelper.Byte2ImageSource(ImageHelper.Image2Byte(resizeImage, ImageFormat.Jpeg));
                 }
             }
             else if (ImageHelper.TryGetWindowImageSource(handle, out var image))

@@ -49,13 +49,13 @@ namespace ShareClientWpf
         public static readonly DependencyProperty TabBrushProperty =
             DependencyProperty.Register(nameof(TabBrush), typeof(Brush), typeof(CustomScrollViewer), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(128, 255, 255, 255))));
 
-        public double TabRedius
+        public double TabRadius
         {
-            get => (double)GetValue(TabRediusProperty);
-            set => SetValue(TabRediusProperty, value);
+            get => (double)GetValue(TabRadiusProperty);
+            set => SetValue(TabRadiusProperty, value);
         }
-        public static readonly DependencyProperty TabRediusProperty =
-            DependencyProperty.Register(nameof(TabRedius), typeof(double), typeof(CustomScrollViewer), new PropertyMetadata(6.0));
+        public static readonly DependencyProperty TabRadiusProperty =
+            DependencyProperty.Register(nameof(TabRadius), typeof(double), typeof(CustomScrollViewer), new PropertyMetadata(6.0));
 
         public CustomScrollViewer()
         {

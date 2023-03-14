@@ -10,19 +10,19 @@ namespace ShareClientWpf
 {
     public class WindowBase : Window
     {
-        private static readonly Dictionary<Type, WindowBase> casheWindows = new();
+        private static readonly Dictionary<Type, WindowBase> cashedWindows = new();
 
         private double ContentTop => WindowState == WindowState.Maximized ? 0 : Top;
 
         private double ContentLeft => WindowState == WindowState.Maximized ? 0 : Left;
 
-        public bool IsCasheWindow
+        public bool IsCashedWindow
         {
-            get => (bool)GetValue(IsCasheWindowProperty);
-            set => SetValue(IsCasheWindowProperty, value);
+            get => (bool)GetValue(IsCashedWindowProperty);
+            set => SetValue(IsCashedWindowProperty, value);
         }
-        public static readonly DependencyProperty IsCasheWindowProperty =
-            DependencyProperty.Register(nameof(IsCasheWindow), typeof(bool), typeof(WindowBase), new PropertyMetadata(false));
+        public static readonly DependencyProperty IsCashedWindowProperty =
+            DependencyProperty.Register(nameof(IsCashedWindow), typeof(bool), typeof(WindowBase), new PropertyMetadata(false));
 
         public bool IsShowDialog
         {
@@ -49,7 +49,7 @@ namespace ShareClientWpf
             Closed += WindowBase_Closed;
         }
 
-        protected void LoadViewModel(object paramater, Action<object> executeCallback)
+        protected void LoadViewModel(object parameter, Action<object> executeCallback)
         {
             if (DataContext is ViewModelBase vm)
             {
@@ -59,7 +59,7 @@ namespace ShareClientWpf
                 vm.CloseWindow += CloseWindow;
                 Closing += WindowBase_Closing;
 
-                vm.LoadedProcess(paramater, executeCallback);
+                vm.LoadedProcess(parameter, executeCallback);
             }
         }
 
@@ -79,7 +79,7 @@ namespace ShareClientWpf
         {
             if (DataContext is ViewModelBase vm)
             {
-                e.Cancel = vm.PostProcces();
+                e.Cancel = vm.PostProcess();
             }
         }
 
@@ -88,14 +88,14 @@ namespace ShareClientWpf
             return await Dispatcher.InvokeAsync(() => MessageDialog.Show(Title, arg1, arg2));
         }
 
-        protected virtual async Task ShowWindow(Type windowType, bool isModal, object paramater, Action<object> callback)
+        protected virtual async Task ShowWindow(Type windowType, bool isModal, object parameter, Action<object> callback)
         {
             await Dispatcher.InvokeAsync(() =>
             {
                 Window window;
-                if (casheWindows.ContainsKey(windowType))
+                if (cashedWindows.ContainsKey(windowType))
                 {
-                    window = casheWindows[windowType];
+                    window = cashedWindows[windowType];
                 }
                 else
                 {
@@ -104,15 +104,15 @@ namespace ShareClientWpf
 
                 if (window is WindowBase windowBase)
                 {
-                    if (windowBase.IsCasheWindow)
+                    if (windowBase.IsCashedWindow)
                     {
-                        if (!casheWindows.ContainsKey(windowType))
+                        if (!cashedWindows.ContainsKey(windowType))
                         {
-                            casheWindows[windowType] = windowBase;
+                            cashedWindows[windowType] = windowBase;
                         }
                     }
 
-                    windowBase.LoadViewModel(paramater, callback);
+                    windowBase.LoadViewModel(parameter, callback);
                 }
 
                 window.WindowStartupLocation = WindowStartupLocation.Manual;
@@ -132,7 +132,7 @@ namespace ShareClientWpf
             });
         }
 
-        private async Task<bool> ShowCommonDialog(Type dialogType, Action<CommonDialog> preCallback, Action<CommonDialog> sucessCallback)
+        private async Task<bool> ShowCommonDialog(Type dialogType, Action<CommonDialog> preCallback, Action<CommonDialog> successCallback)
         {
             return await Dispatcher.InvokeAsync(() =>
             {
@@ -145,7 +145,7 @@ namespace ShareClientWpf
 
                 if (result)
                 {
-                    sucessCallback?.Invoke(dialog);
+                    successCallback?.Invoke(dialog);
                 }
 
                 return result;
@@ -154,7 +154,7 @@ namespace ShareClientWpf
 
         protected virtual bool CloseWindow()
         {
-            if (IsCasheWindow)
+            if (IsCashedWindow)
             {
                 Hide();
             }
@@ -171,12 +171,12 @@ namespace ShareClientWpf
 
         private void WindowBase_Closed(object sender, EventArgs e)
         {
-            casheWindows.Remove(GetType());
+            cashedWindows.Remove(GetType());
         }
 
-        protected static void ClearCasheWindow()
+        protected static void ClearCashedWindow()
         {
-            casheWindows.Values.ToList().ForEach((x) =>
+            cashedWindows.Values.ToList().ForEach((x) =>
             {
                 try
                 {
@@ -184,7 +184,7 @@ namespace ShareClientWpf
                 }
                 catch { }
             });
-            casheWindows.Clear();
+            cashedWindows.Clear();
         }
     }
 }

@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace ShareClientWpf
 {
-    public class WindowImageCaputure : IDisposable
+    public class WindowImageCapture : IDisposable
     {
         private readonly IntPtr handle;
         private readonly int delay;
         private readonly int windowWidth;
         private readonly ImageFormat format;
-        private bool isCaputure = false;
+        private bool isCapture = false;
 
-        public event Action<byte[]> CaputureImage;
+        public event Action<byte[]> CaptureImage;
 
-        public WindowImageCaputure(IntPtr hmdl, int delay, ImageFormat format, int windowWidth = 0)
+        public WindowImageCapture(IntPtr hmdl, int delay, ImageFormat format, int windowWidth = 0)
         {
             this.handle = hmdl;
             this.delay = delay;
@@ -24,7 +24,7 @@ namespace ShareClientWpf
             this.format = format;
         }
 
-        public void Caputure()
+        public void Capture()
         {
             if (ImageHelper.TryGetWindowImage(handle, out Image image))
             {
@@ -33,22 +33,22 @@ namespace ShareClientWpf
                     image = ImageHelper.ResizeImage(image, windowWidth);
                 }
 
-                CaputureImage?.Invoke(ImageHelper.Image2Byte(image, format));
+                CaptureImage?.Invoke(ImageHelper.Image2Byte(image, format));
                 image.Dispose();
             }
         }
 
         public void Start()
         {
-            if (isCaputure)
+            if (isCapture)
             {
-                throw new Exception("Do Caputure.");
+                throw new Exception("Do Capture.");
             }
-            isCaputure = true;
+            isCapture = true;
 
-            while (isCaputure)
+            while (isCapture)
             {
-                Caputure();
+                Capture();
                 Thread.Sleep(delay);
             }
         }
@@ -60,7 +60,7 @@ namespace ShareClientWpf
 
         public void Stop()
         {
-            isCaputure = false;
+            isCapture = false;
         }
 
         public void Dispose()

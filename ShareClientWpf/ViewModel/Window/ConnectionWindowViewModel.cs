@@ -20,18 +20,18 @@ namespace ShareClientWpf
             set => SetProperty(ref connectText, value);
         }
 
-        public override void LoadedProcess(object paramater, Action<object> executeCallback)
+        public override void LoadedProcess(object parameter, Action<object> executeCallback)
         {
             callback = executeCallback;
-            var context = (ReceiveContext)paramater;
+            var context = (ReceiveContext)parameter;
             ConnectText = context.IPEndPoint.Address.ToString();
             Profile = context.Profile;
         }
 
-        protected override void CloseExecute(object paramater)
+        protected override void CloseExecute(object parameter)
         {
-            callback.Invoke(paramater.ToString().Equals("1"));
-            base.CloseExecute(paramater);
+            callback.Invoke(parameter.ToString().Equals("1"));
+            base.CloseExecute(parameter);
         }
     }
 }

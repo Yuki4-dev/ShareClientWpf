@@ -2,7 +2,7 @@
 
 namespace ShareClientWpf
 {
-    public class RecieveStatusPageViewModel : ModelBase
+    public class ReceiveStatusPageViewModel : ModelBase
     {
         private string message;
         public string Message

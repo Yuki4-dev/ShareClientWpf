@@ -22,13 +22,13 @@
             <GridLength x:Key="DialogRowHeight">40</GridLength>
 
             <local:IconSizeConverter x:Key="IconConverter" />
-            <local:WindowHandleConveter x:Key="WindowHandleConveter" />
+            <local:WindowHandleConverter x:Key="WindowHandleConverter" />
 
             <DataTemplate DataType="{x:Type local:SendStatusPageViewModel}">
                 <local:SendStatusPage />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type local:RecieveStatusPageViewModel}">
+            <DataTemplate DataType="{x:Type local:ReceiveStatusPageViewModel}">
                 <local:ReceiveStatusPage />
             </DataTemplate>
 

@@ -20,12 +20,12 @@ namespace ShareClientWpf
 
         public string GetJsonString()
         {
-            var josn = new ProfileJson()
+            var json = new ProfileJson()
             {
                 IconImage = this.IconImage,
                 Name = this.Name
             };
-            return JsonSerializer.Serialize(josn);
+            return JsonSerializer.Serialize(json);
         }
 
         public static Profile FromJson(string jsonString)

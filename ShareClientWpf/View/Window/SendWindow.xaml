@@ -8,7 +8,7 @@
     Title="送信"
     Width="800"
     Height="450"
-    IsCasheWindow="True"
+    IsCashedWindow="True"
     Style="{StaticResource DialogWindowStyle}"
     mc:Ignorable="d">
 
@@ -88,7 +88,7 @@
                             <Image
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
-                                Source="{Binding WindowHandle, Converter={StaticResource WindowHandleConveter}, ConverterParameter=150}"
+                                Source="{Binding WindowHandle, Converter={StaticResource WindowHandleConverter}, ConverterParameter=150}"
                                 Stretch="Fill" />
 
                             <TextBlock

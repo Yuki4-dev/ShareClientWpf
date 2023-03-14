@@ -34,29 +34,29 @@ namespace ShareClientWpf
             CloseCommand = new Command(CloseExecute);
         }
 
-        protected virtual void CloseExecute(object paramater)
+        protected virtual void CloseExecute(object parameter)
         {
             OnCloseWindow();
         }
 
-        public virtual void LoadedProcess(object paramater, Action<object> executeCallback)
+        public virtual void LoadedProcess(object parameter, Action<object> executeCallback)
         {
             return;
         }
 
-        public virtual bool PostProcces()
+        public virtual bool PostProcess()
         {
             return false;
         }
 
-        protected Task OnShowWindow(Type windowType, bool isModal = true, object paramater = null, Action<object> executeCall = null)
+        protected Task OnShowWindow(Type windowType, bool isModal = true, object parameter = null, Action<object> executeCall = null)
         {
-            return ShowWindow?.Invoke(windowType, isModal, paramater, executeCall) ?? Task.CompletedTask;
+            return ShowWindow?.Invoke(windowType, isModal, parameter, executeCall) ?? Task.CompletedTask;
         }
 
-        protected Task<bool> OnShowCommonDialog(Type dialogType, Action<CommonDialog> preCallback = null, Action<CommonDialog> succesCallback = null)
+        protected Task<bool> OnShowCommonDialog(Type dialogType, Action<CommonDialog> preCallback = null, Action<CommonDialog> successCallback = null)
         {
-            return ShowCommonDialog?.Invoke(dialogType, preCallback, succesCallback) ?? Task.FromResult(false);
+            return ShowCommonDialog?.Invoke(dialogType, preCallback, successCallback) ?? Task.FromResult(false);
         }
 
         protected Task<MessageBoxResult> OnShowMessageBox(string msg, MessageBoxButton button = MessageBoxButton.OK)

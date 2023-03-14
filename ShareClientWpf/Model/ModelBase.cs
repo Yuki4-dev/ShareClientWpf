@@ -28,15 +28,15 @@ namespace ShareClientWpf
             }
         }
 
-        protected void SetProperty<T>(ref T prop, T value, Func<T, T, bool> valiedate, Action postCallMethod = null, [CallerMemberName] string name = "")
+        protected void SetProperty<T>(ref T prop, T value, Func<T, T, bool> validate, Action postCallMethod = null, [CallerMemberName] string name = "")
         {
-            SetProperty(ref prop, value, valiedate, postCallMethod != null ? (_) => postCallMethod.Invoke() : null, name);
+            SetProperty(ref prop, value, validate, postCallMethod != null ? (_) => postCallMethod.Invoke() : null, name);
         }
 
-        protected void SetProperty<T>(ref T prop, T value, Func<T, T, bool> valiedate, Action<T> postCallMethod, [CallerMemberName] string name = "")
+        protected void SetProperty<T>(ref T prop, T value, Func<T, T, bool> validate, Action<T> postCallMethod, [CallerMemberName] string name = "")
         {
             if ((!prop?.Equals(value) ?? value != null)
-                && valiedate(prop, value))
+                && validate(prop, value))
             {
                 prop = value;
                 OnPropertyChanged(name);
@@ -59,11 +59,11 @@ namespace ShareClientWpf
             };
         }
 
-        public static Func<T, T, bool> Validate<T>(Func<T, bool> value, Action<T> validateCall, Func<T, bool> oldvalue = null)
+        public static Func<T, T, bool> Validate<T>(Func<T, bool> value, Action<T> validateCall, Func<T, bool> oldValuePredicate = null)
         {
             return (oldValue, newValue) =>
             {
-                var result = value.Invoke(newValue) && (oldvalue?.Invoke(oldValue) ?? true);
+                var result = value.Invoke(newValue) && (oldValuePredicate?.Invoke(oldValue) ?? true);
                 if (!result)
                 {
                     validateCall?.Invoke(newValue);

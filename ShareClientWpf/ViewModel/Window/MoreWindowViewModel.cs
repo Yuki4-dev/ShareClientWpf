@@ -42,19 +42,19 @@ namespace ShareClientWpf
             set => SetProperty(ref message, value);
         }
 
-        public override void LoadedProcess(object paramater, Action<object> executeCallback)
+        public override void LoadedProcess(object parameter, Action<object> executeCallback)
         {
             callback = executeCallback;
-            var context = (SettingContext)paramater;
+            var context = (SettingContext)parameter;
 
             SendDelayText = context.SendDelay.ToString();
             SendWidthText = context.SendWidth.ToString();
             SelectIndex = context.Format != null ? Array.IndexOf(formats, context.Format) : 0;
         }
 
-        protected override void CloseExecute(object paramater)
+        protected override void CloseExecute(object parameter)
         {
-            if (paramater.ToString() == "1")
+            if (parameter.ToString() == "1")
             {
                 var context = new SettingContext()
                 {
