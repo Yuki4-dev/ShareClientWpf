@@ -1,4 +1,5 @@
-﻿using ShareClient.Model.Connect;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using ShareClient.Model.Connect;
 using System;
 using System.Drawing.Imaging;
 using System.Text;
@@ -9,27 +10,20 @@ using System.Windows.Media;
 
 namespace ShareClientWpf
 {
-    public class MainWindowViewModel : ViewModelBase
+    [ObservableObject]
+    public partial class MainWindowViewModel : ViewModelBase
     {
-        private readonly Profile profile = new Profile();
-        private SettingContext settingContext = new SettingContext();
+        private readonly Profile profile = new();
+        private SettingContext settingContext = new();
         private readonly IClientController clientController = new ShareClientController();
-        private readonly SendStatusPageViewModel sendStatusPageViewModel = new SendStatusPageViewModel();
-        private readonly ReceiveStatusPageViewModel receiveStatusPageViewModel = new ReceiveStatusPageViewModel();
+        private readonly SendStatusPageViewModel sendStatusPageViewModel = new();
+        private readonly ReceiveStatusPageViewModel receiveStatusPageViewModel = new();
 
+        [ObservableProperty]
         private ImageSource source;
-        public ImageSource Source
-        {
-            get => source;
-            set => SetProperty(ref source, value);
-        }
 
-        private ModelBase rightPageContent;
-        public ModelBase RightPageContent
-        {
-            get => rightPageContent;
-            set => SetProperty(ref rightPageContent, value);
-        }
+        [ObservableProperty]
+        private object rightPageContent;
 
         public ICommand SelectedCommand { get; }
 

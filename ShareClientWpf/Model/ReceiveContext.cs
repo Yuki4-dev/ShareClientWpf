@@ -1,21 +1,15 @@
-﻿using System.Net;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Net;
 
 namespace ShareClientWpf
 {
-    public class ReceiveContext : ModelBase
+    [ObservableObject]
+    public partial class ReceiveContext
     {
+        [ObservableProperty]
         private IPEndPoint iPEndPoint;
-        public IPEndPoint IPEndPoint
-        {
-            get => iPEndPoint;
-            set => SetProperty(ref iPEndPoint, value);
-        }
 
+        [ObservableProperty]
         private Profile profile;
-        public Profile Profile
-        {
-            get => profile;
-            set => SetProperty(ref profile, value);
-        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace ShareClientWpf
@@ -22,34 +23,19 @@ namespace ShareClientWpf
         }
     }
 
-    public class HeaderMenuCommands : ModelBase
+    [ObservableObject]
+    public partial class HeaderMenuCommands
     {
+        [ObservableProperty]
         private Command profileCommand;
-        public Command ProfileCommand
-        {
-            get => profileCommand;
-            set => SetProperty(ref profileCommand, value);
-        }
 
+        [ObservableProperty]
         private Command sendCommand;
-        public Command SendCommand
-        {
-            get => sendCommand;
-            set => SetProperty(ref sendCommand, value);
-        }
 
+        [ObservableProperty]
         private Command receiveCommand;
-        public Command ReceiveCommand
-        {
-            get => receiveCommand;
-            set => SetProperty(ref receiveCommand, value);
-        }
 
+        [ObservableProperty]
         private Command moreCommand;
-        public Command MoreCommand
-        {
-            get => moreCommand;
-            set => SetProperty(ref moreCommand, value);
-        }
     }
 }

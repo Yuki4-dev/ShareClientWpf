@@ -1,43 +1,25 @@
-﻿using System.Net;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Net;
 
 namespace ShareClientWpf
 {
-    public class ReceiveStatusPageViewModel : ModelBase
+    [ObservableObject]
+    public partial class ReceiveStatusPageViewModel
     {
+        [ObservableProperty]
         private string message;
-        public string Message
-        {
-            get => message;
-            set => SetProperty(ref message, value);
-        }
 
+        [ObservableProperty]
         private IPEndPoint iPEndPoint;
-        public IPEndPoint IPEndPoint
-        {
-            get => iPEndPoint;
-            set => SetProperty(ref iPEndPoint, value);
-        }
 
+        [ObservableProperty]
         private Profile profile;
-        public Profile Profile
-        {
-            get => profile;
-            set => SetProperty(ref profile, value);
-        }
 
+        [ObservableProperty]
         private string byteSizeText;
-        public string ByteSizeText
-        {
-            get => byteSizeText;
-            set => SetProperty(ref byteSizeText, value);
-        }
 
+        [ObservableProperty]
         private Command stopCommand;
-        public Command StopCommand
-        {
-            get => stopCommand;
-            set => SetProperty(ref stopCommand, value);
-        }
 
         public void SetReceiveState(ReceiveViewModelState state, ReceiveContext context = null)
         {

@@ -1,21 +1,15 @@
-﻿using System.Net;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Net;
 
 namespace ShareClientWpf
 {
-    public class SendContext : ModelBase
+    [ObservableObject]
+    public partial class SendContext
     {
+        [ObservableProperty]
         private IPEndPoint iPEndPoint;
-        public IPEndPoint IPEndPoint
-        {
-            get => iPEndPoint;
-            set => SetProperty(ref iPEndPoint, value);
-        }
 
+        [ObservableProperty]
         private WindowInfo windowInfo;
-        public WindowInfo WindowInfo
-        {
-            get => windowInfo;
-            set => SetProperty(ref windowInfo, value);
-        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -8,44 +9,54 @@ using System.Windows.Input;
 
 namespace ShareClientWpf
 {
-    public class SendWindowViewModel : ViewModelBase
+
+    [ObservableObject]
+    public partial class SendWindowViewModel : ViewModelBase
     {
         private Action<object> callback;
 
         public ICollection<WindowInfo> WindowInfos { get; } = new ObservableCollection<WindowInfo>();
 
+        [ObservableProperty]
         private WindowInfo selectWindowInfo;
-        public WindowInfo SelectWindowInfo
-        {
-            get => selectWindowInfo;
-            set => SetProperty(ref selectWindowInfo, value);
-        }
+
+        [ObservableProperty]
+        private string message;
 
         private string ipText;
         public string IpText
         {
             get => ipText;
-            set => SetProperty(ref ipText,
-                               value,
-                               Validate<string>((_) => IPAddress.TryParse(value, out var __), (_) => Message = "有効なIPを入力してください。"),
-                               () => Message = "");
+            set
+            {
+                if (IPAddress.TryParse(value, out var _))
+                {
+                    Message = "";
+                    SetProperty(ref ipText, value);
+                }
+                else
+                {
+                    Message = "有効なIPを入力してください。";
+                }
+            }
         }
 
         private string portText;
         public string PortText
         {
             get => portText;
-            set => SetProperty(ref portText,
-                               value,
-                               IntValidate<string>((_) => Message = "Portには数字を入れてください。"),
-                               () => Message = "");
-        }
-
-        private string message;
-        public string Message
-        {
-            get => message;
-            set => SetProperty(ref message, value);
+            set
+            {
+                if (int.TryParse(value, out var _))
+                {
+                    Message = "";
+                    SetProperty(ref portText, value);
+                }
+                else
+                {
+                    Message = "Portには数字を入れてください。";
+                }
+            }
         }
 
         public ICommand SelectedCommand { get; }

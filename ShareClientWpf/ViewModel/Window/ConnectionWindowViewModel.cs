@@ -1,24 +1,18 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 
 namespace ShareClientWpf
 {
-    public class ConnectionWindowViewModel : ViewModelBase
+    [ObservableObject]
+    public partial class ConnectionWindowViewModel : ViewModelBase
     {
         private Action<object> callback;
 
+        [ObservableProperty]
         private Profile profile;
-        public Profile Profile
-        {
-            get => profile;
-            set => SetProperty(ref profile, value);
-        }
 
+        [ObservableProperty]
         private string connectText;
-        public string ConnectText
-        {
-            get => connectText;
-            set => SetProperty(ref connectText, value);
-        }
 
         public override void LoadedProcess(object parameter, Action<object> executeCallback)
         {

@@ -1,43 +1,25 @@
-﻿using System.Net;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Net;
 
 namespace ShareClientWpf
 {
-    public class SendStatusPageViewModel : ModelBase
+    [ObservableObject]
+    public partial class SendStatusPageViewModel
     {
+        [ObservableProperty]
         private string message;
-        public string Message
-        {
-            get => message;
-            set => SetProperty(ref message, value);
-        }
 
+        [ObservableProperty]
         private WindowInfo windowInfo;
-        public WindowInfo WindowInfo
-        {
-            get => windowInfo;
-            set => SetProperty(ref windowInfo, value);
-        }
 
+        [ObservableProperty]
         private IPEndPoint iPEndPoint;
-        public IPEndPoint IPEndPoint
-        {
-            get => iPEndPoint;
-            set => SetProperty(ref iPEndPoint, value);
-        }
 
+        [ObservableProperty]
         private string byteSizeText;
-        public string ByteSizeText
-        {
-            get => byteSizeText;
-            set => SetProperty(ref byteSizeText, value);
-        }
 
+        [ObservableProperty]
         private Command stopCommand;
-        public Command StopCommand
-        {
-            get => stopCommand;
-            set => SetProperty(ref stopCommand, value);
-        }
 
         public void SetSendState(SendViewModelState state, SendContext context = null)
         {

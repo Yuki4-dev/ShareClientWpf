@@ -1,22 +1,16 @@
-﻿using System.Text.Json;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Text.Json;
 
 namespace ShareClientWpf
 {
-    public class Profile : ModelBase
+    [ObservableObject]
+    public partial class Profile
     {
+        [ObservableProperty]
         private byte[] iconImage;
-        public byte[] IconImage
-        {
-            get => iconImage;
-            set => SetProperty(ref iconImage, value);
-        }
 
+        [ObservableProperty]
         private string name;
-        public string Name
-        {
-            get => name;
-            set => SetProperty(ref name, value);
-        }
 
         public string GetJsonString()
         {

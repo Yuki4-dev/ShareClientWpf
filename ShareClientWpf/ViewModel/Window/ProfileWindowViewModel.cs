@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Win32;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -6,21 +7,14 @@ using System.Windows.Input;
 
 namespace ShareClientWpf
 {
-    public class ProfileWindowViewModel : ViewModelBase
+    [ObservableObject]
+    public partial class ProfileWindowViewModel : ViewModelBase
     {
+        [ObservableProperty]
         private Profile profile;
-        public Profile Profile
-        {
-            get => profile;
-            set => SetProperty(ref profile, value);
-        }
 
+        [ObservableProperty]
         private string message;
-        public string Message
-        {
-            get => message;
-            set => SetProperty(ref message, value);
-        }
 
         public ICommand ClearCommand { get; }
 
@@ -28,7 +22,7 @@ namespace ShareClientWpf
 
         public ProfileWindowViewModel()
         {
-            SelectCommand = new Command(SelectExecute);
+            SelectCommand = new Command(SelectExecuteAsync);
             ClearCommand = new Command(() =>
             {
                 if (Profile != null)
@@ -43,7 +37,7 @@ namespace ShareClientWpf
             Profile = (Profile)parameter;
         }
 
-        private async void SelectExecute()
+        private async void SelectExecuteAsync()
         {
             await OnShowCommonDialog(typeof(OpenFileDialog), (dialog) =>
             {

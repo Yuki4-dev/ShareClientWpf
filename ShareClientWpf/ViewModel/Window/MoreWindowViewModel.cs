@@ -1,45 +1,55 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Drawing.Imaging;
 
 namespace ShareClientWpf
 {
-    public class MoreWindowViewModel : ViewModelBase
+    [ObservableObject]
+    public partial class MoreWindowViewModel : ViewModelBase
     {
         private Action<object> callback;
         private readonly ImageFormat[] formats = new ImageFormat[] { ImageFormat.Jpeg, ImageFormat.Png, ImageFormat.Gif };
 
+        [ObservableProperty]
         private int selectIndex;
-        public int SelectIndex
-        {
-            get => selectIndex;
-            set => SetProperty(ref selectIndex, value);
-        }
+
+        [ObservableProperty]
+        private string message;
 
         private string sendDelayText;
         public string SendDelayText
         {
             get => sendDelayText;
-            set => SetProperty(ref sendDelayText,
-                               value,
-                               IntValidate<string>((_) => Message = "送信間隔には数字を入れてください。"),
-                               () => Message = "");
+            set
+            {
+                if (int.TryParse(value, out var _))
+                {
+                    Message = "";
+                    SetProperty(ref sendDelayText, value);
+                }
+                else
+                {
+                    Message = "送信間隔には数字を入れてください。";
+                }
+            }
         }
 
         private string sendWidthText;
         public string SendWidthText
         {
             get => sendWidthText;
-            set => SetProperty(ref sendWidthText,
-                               value,
-                               IntValidate<string>((_) => Message = "画面幅には数字を入れてください。"),
-                               () => Message = "");
-        }
-
-        private string message;
-        public string Message
-        {
-            get => message;
-            set => SetProperty(ref message, value);
+            set
+            {
+                if (int.TryParse(value, out var _))
+                {
+                    Message = "";
+                    SetProperty(ref sendWidthText, value);
+                }
+                else
+                {
+                    Message = "画面幅には数字を入れてください。";
+                }
+            }
         }
 
         public override void LoadedProcess(object parameter, Action<object> executeCallback)

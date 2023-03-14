@@ -6,28 +6,14 @@ using System.Windows.Input;
 
 namespace ShareClientWpf
 {
-    public class ViewModelBase : ModelBase
+    public class ViewModelBase
     {
         public event Func<string, MessageBoxButton, Task<MessageBoxResult>> ShowMessageBox;
         public event Func<Type, bool, object, Action<object>, Task> ShowWindow;
         public event Func<Type, Action<CommonDialog>, Action<CommonDialog>, Task<bool>> ShowCommonDialog;
         public event Func<bool> CloseWindow;
 
-        private bool isBusy;
-        public bool IsBusy
-        {
-            get => isBusy;
-            set => SetProperty(ref isBusy, value, () => OnPropertyChanged(nameof(IsNotBusy)));
-        }
-
-        public bool IsNotBusy => !IsBusy;
-
-        private ICommand closeCommand;
-        public ICommand CloseCommand
-        {
-            get => closeCommand;
-            set => SetProperty(ref closeCommand, value);
-        }
+        public ICommand CloseCommand { get; }
 
         public ViewModelBase()
         {
