@@ -23,7 +23,7 @@
                                 x:Name="ThumbBorder"
                                 Margin="{StaticResource ThumbThickness}"
                                 Background="{Binding TabBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomScrollViewer}}"
-                                CornerRadius="{Binding TabRedius, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomScrollViewer}}" />
+                                CornerRadius="{Binding TabRadius, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CustomScrollViewer}}" />
                         </Grid>
                         <ControlTemplate.Triggers>
                             <MultiTrigger>
