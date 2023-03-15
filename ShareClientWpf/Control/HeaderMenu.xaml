@@ -29,7 +29,7 @@
 
             <Button
                 Grid.Row="0"
-                Command="{Binding Path=Commands.ProfileCommand, ElementName=HeaderRoot}"
+                Command="{Binding Path=ProfileCommand, ElementName=HeaderRoot}"
                 Content="{StaticResource Profile}">
 
                 <Button.ToolTip>
@@ -40,7 +40,7 @@
 
             <Button
                 Grid.Row="1"
-                Command="{Binding Commands.SendCommand, ElementName=HeaderRoot}"
+                Command="{Binding SendCommand, ElementName=HeaderRoot}"
                 Content="{StaticResource Send}">
 
                 <Button.ToolTip>
@@ -51,7 +51,7 @@
 
             <Button
                 Grid.Row="2"
-                Command="{Binding Commands.ReceiveCommand, ElementName=HeaderRoot}"
+                Command="{Binding ReceiveCommand, ElementName=HeaderRoot}"
                 Content="{StaticResource Recive}">
 
                 <Button.ToolTip>
@@ -66,7 +66,7 @@
             Grid.Row="1"
             Margin="0,0,0,24"
             VerticalAlignment="Bottom"
-            Command="{Binding Commands.MoreCommand, ElementName=HeaderRoot}"
+            Command="{Binding MoreCommand, ElementName=HeaderRoot}"
             Content="{StaticResource More}">
 
             <Button.ToolTip>

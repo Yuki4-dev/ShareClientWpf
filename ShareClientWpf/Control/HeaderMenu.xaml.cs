@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace ShareClientWpf
 {
@@ -9,33 +10,43 @@ namespace ShareClientWpf
     /// </summary>
     public partial class HeaderMenu : UserControl
     {
-        public HeaderMenuCommands Commands
+        public ICommand ProfileCommand
         {
-            get => (HeaderMenuCommands)GetValue(CommandsProperty);
-            set => SetValue(CommandsProperty, value);
+            get => (ICommand)GetValue(ProfileCommandProperty);
+            set => SetValue(ProfileCommandProperty, value);
         }
-        public static readonly DependencyProperty CommandsProperty =
-            DependencyProperty.Register(nameof(Commands), typeof(HeaderMenuCommands), typeof(HeaderMenu), new PropertyMetadata(null));
+        public static readonly DependencyProperty ProfileCommandProperty =
+            DependencyProperty.Register(nameof(ProfileCommand), typeof(ICommand), typeof(HeaderMenu), new PropertyMetadata(null));
+
+        public ICommand SendCommand
+        {
+            get => (ICommand)GetValue(SendCommandProperty);
+            set => SetValue(SendCommandProperty, value);
+        }
+        public static readonly DependencyProperty SendCommandProperty =
+            DependencyProperty.Register(nameof(SendCommand), typeof(ICommand), typeof(HeaderMenu), new PropertyMetadata(null));
+
+
+        public ICommand ReceiveCommand
+        {
+            get => (ICommand)GetValue(ReceiveCommandProperty);
+            set => SetValue(ReceiveCommandProperty, value);
+        }
+        public static readonly DependencyProperty ReceiveCommandProperty =
+            DependencyProperty.Register(nameof(ReceiveCommand), typeof(ICommand), typeof(HeaderMenu), new PropertyMetadata(null));
+
+
+        public ICommand MoreCommand
+        {
+            get => (ICommand)GetValue(MoreCommandProperty);
+            set => SetValue(MoreCommandProperty, value);
+        }
+        public static readonly DependencyProperty MoreCommandProperty =
+            DependencyProperty.Register(nameof(MoreCommand), typeof(ICommand), typeof(HeaderMenu), new PropertyMetadata(null));
 
         public HeaderMenu()
         {
             InitializeComponent();
         }
-    }
-
-    [ObservableObject]
-    public partial class HeaderMenuCommands
-    {
-        [ObservableProperty]
-        private Command profileCommand;
-
-        [ObservableProperty]
-        private Command sendCommand;
-
-        [ObservableProperty]
-        private Command receiveCommand;
-
-        [ObservableProperty]
-        private Command moreCommand;
     }
 }

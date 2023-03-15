@@ -59,7 +59,7 @@ namespace ShareClientWpf
                 vm.CloseWindow += CloseWindow;
                 Closing += WindowBase_Closing;
 
-                vm.LoadedProcess(parameter, executeCallback);
+                vm.Loaded(parameter, executeCallback);
             }
         }
 

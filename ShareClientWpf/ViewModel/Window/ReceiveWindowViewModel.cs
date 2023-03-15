@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Windows.Input;
 
@@ -31,22 +32,20 @@ namespace ShareClientWpf
             }
         }
 
-        public ICommand ReceiveCommand { get; }
-
         public ReceiveWindowViewModel()
         {
-            ReceiveCommand = new Command(ReceiveExecute);
 #if DEBUG
             PortText = "2002";
 #endif
         }
 
-        public override void LoadedProcess(object parameter, Action<object> executeCallback)
+        public override void Loaded(object parameter, Action<object> executeCallback)
         {
             callback = executeCallback;
         }
 
-        private void ReceiveExecute()
+        [RelayCommand]
+        private void Receive()
         {
             if (!string.IsNullOrEmpty(PortText))
             {

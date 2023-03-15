@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using ShareClient.Model.Connect;
 using System;
 using System.Drawing.Imaging;
@@ -25,24 +26,11 @@ namespace ShareClientWpf
         [ObservableProperty]
         private object rightPageContent;
 
-        public ICommand SelectedCommand { get; }
-
-        public HeaderMenuCommands HeaderCommands { get; }
-
         public MainWindowViewModel()
         {
-            SelectedCommand = new Command(SelectExecute);
-            HeaderCommands = new HeaderMenuCommands()
-            {
-                ProfileCommand = new Command(ProfileExecute),
-                SendCommand = new Command(SendExecute),
-                ReceiveCommand = new Command(ReceiveExecute),
-                MoreCommand = new Command(MoreExecute)
-            };
-
-            sendStatusPageViewModel.StopCommand = new Command(StopSendExecute);
+            sendStatusPageViewModel.StopCommand = StopSendCommand;
             sendStatusPageViewModel.SetSendState(SendViewModelState.None);
-            receiveStatusPageViewModel.StopCommand = new Command(StopReceiveExecute);
+            receiveStatusPageViewModel.StopCommand = StopReceiveCommand;
             receiveStatusPageViewModel.SetReceiveState(ReceiveViewModelState.None);
 
             RightPageContent = sendStatusPageViewModel;
@@ -56,16 +44,13 @@ namespace ShareClientWpf
 #endif
         }
 
-        public MainWindowViewModel(IClientController clientController,
-                                   SendStatusPageViewModel sendStatusPageViewModel,
-                                   ReceiveStatusPageViewModel receiveStatusPageViewModel) : this()
+        public MainWindowViewModel(IClientController clientController) : this()
         {
             this.clientController = clientController;
-            this.sendStatusPageViewModel = sendStatusPageViewModel;
-            this.receiveStatusPageViewModel = receiveStatusPageViewModel;
         }
 
-        private void SelectExecute(object parameter)
+        [RelayCommand]
+        private void Select(object parameter)
         {
             if (parameter.ToString() == "0")
             {
@@ -77,15 +62,15 @@ namespace ShareClientWpf
             }
         }
 
-        private void ProfileExecute()
+        [RelayCommand]
+        private void Profile()
         {
             OnShowWindow(typeof(ProfileWindow), parameter: profile);
         }
 
-        private async void SendExecute()
+        [RelayCommand]
+        private async void Send()
         {
-            HeaderCommands.SendCommand.CanExecuteValue = false;
-
             SendContext context = null;
             await OnShowWindow(typeof(SendWindow), executeCall: (parameter) => context = (SendContext)parameter);
 
@@ -102,9 +87,9 @@ namespace ShareClientWpf
             }
 
             sendStatusPageViewModel.SetSendState(SendViewModelState.None);
-            HeaderCommands.SendCommand.CanExecuteValue = true;
         }
 
+        [RelayCommand]
         private async Task SendWindow(SendContext context)
         {
             sendStatusPageViewModel.SetSendState(SendViewModelState.Connect, context);
@@ -118,7 +103,8 @@ namespace ShareClientWpf
             }
         }
 
-        private async void StopSendExecute()
+        [RelayCommand]
+        private async void StopSend()
         {
             var result = await OnShowMessageBox("送信処理を中止しますか？", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
@@ -128,12 +114,11 @@ namespace ShareClientWpf
             }
         }
 
-        private void ReceiveExecute()
+        [RelayCommand]
+        private void Receive()
         {
             OnShowWindow(typeof(RecieveWindow), executeCall: async (parameter) =>
             {
-                HeaderCommands.ReceiveCommand.CanExecuteValue = false;
-
                 ReceiveContext context = null;
                 try
                 {
@@ -159,7 +144,6 @@ namespace ShareClientWpf
                 }
 
                 receiveStatusPageViewModel.SetReceiveState(ReceiveViewModelState.None);
-                HeaderCommands.ReceiveCommand.CanExecuteValue = true;
             });
         }
 
@@ -171,7 +155,7 @@ namespace ShareClientWpf
                 var reqConnect = false;
                 context = new ReceiveContext()
                 {
-                    Profile = Profile.FromJson(Encoding.UTF8.GetString(data.MetaData)),
+                    Profile = ShareClientWpf.Profile.FromJson(Encoding.UTF8.GetString(data.MetaData)),
                     IPEndPoint = ip
                 };
                 OnShowWindow(typeof(ConnectionWindow), true, context, (p) => reqConnect = (bool)p).Wait();
@@ -186,7 +170,9 @@ namespace ShareClientWpf
             return context;
         }
 
-        private async void StopReceiveExecute()
+
+        [RelayCommand]
+        private async void StopReceive()
         {
             var result = await OnShowMessageBox("受信処理を中止しますか？", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
@@ -196,12 +182,13 @@ namespace ShareClientWpf
             }
         }
 
-        private void MoreExecute()
+        [RelayCommand]
+        private void More()
         {
             OnShowWindow(typeof(MoreWindow), parameter: settingContext, executeCall: (context) => settingContext = (SettingContext)context);
         }
 
-        protected override void CloseExecute(object parameter)
+        protected override void Close(object parameter)
         {
             Closing();
         }

@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -61,19 +62,16 @@ namespace ShareClientWpf
 
         public ICommand SelectedCommand { get; }
 
-        public ICommand SendCommand { get; }
-
         public SendWindowViewModel()
         {
-            SendCommand = new Command(SendExecute);
-            SelectedCommand = new Command(p => SelectWindowInfo = (WindowInfo)p);
+            SelectedCommand = new RelayCommand<WindowInfo>(p => SelectWindowInfo = p);
 #if DEBUG
             IpText = "127.0.0.1";
             PortText = "2002";
 #endif
         }
 
-        public override void LoadedProcess(object parameter, Action<object> executeCallback)
+        public override void Loaded(object parameter, Action<object> executeCallback)
         {
             callback = executeCallback;
             LoadWindows();
@@ -89,7 +87,8 @@ namespace ShareClientWpf
                    .ForEach(info => WindowInfos.Add(info));
         }
 
-        private void SendExecute()
+        [RelayCommand]
+        private void Send()
         {
             if (string.IsNullOrEmpty(IpText) && string.IsNullOrEmpty(PortText))
             {

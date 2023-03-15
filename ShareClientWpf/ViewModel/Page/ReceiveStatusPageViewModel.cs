@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Net;
+using System.Windows.Input;
 
 namespace ShareClientWpf
 {
@@ -8,6 +9,9 @@ namespace ShareClientWpf
     {
         [ObservableProperty]
         private string message;
+
+        [ObservableProperty]
+        private bool stopEnable;
 
         [ObservableProperty]
         private IPEndPoint iPEndPoint;
@@ -19,35 +23,30 @@ namespace ShareClientWpf
         private string byteSizeText;
 
         [ObservableProperty]
-        private Command stopCommand;
+        private ICommand stopCommand;
 
         public void SetReceiveState(ReceiveViewModelState state, ReceiveContext context = null)
         {
-            bool stopExecute = false;
             if (state == ReceiveViewModelState.None)
             {
                 Message = "未接続";
                 IPEndPoint = null;
                 Profile = null;
+                StopEnable = false;
             }
             else if (state == ReceiveViewModelState.Accept)
             {
                 Message = "受信待機中";
                 IPEndPoint = null;
                 Profile = null;
-                stopExecute = true;
+                StopEnable = true;
             }
             else if (state == ReceiveViewModelState.Receiving)
             {
                 Message = "受信中";
                 IPEndPoint = context.IPEndPoint;
                 Profile = context.Profile;
-                stopExecute = true;
-            }
-
-            if (StopCommand != null)
-            {
-                StopCommand.CanExecuteValue = stopExecute;
+                StopEnable = true;
             }
         }
     }

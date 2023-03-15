@@ -14,7 +14,7 @@ namespace ShareClientWpf
         [ObservableProperty]
         private string connectText;
 
-        public override void LoadedProcess(object parameter, Action<object> executeCallback)
+        public override void Loaded(object parameter, Action<object> executeCallback)
         {
             callback = executeCallback;
             var context = (ReceiveContext)parameter;
@@ -22,10 +22,10 @@ namespace ShareClientWpf
             Profile = context.Profile;
         }
 
-        protected override void CloseExecute(object parameter)
+        protected override void Close(object parameter)
         {
             callback.Invoke(parameter.ToString().Equals("1"));
-            base.CloseExecute(parameter);
+            OnCloseWindow();
         }
     }
 }

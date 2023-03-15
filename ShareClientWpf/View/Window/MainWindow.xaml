@@ -78,9 +78,12 @@
 
         <local:HeaderMenu
             Background="{StaticResource HeaderBackGround}"
-            Commands="{Binding HeaderCommands}"
+            MoreCommand="{Binding MoreCommand}"
             MouseDoubleClick="HeaderMenu_MouseDoubleClick"
-            MouseLeftButtonDown="HeaderMenu_MouseLeftButtonDown" />
+            MouseLeftButtonDown="HeaderMenu_MouseLeftButtonDown"
+            ProfileCommand="{Binding ProfileCommand}"
+            ReceiveCommand="{Binding ReceiveCommand}"
+            SendCommand="{Binding SendCommand}" />
 
         <Image
             Grid.Column="1"
@@ -108,12 +111,12 @@
             <StackPanel Margin="12" Orientation="Horizontal">
 
                 <RadioButton
-                    Command="{Binding SelectedCommand}"
+                    Command="{Binding SelectCommand}"
                     CommandParameter="0"
                     Content="送信"
                     IsChecked="True" />
                 <RadioButton
-                    Command="{Binding SelectedCommand}"
+                    Command="{Binding SelectCommand}"
                     CommandParameter="1"
                     Content="受信" />
             </StackPanel>

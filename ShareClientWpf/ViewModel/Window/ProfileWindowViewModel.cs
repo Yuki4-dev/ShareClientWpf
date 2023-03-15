@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Windows.Input;
 
 namespace ShareClientWpf
 {
@@ -16,28 +16,13 @@ namespace ShareClientWpf
         [ObservableProperty]
         private string message;
 
-        public ICommand ClearCommand { get; }
-
-        public ICommand SelectCommand { get; }
-
-        public ProfileWindowViewModel()
-        {
-            SelectCommand = new Command(SelectExecuteAsync);
-            ClearCommand = new Command(() =>
-            {
-                if (Profile != null)
-                {
-                    Profile.IconImage = null;
-                }
-            });
-        }
-
-        public override void LoadedProcess(object parameter, Action<object> executeCallback)
+        public override void Loaded(object parameter, Action<object> executeCallback)
         {
             Profile = (Profile)parameter;
         }
 
-        private async void SelectExecuteAsync()
+        [RelayCommand]
+        private async void Select()
         {
             await OnShowCommonDialog(typeof(OpenFileDialog), (dialog) =>
             {
@@ -48,6 +33,15 @@ namespace ShareClientWpf
             {
                 SetProfileImage(((OpenFileDialog)dialog).FileName);
             });
+        }
+
+        [RelayCommand]
+        private void Clear()
+        {
+            if (Profile != null)
+            {
+                Profile.IconImage = null;
+            }
         }
 
         private void SetProfileImage(string filename)

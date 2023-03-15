@@ -1,31 +1,25 @@
-﻿using Microsoft.Win32;
+﻿using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
 using System;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 
 namespace ShareClientWpf
 {
-    public class ViewModelBase
+    public partial class ViewModelBase
     {
         public event Func<string, MessageBoxButton, Task<MessageBoxResult>> ShowMessageBox;
         public event Func<Type, bool, object, Action<object>, Task> ShowWindow;
         public event Func<Type, Action<CommonDialog>, Action<CommonDialog>, Task<bool>> ShowCommonDialog;
         public event Func<bool> CloseWindow;
 
-        public ICommand CloseCommand { get; }
-
-        public ViewModelBase()
-        {
-            CloseCommand = new Command(CloseExecute);
-        }
-
-        protected virtual void CloseExecute(object parameter)
+        [RelayCommand]
+        protected virtual void Close(object parameter)
         {
             OnCloseWindow();
         }
 
-        public virtual void LoadedProcess(object parameter, Action<object> executeCallback)
+        public virtual void Loaded(object parameter, Action<object> executeCallback)
         {
             return;
         }
@@ -53,50 +47,6 @@ namespace ShareClientWpf
         protected bool OnCloseWindow()
         {
             return CloseWindow?.Invoke() ?? false;
-        }
-    }
-
-
-    public class Command : ICommand
-    {
-        public event EventHandler CanExecuteChanged;
-
-        private readonly Action<object> callCommand;
-        private readonly Action postCallMethod;
-
-        private bool canExecuteValue = true;
-        public bool CanExecuteValue
-        {
-            get => canExecuteValue;
-            set
-            {
-                if (!canExecuteValue.Equals(value))
-                {
-                    canExecuteValue = value;
-                    CanExecuteChanged?.Invoke(this, new EventArgs());
-                }
-            }
-        }
-
-        public Command(Action action, Action postCall = null) : this((p) => action.Invoke(), postCall)
-        {
-        }
-
-        public Command(Action<object> action, Action postCall = null)
-        {
-            callCommand = action;
-            postCallMethod = postCall;
-        }
-
-        public bool CanExecute(object parameter)
-        {
-            return CanExecuteValue;
-        }
-
-        public void Execute(object parameter)
-        {
-            callCommand.Invoke(parameter);
-            postCallMethod?.Invoke();
         }
     }
 

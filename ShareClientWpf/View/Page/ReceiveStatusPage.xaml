@@ -47,6 +47,7 @@
                 HorizontalAlignment="Left"
                 Command="{Binding StopCommand}"
                 Content="停止"
+                IsEnabled="{Binding StopEnable}"
                 Style="{StaticResource AccentButtonStyle}" />
 
         </StackPanel>

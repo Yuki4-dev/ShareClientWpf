@@ -52,7 +52,7 @@ namespace ShareClientWpf
             }
         }
 
-        public override void LoadedProcess(object parameter, Action<object> executeCallback)
+        public override void Loaded(object parameter, Action<object> executeCallback)
         {
             callback = executeCallback;
             var context = (SettingContext)parameter;
@@ -62,7 +62,7 @@ namespace ShareClientWpf
             SelectIndex = context.Format != null ? Array.IndexOf(formats, context.Format) : 0;
         }
 
-        protected override void CloseExecute(object parameter)
+        protected override void Close(object parameter)
         {
             if (parameter.ToString() == "1")
             {
