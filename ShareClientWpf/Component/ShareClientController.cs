@@ -27,10 +27,8 @@ namespace ShareClientWpf
             ThrowIfDisposed();
 
             isCancelAccept = false;
-            receiverConnection = await Task.Run(() => Connection.Builder()
-                                                                .SetCancellation(() => isCancelAccept)
-                                                                .SetAcceptRequest(acceptCallback)
-                                                                .Accept(new IPEndPoint(IPAddress.Any, port)));
+
+            receiverConnection = await ConnectionFactory.AcceptAsync(new(IPAddress.Any, port), new() { IsCancellation = () => isCancelAccept, AcceptRequest = acceptCallback });
 
             return receiverConnection != null;
         }
@@ -48,10 +46,11 @@ namespace ShareClientWpf
                 throw new Exception($"Already Run Receiving.");
             }
 
-            receiver = ShareAlgorithmBuilder.NewBuilder()
-                                            .SetShareClientSpec(receiverConnection.ClientSpec)
-                                            .SetConnectEndoPoint(receiverConnection.RemoteEndPoint)
-                                            .BuildReceive(receiverConnection.LocalEndPoint);
+            receiver = ShareAlgorithmFactory.CreateReceive(receiverConnection.LocalEndPoint, receiverConnection.RemoteEndPoint, new()
+            {
+                Spec = receiverConnection.ClientSpec
+            });
+
             receiver.ShareAlgorithmClosed += (_, __) => closed.Invoke();
 
             try
@@ -72,9 +71,8 @@ namespace ShareClientWpf
             ThrowIfDisposed();
 
             isCancelConnect = false;
-            senderConnection = await Task.Run(() => Connection.Builder()
-                                                              .SetCancellation(() => isCancelConnect)
-                                                              .Connect(iPEndPoint, connectionData));
+
+            senderConnection = await ConnectionFactory.ConnectAsync(iPEndPoint, connectionData, new() { IsCancellation = ()=> isCancelConnect });
             return senderConnection != null;
         }
 
@@ -91,10 +89,7 @@ namespace ShareClientWpf
                 throw new Exception($"Already Run Sending.");
             }
 
-            sender = ShareAlgorithmBuilder.NewBuilder()
-                                          .SetShareClientSpec(senderConnection.ClientSpec)
-                                          .SetLocalEndoPoint(senderConnection.LocalEndPoint)
-                                          .BuildSend(senderConnection.RemoteEndPoint);
+            sender = ShareAlgorithmFactory.CreateSend(senderConnection.RemoteEndPoint, senderConnection.LocalEndPoint, new() { Spec = senderConnection.ClientSpec });
 
             capture = new WindowImageCapture(sendContext.WindowInfo.WindowHandle,
                                                settingContext.SendDelay,
